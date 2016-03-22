@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ns1="myriadLands.ui.*" xmlns:ns2="myriadLands.ui.panels.*"
+	creationComplete="init();" xmlns:ns3="myriadLands.ui.buttons.*" xmlns:ns4="myriadLands.ui.text.*">
+	<mx:Grid x="0" y="0">
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Canvas width="100%">
+					<ns3:CircularButton x="10" y="0" width="26" height="26" id="landsFilterButton"/>
+					<ns3:CircularButton x="40" y="0" width="26" height="26" id="structuresFilterButton"/>
+					<ns3:CircularButton x="70" y="0" width="26" height="26" id="championsFilterButton"/>
+					<ns3:CircularButton x="100" y="0" width="26" height="26" id="unitsFilterButton"/>
+					<ns3:CircularButton x="130" y="0" width="26" height="26" id="equipmentsFilterButton"/>
+					<ns3:CircularButton x="160" y="0" width="26" height="26" id="machineriesFilterButton"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<ns1:MLWindow id="inventoryWindow"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<ns1:MLWindow id="vaultWindow"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<ns1:MLWindow id="exportWindow"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<ns1:MLWindow id="importWindow"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Canvas width="100%" height="61" id="can">
+					<mx:Canvas width="{xylanCost.x + xylanCost.height * 0.5 - 2}" height="{xylanCost.height - 4}" backgroundColor="#000000" x="2" verticalCenter="0"/>
+					<ns3:CircularButton x="0" width="57" height="57" verticalCenter="0" id="factionCycleButton" click="cycleFactionExport();"/>
+					<ns3:CircularButton width="46" height="46" verticalCenter="0" x="73" id="firstActionButton" click="onActionButtonClick(event);"
+						mouseOver="onActionButtonOver(event);" mouseOut="resetCost();"/>
+					<ns3:CircularButton width="46" height="46" verticalCenter="0" x="127" id="secondActionButton" click="onActionButtonClick(event);"
+						mouseOver="onActionButtonOver(event);" mouseOut="resetCost();"/>
+					<ns4:CostItem id="xylanCost" right="61" verticalCenter="1" width="61" height="19"/>
+					<ns4:CostItem id="morphidCost" right="122" verticalCenter="1" width="61" height="19"/>
+					<ns4:CostItem id="brontiteCost" right="0" verticalCenter="1" width="61" height="19"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.entities.Citadel;
+			import mx.controls.Button;
+			import myriadLands.faction.Faction;
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.actions.ActionManager;
+			import myriadLands.core.Settings;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.actions.Action;
+			import myriadLands.loaders.ActionLoader;
+			import myriadLands.events.AssetEvent;
+			import myriadLands.entities.Entity;
+			import myriadLands.ui.panels.EntityListPanel;
+			
+			protected static const REVIVE_ACTION_ID:String = "-1"; 
+			protected static const RECYCLE_ACTION_ID:String = "-2";
+			protected static const BUY_ACTION_ID:String = "-3"; 
+			protected static const TO_ASSET_POOL_ACTION_ID:String = "-4";
+			protected static const EXPORT_ACTION_ID:String = "-5"; 
+			
+			private var inventoryPanel:EntityListPanel;
+			private var exportPanel:EntityListPanel;
+			private var importPanel:EntityListPanel;
+			private var vaultPanel:EntityListPanel;
+			
+			private var currentEntity:Entity;
+			private var currentContainer:String;
+			private var currentMLWindow:MLWindow;
+			private var currentImportFaction:Faction;
+			private var isTheSameMLWindow:Boolean;
+			
+			private var previousSelectedButton:SquareButton;
+			private var am:ActionManager;
+			
+			private function init():void {
+				am = ActionManager.getInstance();
+				inventoryPanel = new EntityListPanel();
+				inventoryPanel.id = AssetEvent.INVENTORY;
+				inventoryWindow.setContent(inventoryPanel, true, false);
+				inventoryWindow.titleText = "inventoryWindowTitle";
+				inventoryWindow.entityCounter.visible = true;
+				inventoryWindow.addEventListener(MLWindow.HIDE_COMPLETE, onAssetPanelHide, false, 0, true);
+				inventoryWindow.closeButton.addEventListener(MouseEvent.CLICK, onAssetPanelCloseButtonClick, false, 0, true);
+				currentMLWindow = inventoryWindow;
+				inventoryPanel.addEventListener(AssetEvent.INVENTORY, onEntitySelected, false, 0, true);
+				
+				exportPanel = new EntityListPanel();
+				exportPanel.id = AssetEvent.EXPORT;
+				exportWindow.setContent(exportPanel, true, false);
+				exportWindow.titleText = "exportWindowTitle";
+				exportWindow.entityCounter.visible = true;
+				exportWindow.addEventListener(MLWindow.HIDE_COMPLETE, onAssetPanelHide, false, 0, true);
+				exportWindow.closeButton.addEventListener(MouseEvent.CLICK, onAssetPanelCloseButtonClick, false, 0, true);
+				exportWindow.hide();
+				exportPanel.addEventListener(AssetEvent.EXPORT, onEntitySelected, false, 0, true);
+				
+				importPanel = new EntityListPanel();
+				importPanel.id = AssetEvent.IMPORT;
+				importWindow.setContent(importPanel, true, false);
+				importWindow.titleText = "importWindowTitle";
+				importWindow.entityCounter.visible = true;
+				importWindow.addEventListener(MLWindow.HIDE_COMPLETE, onAssetPanelHide, false, 0, true);
+				importWindow.closeButton.addEventListener(MouseEvent.CLICK, onAssetPanelCloseButtonClick, false, 0, true);
+				importWindow.hide();
+				importPanel.addEventListener(AssetEvent.IMPORT, onEntitySelected, false, 0, true);
+				
+				vaultPanel = new EntityListPanel();
+				vaultPanel.id = AssetEvent.VAULT;
+				vaultWindow.setContent(vaultPanel, true, false);
+				vaultWindow.titleText = "vaultWindowTitle";
+				vaultWindow.entityCounter.visible = true;
+				vaultWindow.addEventListener(MLWindow.HIDE_COMPLETE, onAssetPanelHide, false, 0, true);
+				vaultWindow.closeButton.addEventListener(MouseEvent.CLICK, onAssetPanelCloseButtonClick, false, 0, true);
+				vaultWindow.hide();
+				vaultPanel.addEventListener(AssetEvent.VAULT, onEntitySelected, false, 0, true);
+				
+				landsFilterButton.toggle = true;
+				landsFilterButton.setIconName("land-sym");
+				structuresFilterButton.toggle = true;
+				structuresFilterButton.setIconName("structure-sym");
+				championsFilterButton.toggle = true;
+				championsFilterButton.setIconName("champion-sym");
+				unitsFilterButton.toggle = true;
+				unitsFilterButton.setIconName("unit-sym");
+				equipmentsFilterButton.toggle = true;
+				equipmentsFilterButton.setIconName("equipment-sym");
+				machineriesFilterButton.toggle = true;
+				machineriesFilterButton.setIconName("machinery-sym");
+				
+				firstActionButton.visible = false;
+				secondActionButton.visible = false;
+				
+				xylanCost.setIconName("xylan-sym");
+				xylanCost.disabled = true;
+				morphidCost.setIconName("morphid-sym");
+				morphidCost.disabled = true;
+				brontiteCost.setIconName("brontite-sym");
+				brontiteCost.disabled = true;
+				
+				factionCycleButton.setIconName("cycle-sym");
+				
+				width = inventoryPanel.width;
+			}
+			
+			public function clear():void {
+				inventoryPanel.clearEntities();
+				exportPanel.clearEntities();
+				importPanel.clearEntities();
+				vaultPanel.clearEntities();
+			}
+			
+			public function addToInventory(e:Entity):void {
+				inventoryPanel.addEntity(e);
+			}
+			
+			public function removeFromInventory(e:Entity):void {
+				inventoryPanel.removeEntity(e);
+			}
+			
+			public function setMaxPreservedEntities(value:int):void {
+				vaultWindow.setMaxCapacity(value);
+			}
+			public function addToVault(e:Entity):void {
+				vaultPanel.addEntity(e);
+				vaultWindow.setCurrentCapacity(vaultPanel.getEntitiesNum());
+			}
+			
+			public function removeFromVault(e:Entity):void {
+				vaultPanel.removeEntity(e);
+				vaultWindow.setCurrentCapacity(vaultPanel.getEntitiesNum());
+			}
+			
+			public function addToExport(e:Entity):void {
+				exportPanel.addEntity(e);
+			}
+			
+			public function removeFromExport(e:Entity):void {
+				exportPanel.removeEntity(e);
+			}
+			
+			public function addToImport(e:Entity):void {
+				importPanel.addEntity(e);
+			}
+			
+			public function removeFromImport(e:Entity):void {
+				importPanel.removeEntity(e);
+			}
+			
+			protected function initActions():void {
+				switch (currentContainer) {
+					case AssetEvent.INVENTORY:
+						firstActionButton.setIconName("export-sym");
+						firstActionButton.visible = true;
+						secondActionButton.visible = false;
+					break;
+					case AssetEvent.IMPORT:
+						firstActionButton.setIconName("buy-sym");
+						firstActionButton.visible = true;
+						secondActionButton.visible = false;
+					break;
+					case AssetEvent.EXPORT:
+						firstActionButton.setIconName("toAssetPool-sym");
+						firstActionButton.visible = true;
+						secondActionButton.visible = false;
+					break;
+					case AssetEvent.VAULT:
+						if (Settings.player.getRecyclingEnabled) {
+							firstActionButton.setIconName("recycle-sym");
+							firstActionButton.visible = true;
+						} else
+							firstActionButton.visible = false;
+						secondActionButton.setIconName("revive-sym");
+						secondActionButton.visible = true;
+					break;
+				}
+			}
+			
+			//ACTIONS
+			protected function export(citadel:Citadel, entityToApply:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(AssetWindowsContent.EXPORT_ACTION_ID, citadel);
+				am.executePoolAction(action, {"entityToApply":entityToApply})
+			}
+			protected function buy(citadel:Citadel, entityToApply:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(AssetWindowsContent.BUY_ACTION_ID, citadel);
+				am.executePoolAction(action, {"entityToApply":entityToApply, "buyingFaction":Settings.player})
+			}
+			protected function sendToAssetPool(citadel:Citadel, entityToApply:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(AssetWindowsContent.TO_ASSET_POOL_ACTION_ID, citadel);
+				am.executePoolAction(action, {"entityToApply":entityToApply})
+			}
+			protected function revive(citadel:Citadel, entityToApply:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(AssetWindowsContent.REVIVE_ACTION_ID, citadel);
+				am.executePoolAction(action, {"entityToApply":entityToApply})
+			}
+			protected function recycle(citadel:Citadel, entityToApply:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(AssetWindowsContent.RECYCLE_ACTION_ID, citadel);
+				am.executePoolAction(action, {"entityToApply":entityToApply})
+			}
+			//COST
+			protected function setCost(actionID:String, entity:Entity):void {
+				var action:Action = ActionLoader.getInstance().getActionOfEntity(actionID, entity);
+				var o:Object = action.getCostExternal({});
+				xylanCost.text = o.xylan;
+				morphidCost.text = o.morphid;
+				brontiteCost.text = o.brontite;
+			}
+			protected function resetCost():void {
+				xylanCost.text = "";
+				morphidCost.text = "";
+				brontiteCost.text = "";
+			}
+			
+			//EVENTS
+			protected function onEntitySelected(e:AssetEvent):void {
+				if (previousSelectedButton == e.squareButton) return;
+				currentContainer = e.type;
+				currentEntity = e.entity;
+				if (previousSelectedButton != null)
+					previousSelectedButton.setToggled(false);
+				previousSelectedButton = e.squareButton;
+				//previousSelectedButton.setGlow();
+				initActions();
+			}
+			
+			protected function onAssetPanelHide(e:Event):void {
+				if (!isTheSameMLWindow || (isTheSameMLWindow && currentMLWindow.isVisible()))
+					currentMLWindow.show();
+			}
+			protected function onAssetPanelCloseButtonClick(e:MouseEvent):void {
+				var newCurrentMLWindow:MLWindow = (e.currentTarget as Button).parent.parent as MLWindow;
+				isTheSameMLWindow = (newCurrentMLWindow == currentMLWindow);
+				if (!isTheSameMLWindow || (isTheSameMLWindow && !currentMLWindow.isVisible()))
+					currentMLWindow.hide();
+				//else
+				//	(currentMLWindow.isVisible()) ? currentMLWindow.hide() : currentMLWindow.show();						
+				currentMLWindow = newCurrentMLWindow;
+			}
+			
+			protected function onActionButtonClick(e:MouseEvent):void {
+				if (currentEntity == null) return;
+				var citadel:Citadel = NetworkManager.getInstance().getFactionPlayer().citadel;
+				switch (currentContainer) {
+					case AssetEvent.INVENTORY:
+						if (e.currentTarget == firstActionButton)
+							export(citadel, currentEntity);
+					break;
+					case AssetEvent.IMPORT:
+						if (e.currentTarget == firstActionButton)
+							buy(citadel, currentEntity);
+					break;
+					case AssetEvent.EXPORT:
+						if (e.currentTarget == firstActionButton)
+							sendToAssetPool(citadel, currentEntity);
+					break;
+					case AssetEvent.VAULT:
+						if (e.currentTarget == firstActionButton)
+							recycle(citadel, currentEntity);
+						else if (e.currentTarget == secondActionButton)
+							revive(citadel, currentEntity);
+					break;
+				}
+				currentEntity = null;
+				resetCost();
+				previousSelectedButton.setToggled(false);
+			}
+			
+			protected function onActionButtonOver(e:MouseEvent):void {
+				if (currentEntity == null) return;
+				switch (currentContainer) {
+					case AssetEvent.IMPORT:
+						if (e.currentTarget == firstActionButton)
+							setCost(AssetWindowsContent.BUY_ACTION_ID, currentEntity);
+					break;
+					case AssetEvent.VAULT:
+						if (e.currentTarget == firstActionButton)
+							setCost(RECYCLE_ACTION_ID, currentEntity);
+						else if (e.currentTarget == secondActionButton)
+							setCost(REVIVE_ACTION_ID, currentEntity);
+					break;
+				}
+			}
+			
+			protected function cycleFactionExport():void {
+				var factions:Array = NetworkManager.getInstance().getFactions();
+				var ent:Entity;
+				importPanel.clearEntities();
+				if (factions.length <= 1) return;
+				if (currentImportFaction != null) {
+					//Index == 1 is always player
+					var index:int = factions.indexOf(currentImportFaction) + 1;
+					currentImportFaction = (index >= factions.length) ? factions[1] : factions[index];
+				} else
+					currentImportFaction =  factions[1];
+				for each(ent in currentImportFaction.getExportion()) {
+					importPanel.addEntity(ent);
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

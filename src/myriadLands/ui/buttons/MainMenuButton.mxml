@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="200" height="75" xmlns:ns1="myriadLands.ui.buttons.*"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<ns1:CircularButton x="1" y="2" width="{this.height}" height="{this.height - 4}" id="circularButton"/>
+	<mx:TextArea x="{circularButton.width * 0.25}" y="2" styleName="MainMenuButtonTextArea" id="textArea"
+		width="{this.width - this.height * 0.5}" height="{circularButton.height}" maxChars="6" verticalScrollPolicy="off" horizontalScrollPolicy="off"
+		text="here comes" wordWrap="false" editable="false" enabled="false" mouseEnabled="false" borderStyle="none" selectable="false" backgroundAlpha="0.0"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.BitmapAsset;
+			
+			public function setIconName(name:String):void {
+				circularButton.setIconName(name);
+			}
+			
+			public function setIcon(ba:BitmapAsset):void {
+				circularButton.setIcon(ba);
+			}
+			
+			protected function createBmpText(text:String):BitmapAsset {
+				var format:TextFormat = new TextFormat("TrebuchetMS", 150, 0xFFFFFF);
+
+				var txt:TextField = new TextField();
+				txt.width = 150;
+				txt.height = 150;
+				txt.embedFonts = true;
+            	//txt.antiAliasType = AntiAliasType.NORMAL;
+            	txt.autoSize = TextFieldAutoSize.CENTER;
+            	txt.defaultTextFormat = format;
+				txt.text = text;
+				
+				var bmp:BitmapData = new BitmapData(150, 150, true, 0x00000000);
+				bmp.draw(txt);
+				var ba:BitmapAsset = new BitmapAsset();
+				//ba.smoothing = true;
+				ba.bitmapData = bmp;
+				return ba;
+			}
+			
+			//Setters
+			public function set text(txt:String):void
+			{
+				//circularButton.setIcon(createBmpText(txt.charAt(0)));
+				textArea.text = txt;
+				width = textArea.textWidth + circularButton.width * 1.5;
+			}
+			public function set disabled(v:Boolean):void {
+				circularButton.disabled = v;
+				textArea.enabled = v;
+			}
+			
+			//Getters
+			public function get text():String
+			{
+				return textArea.text;
+			}
+			
+			public function get disabled():Boolean {
+				return circularButton.disabled;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

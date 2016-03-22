@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="247" height="27" xmlns:ns1="myriadLands.ui.buttons.*">
+	<mx:TextArea x="0" y="0" height="{this.height}" width="{this.width - this.height * 0.5 - 1}" id="actionInfo" wordWrap="false" editable="false"
+		selectable="false" styleName="actionButtonText" text="here goes the text" click="onClick();"/>
+	<ns1:CircularButton id="quickTagButton" width="{this.height}" height="{this.height}" right="1" top="0" click="nextQuickTagMode();"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.entities.Unit;
+			import myriadLands.ui.css.MLFilters;
+			import myriadLands.events.ActionEvent;
+			import myriadLands.loaders.ActionLoader;
+			import myriadLands.actions.Action;
+			
+			private const UNASSIGNED_QUICKTAG:int = 0;
+			private const FIRST_QUICKTAG:int = 1;
+			private const SECOND_QUICKTAG:int = 2;
+			private const THIRD_QUICKTAG:int = 3;
+			
+			private const MODES:Array = ["quicktagUnassigned", "quicktag1", "quicktag2", "quicktag3"];
+			
+			private var quickTagMode:int;
+			private var action:Action;
+			
+			public function setQuickTagIcon(mode:int):void {
+				quickTagMode = mode;
+				quickTagButton.setIconName(MODES[quickTagMode] + "-sym");
+			}
+			
+			public function setQuickTagMode(mode:int):void {
+				quickTagMode = mode;
+				quickTagButton.setIconName(MODES[quickTagMode] + "-sym");
+				dispatchEvent(new ActionEvent(ActionEvent.QUICK_TAG_CHANGED, action, mode));
+			}
+			
+			//GETTERS
+			public function getAction():Action {return this.action;}
+			public function get actionName():String {return this.actionInfo.text;}
+			
+			//SETTERS
+			public function set actionName(v:String):void {this.actionInfo.text = v;}
+			public function setAction(action:Action):void {
+				this.action = action;
+				quickTagButton.disabled = !action.canBeQuickTagged;
+				actionInfo.enabled = action.canBeQuickTagged;
+				actionInfo.mouseEnabled = action.canBeQuickTagged;
+			}
+			
+			public function setSelected(value:Boolean):void {
+				if (!actionInfo.enabled) return;
+				var color:uint;
+				if (value)
+					color = actionInfo.getStyle("selectedColor");
+				else
+					color = actionInfo.getStyle("defaultColor");
+					
+				actionInfo.setStyle("color", color);
+			}
+			
+			//EVENTS
+			private function nextQuickTagMode():void {
+				switch (quickTagMode) {
+					case UNASSIGNED_QUICKTAG:
+						setQuickTagMode(FIRST_QUICKTAG);
+					break;
+					case FIRST_QUICKTAG:
+						setQuickTagMode(SECOND_QUICKTAG);
+					break;
+					case SECOND_QUICKTAG:
+						setQuickTagMode(THIRD_QUICKTAG);
+					break;
+					case THIRD_QUICKTAG:
+						setQuickTagMode(UNASSIGNED_QUICKTAG);
+					break;
+				}
+			}
+			
+			private function onClick():void {
+				dispatchEvent(new ActionEvent(ActionEvent.SELECTED, action));
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

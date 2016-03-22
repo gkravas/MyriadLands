@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="InnerCircularButton" currentState="up"
+	currentStateChange="currentStateChanged();">
+	<mx:states>
+		<mx:State name="up"/>
+		<mx:State name="over"/>
+		<mx:State name="down"/>
+		<mx:State name="toggled"/>
+		<mx:State name="disabled"/>
+	</mx:states>
+	<mx:Script>
+		<![CDATA[
+			override protected function updateDisplayList(w:Number, h:Number):void {
+				switch (currentState)
+			     {            
+				     case "down":
+				     graphics.beginFill(getStyle("downOuterColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.5);
+			         graphics.beginFill(getStyle("downInnerColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.45);
+				     break;
+			     	 
+			     	 case "over":
+				     graphics.beginFill(getStyle("overOuterColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.5);
+			         graphics.beginFill(getStyle("overInnerColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.45);
+				     break;
+				     
+				     case "up":
+			         graphics.beginFill(getStyle("upOuterColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.5);
+			         graphics.beginFill(getStyle("upInnerColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.45);
+				     break;
+				     
+				     case "toggled":
+			         graphics.beginFill(getStyle("toggledOuterColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.5);
+			         graphics.beginFill(getStyle("toggledInnerColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.45);
+				     break;
+				     
+				     case "disabled":
+				     graphics.beginFill(getStyle("disabledOuterColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.5);
+			         graphics.beginFill(getStyle("disabledInnerColor"), alpha);
+				     graphics.drawCircle(w * 0.5, h * 0.5, w * 0.45);
+				     break;
+			     }
+	 		}
+	 		
+	 		private function currentStateChanged():void {
+     			invalidateDisplayList();
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

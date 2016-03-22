@@ -1,0 +1,474 @@
+<entities>
+	<entity name="cardRear" class="Land">
+		<attribute name="spn">0,0,0</attribute>
+	</entity>
+	<entity name="flatLands" class="Land">
+		<attribute name="cap">4</attribute>
+		<attribute name="spn">120,220,300</attribute>
+		<attribute name="grd">15-20</attribute>
+		<attribute name="crf">100</attribute>
+	</entity>
+	<entity name="scarredLand" class="Land">
+		<attribute name="cap">2</attribute>
+		<attribute name="spn">220,400,80</attribute>
+		<attribute name="grd">10-20</attribute>
+		<attribute name="crf">160</attribute>
+	</entity>
+	<entity name="wasteDump" class="Land">
+		<attribute name="cap">2</attribute>
+		<attribute name="spn">400,300,120</attribute>
+		<attribute name="grd">20-25</attribute>
+		<attribute name="crf">180</attribute>
+	</entity>
+	<entity name="crater" class="Land">
+		<attribute name="cap">1</attribute>
+		<attribute name="spn">400,120,200</attribute>
+		<attribute name="grd">10-20</attribute>
+		<attribute name="crf">600</attribute>
+	</entity>
+	<entity name="chasm" class="Land">
+		<attribute name="cap">1</attribute>
+		<attribute name="spn">400,120,200</attribute>
+		<attribute name="grd">10-20</attribute>
+		<attribute name="crf">600</attribute>
+	</entity>
+	<entity name="occultRuins" class="Land" type="ruin">
+		<attribute name="cap">0</attribute>
+		<attribute name="spn">220,220,110</attribute>
+		<attribute name="grd">15-20</attribute>
+		<attribute name="crf">100</attribute>
+	</entity>
+	<entity name="portalRuins" class="Land" type="ruin">
+		<attribute name="cap">0</attribute>
+		<attribute name="spn">220,220,110</attribute>
+		<attribute name="grd">15-20</attribute>
+		<attribute name="crf">100</attribute>
+	</entity>
+	<entity name="constructedLand" class="Land">
+		<attribute name="cap">0</attribute>
+		<attribute name="spn">340,340,340</attribute>
+		<attribute name="grd">15</attribute>
+		<attribute name="crf">80</attribute>
+	</entity>
+	<entity name="warpedLand" class="Land">
+		<attribute name="cap">0</attribute>
+		<attribute name="spn">600,120,80</attribute>
+		<attribute name="grd">25</attribute>
+		<attribute name="crf">400</attribute>
+	</entity>
+	<entity name="gridTerrain" class="CombatGround">
+	</entity>
+	<!--STRUCTURES-->
+	<entity name="citadelCore" class="Citadel" type="citadel">
+		<attribute name="availableActions">3,23,2,6,10,18,28,24,46,47,59</attribute>
+		<attribute name="abilities">61,63,64,65,66,68</attribute>
+	</entity>
+	<entity name="warpHive" class="Structure">
+		<attribute name="availableActions">10,28,21,46,47</attribute>
+		<attribute name="abilities">63,64,65,68</attribute>
+	</entity>
+	<entity name="flagstone" class="Structure" type="flagstone">
+		<attribute name="prc">50,0,0</attribute>
+		<attribute name="upk">2</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="availableActions">35,36</attribute>
+	</entity>
+	<!--CORE BUILDINGS-->
+	<entity name="constructionPit" class="Structure" type="coreStructure,structure">
+		<attribute name="prc">3200,0,0</attribute>
+		<attribute name="upk">6</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">3</attribute>
+		<attribute name="availableActions">8,28,46,47</attribute>
+	</entity>
+	<entity name="labComplex" class="Structure" type="coreStructure,structure">
+		<attribute name="prc">3600,0,0</attribute>
+		<attribute name="upk">6</attribute>
+		<attribute name="sel">8000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">3</attribute>
+		<attribute name="availableActions">86,28,46,47</attribute>
+	</entity>
+	<entity name="commandBureau" class="Structure" type="coreStructure,structure">
+		<attribute name="prc">6000,0,0</attribute>
+		<attribute name="upk">6</attribute>
+		<attribute name="sel">15000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">9,28,46,47</attribute>
+	</entity>
+	<entity name="tradePortal" class="Structure" type="coreStructure,structure">
+		<attribute name="prc">800,0,0</attribute>
+		<attribute name="upk">2</attribute>
+		<attribute name="sel">600</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">28</attribute>
+		<attribute name="abilities">62</attribute>
+	</entity>
+	<entity name="vaultHouse" class="Structure" type="coreStructure,structure">
+		<attribute name="prc">800,0,0</attribute>
+		<attribute name="upk">5</attribute>
+		<attribute name="sel">5000</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">28</attribute>
+		<attribute name="abilities">60,61</attribute>
+	</entity>
+	<!--LABORATORIES-->
+	<entity name="machineShop" class="Structure" type="laboratory,structure">
+		<attribute name="prc">4000,0,0</attribute>
+		<attribute name="upk">4</attribute>
+		<attribute name="sel">9000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">87,28,46,47</attribute>
+	</entity>
+	<entity name="weaponsRange" class="Structure" type="laboratory,structure">
+		<attribute name="prc">3000,0,0</attribute>
+		<attribute name="upk">5</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">2</attribute>
+		<attribute name="availableActions">11,28,46,47</attribute>
+	</entity>
+	<!--INFRASTRUCTURE-->
+	<entity name="drillPlatform" class="Structure" type="infrastructure,structure">
+		<attribute name="prc">1200,0,0</attribute>
+		<attribute name="upk">1</attribute>
+		<attribute name="sel">3000</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">28</attribute>
+	</entity>
+	<entity name="weaponsRange" class="Structure" type="infrastructure,structure">
+		<attribute name="prc">2100,0,0</attribute>
+		<attribute name="upk">2</attribute>
+		<attribute name="sel">4000</attribute>
+		<attribute name="gat">10</attribute>
+		<attribute name="mch">1</attribute>
+		<attribute name="availableActions">28</attribute>
+	</entity>
+	<!--COMMAND BUILDINGS-->
+	<entity name="championHall" class="Structure" type="commandBuilding,structure">
+		<attribute name="prc">6000,0,0</attribute>
+		<attribute name="upk">3</attribute>
+		<attribute name="sel">12000</attribute>
+		<attribute name="gat">12</attribute>
+		<attribute name="mch">2</attribute>
+		<attribute name="availableActions">2,28,46,47</attribute>
+	</entity>
+	<!--CLONEWARDS-->
+	<entity name="homikinDens" class="Structure" type="cloneWard,structure">
+		<attribute name="prc">3000,0,0</attribute>
+		<attribute name="upk">5</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="gat">10</attribute>
+		<attribute name="mch">2</attribute>
+		<attribute name="availableActions">3,28,46,47</attribute>
+	</entity>
+	<entity name="motokrabAssembly" class="Structure" type="cloneWard,structure">
+		<attribute name="prc">4000,0,0</attribute>
+		<attribute name="upk">4</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="gat">10</attribute>
+		<attribute name="mch">2</attribute>
+		<attribute name="availableActions">5,28,46,47</attribute>
+	</entity>
+	<entity name="hangars" class="Structure" type="cloneWard,structure">
+		<attribute name="prc">4000,0,0</attribute>
+		<attribute name="upk">5</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="gat">10</attribute>
+		<attribute name="mch">2</attribute>
+		<attribute name="availableActions">4,28,46,47</attribute>
+	</entity>
+	<!--EQUIPMENT-->
+	<entity name="ripsaw" class="Equipment" type="weaponry">
+		<attribute name="prc">600,0,0</attribute>
+		<attribute name="upk">0.1</attribute>
+		<attribute name="sel">1000</attribute>
+		<attribute name="rep">50</attribute>
+		<attribute name="gat">5</attribute>
+	</entity>
+	<entity name="infantryRifle" class="Equipment" type="weaponry">
+		<attribute name="prc">900,0,0</attribute>
+		<attribute name="upk">0.4</attribute>
+		<attribute name="sel">1200</attribute>
+		<attribute name="rep">40</attribute>
+		<attribute name="gat">5</attribute>
+	</entity>
+	<!--MACHINERY-->
+	<entity name="powerCore" class="Machinery" type="machinery">
+		<attribute name="prc">3000,0,0</attribute>
+		<attribute name="upk">2</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="rep">60</attribute>
+		<attribute name="gat">10</attribute>
+	</entity>
+	<entity name="assemblyCoordinator" class="Machinery" type="machinery">
+		<attribute name="prc">2500,0,0</attribute>
+		<attribute name="upk">2</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="rep">60</attribute>
+		<attribute name="gat">15</attribute>
+	</entity>
+	<!--CHAMPIONS-->
+	<entity name="missMauoti" class="Champion" type="champion,summoner">
+		<attribute name="prc">3000,2000,1700</attribute>
+		<attribute name="upk">1</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="rep">80</attribute>
+		<attribute name="rez">90</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">11</attribute>
+		<attribute name="lif">120</attribute>
+		<attribute name="lifrg">3</attribute>
+		<attribute name="act">200</attribute>
+		<attribute name="actrg">20</attribute>
+		<attribute name="atk">110</attribute>
+		<attribute name="def">65</attribute>
+		<attribute name="crc">10</attribute>
+		<attribute name="unt">4</attribute>
+		<attribute name="availableActions">30,31,33,34,37,39,40,23,26,19,76,78,79,82,44,47,51,53,57,58,81,83,84</attribute>
+		<attribute name="abilities">67,69</attribute>
+	</entity>
+	<entity name="aseor" class="Champion" type="champion,artificer">
+		<attribute name="prc">3000,4000,1200</attribute>
+		<attribute name="upk">1</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="rep">80</attribute>
+		<attribute name="rez">80</attribute>
+		<attribute name="gat">6</attribute>
+		<attribute name="cap">9</attribute>
+		<attribute name="lif">190</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">160</attribute>
+		<attribute name="actrg">20</attribute>
+		<attribute name="atk">120</attribute>
+		<attribute name="def">75</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="equ">4</attribute>
+		<attribute name="availableActions">30,31,33,34,37,39,41,23,29,19,75,77,78,79,80,83,43,51</attribute>	
+	</entity>
+	<entity name="ikrixMatriarch" class="Champion" type="champion,summoner,artificer">
+		<attribute name="prc">4500,6000,2000</attribute>
+		<attribute name="upk">1</attribute>
+		<attribute name="sel">7000</attribute>
+		<attribute name="rep">90</attribute>
+		<attribute name="rez">80</attribute>
+		<attribute name="gat">7</attribute>
+		<attribute name="cap">6</attribute>
+		<attribute name="lif">90</attribute>
+		<attribute name="lifrg">2</attribute>
+		<attribute name="act">140</attribute>
+		<attribute name="actrg">20</attribute>
+		<attribute name="atk">95</attribute>
+		<attribute name="def">55</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="equ">2</attribute>
+		<attribute name="unt">3</attribute>
+		<attribute name="availableActions">30,31,33,37,38,39,23,27,29,75,78,80,44,47,51,70,73</attribute>
+	</entity>
+	<entity name="warpedChampion" class="Champion" type="champion,warped,summoner">>
+		<attribute name="prc">2500,3000,3000</attribute>
+		<attribute name="upk">1</attribute>
+		<attribute name="sel">6000</attribute>
+		<attribute name="rep">90</attribute>
+		<attribute name="rez">40</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">14</attribute>
+		<attribute name="lif">200</attribute>
+		<attribute name="lifrg">3</attribute>
+		<attribute name="act">160</attribute>
+		<attribute name="actrg">30</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">55</attribute>
+		<attribute name="crc">10</attribute>
+		<attribute name="equ">2</attribute>
+		<attribute name="unt">6</attribute>
+		<attribute name="availableActions">30,31,19,85,77,79,80,82,83,42,47,57</attribute>	
+	</entity>
+	<!--HOMIKIN-->
+	<entity name="homikinHoplite" class="Unit" type="unit,homikin">
+		<attribute name="prc">1100,400,300</attribute>
+		<attribute name="upk">0.5</attribute>
+		<attribute name="sel">1200</attribute>
+		<attribute name="rep">60</attribute>
+		<attribute name="rez">70</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">4</attribute>
+		<attribute name="lif">80</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">120</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">45</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,75,56</attribute>
+	</entity>
+	<entity name="homikinMedicant" class="Unit" type="unit,homikin">
+		<attribute name="prc">900,200,400</attribute>
+		<attribute name="upk">0.5</attribute>
+		<attribute name="sel">1400</attribute>
+		<attribute name="rez">70</attribute>
+		<attribute name="gat">4</attribute>
+		<attribute name="cap">3</attribute>
+		<attribute name="lif">50</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">100</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">80</attribute>
+		<attribute name="def">45</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,75</attribute>
+	</entity>
+	<entity name="homikinRanger" class="Unit" type="unit,homikin">
+		<attribute name="prc">600,1000,800</attribute>
+		<attribute name="upk">0.5</attribute>
+		<attribute name="sel">1600</attribute>
+		<attribute name="rez">70</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">3</attribute>
+		<attribute name="lif">50</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">120</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">40</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,76</attribute>
+	</entity>
+	<!--MOTOKRAB-->
+	<entity name="lightMotokrab" class="Unit" type="unit,motokrab">
+		<attribute name="prc">1200,1200,1200</attribute>
+		<attribute name="upk">0.5</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">7</attribute>
+		<attribute name="cap">3</attribute>
+		<attribute name="lif">100</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">80</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">55</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="availableActions">31,75,80</attribute>
+	</entity>
+	<entity name="shriekerMotokrab" class="Unit" type="unit,motokrab">
+		<attribute name="prc">1200,1200,1200</attribute>
+		<attribute name="upk">0.5</attribute>
+		<attribute name="sel">2000</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">7</attribute>
+		<attribute name="cap">3</attribute>
+		<attribute name="lif">100</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">80</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">55</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="availableActions">31,75,80</attribute>
+	</entity>
+	<entity name="armoredMotokrab" class="Unit" type="motokrab">
+		<attribute name="prc">1800,600,2000</attribute>
+		<attribute name="upk">0.7</attribute>
+		<attribute name="sel">2500</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">3</attribute>
+		<attribute name="lif">120</attribute>
+		<attribute name="lifrg">2</attribute>
+		<attribute name="act">80</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">65</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,75,80</attribute>
+	</entity>
+	<!--AUTOPHISH-->
+	<entity name="patrollerAutophish" class="Unit" type="unit,autophish">
+		<attribute name="prc">2000,3000,1200</attribute>
+		<attribute name="upk">0.7</attribute>
+		<attribute name="sel">3000</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">6</attribute>
+		<attribute name="cap">4</attribute>
+		<attribute name="lif">60</attribute>
+		<attribute name="lifrg">2</attribute>
+		<attribute name="act">90</attribute>
+		<attribute name="actrg">20</attribute>
+		<attribute name="atk">100</attribute>
+		<attribute name="def">40</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,77,74</attribute>
+	</entity>
+	<entity name="cruiserAutophish" class="Unit" type="unit,autophish">
+		<attribute name="prc">2200,3200,600</attribute>
+		<attribute name="upk">0.8</attribute>
+		<attribute name="sel">4000</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">2</attribute>
+		<attribute name="cap">6</attribute>
+		<attribute name="lif">70</attribute>
+		<attribute name="lifrg">2</attribute>
+		<attribute name="act">90</attribute>
+		<attribute name="actrg">20</attribute>
+		<attribute name="atk">120</attribute>
+		<attribute name="def">50</attribute>
+		<attribute name="crc">2</attribute>
+		<attribute name="availableActions">31,77,79,74</attribute>
+	</entity>
+	<!--WARPED-->
+	<entity name="warpMinion" class="Unit" type="unit,warped">
+		<attribute name="prc">300,180,300</attribute>
+		<attribute name="upk">0.8</attribute>
+		<attribute name="sel">700</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">3</attribute>
+		<attribute name="cap">1</attribute>
+		<attribute name="lif">80</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">100</attribute>
+		<attribute name="actrg">15</attribute>
+		<attribute name="atk">110</attribute>
+		<attribute name="def">45</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="availableActions">31,75</attribute>
+	</entity>
+	<entity name="warpedAutophish" class="Unit" type="unit,warped">
+		<attribute name="prc">400,400,200</attribute>
+		<attribute name="upk">0.8</attribute>
+		<attribute name="sel">800</attribute>
+		<attribute name="rez">60</attribute>
+		<attribute name="gat">3</attribute>
+		<attribute name="cap">2</attribute>
+		<attribute name="lif">70</attribute>
+		<attribute name="lifrg">1</attribute>
+		<attribute name="act">120</attribute>
+		<attribute name="actrg">10</attribute>
+		<attribute name="atk">110</attribute>
+		<attribute name="def">45</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="availableActions">31,77,74</attribute>
+	</entity>
+	<entity name="warpedMotokrab" class="Unit" type="unit,warped">
+		<attribute name="prc">600,300,900</attribute>
+		<attribute name="upk">0.4</attribute>
+		<attribute name="sel">800</attribute>
+		<attribute name="rez">30</attribute>
+		<attribute name="gat">5</attribute>
+		<attribute name="cap">2</attribute>
+		<attribute name="lif">90</attribute>
+		<attribute name="lifrg">3</attribute>
+		<attribute name="act">120</attribute>
+		<attribute name="actrg">10</attribute>
+		<attribute name="atk">110</attribute>
+		<attribute name="def">55</attribute>
+		<attribute name="crc">5</attribute>
+		<attribute name="availableActions">31,75,80</attribute>
+	</entity>
+</entities>

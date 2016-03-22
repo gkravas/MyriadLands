@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="554" height="450" backgroundColor="#000000" verticalScrollPolicy="off"
+	horizontalScrollPolicy="off" backgroundAlpha="0.0" creationComplete="onCreationComplete();" xmlns:ns1="myriadLands.ui.buttons.*">
+	<mx:Image id="introImg" horizontalCenter="0" top="0" scaleContent="true" width="100%" height="0" alpha="0.0"/>
+	<mx:Canvas width="270" height="115" id="loginPanel" horizontalCenter="0" verticalCenter="0" alpha="0" borderStyle="solid"
+		borderColor="#000000" themeColor="#000000" borderThickness="1" backgroundAlpha="0.3" backgroundColor="#000000">
+		<mx:Label id="username" color="#FAD39E" fontSize="16" fontFamily="TrebuchetMS" right="160" bottom="73.04999"/>
+		<mx:Label id="password" color="#FAD39E" fontSize="16" fontFamily="TrebuchetMS" right="160" bottom="40.049988"/>
+		<mx:Button label="Login" click="tryToLogin();" bottom="10" right="10"/>
+		<mx:TextInput width="142" id="_username" text="PLAYER" right="10" bottom="73.04999"/>
+		<mx:TextInput width="142" id="_password" text="123456" right="10" bottom="40" displayAsPassword="true"/>
+	</mx:Canvas>
+	<ns1:MainMenuButton id="creditsBtn"/>
+	<ns1:MainMenuButton id="optionsBtn" click="openOptionsPanel();"/>
+	<ns1:MainMenuButton id="multiPlayerBtn" click="showLoginPanel();"/>
+	<ns1:MainMenuButton id="singlePlayerBtn"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import __AS3__.vec.Vector;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			import mx.controls.Text;
+			import gs.TweenMax;
+			import gs.events.TweenEvent;
+			import myriadLands.ui.css.MLFilters;		
+			import mx.core.Application;
+			import mx.core.BitmapAsset;
+			import gamestone.graphics.ImgLoader;
+			import myriadLands.actions.CentralManager;
+			import myriadLands.core.Settings;
+			import gamestone.localization.LocalizationDictionary;
+			import mx.controls.Alert;
+			import gamestone.utils.StringUtil;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.net.NetInternal;
+			
+			use namespace NetInternal;
+			
+			public static const LOGIN_SUCCESS:String = "login_success";
+			public static const LOGIN_IMG_ID:String = "loginBG-misc";
+			
+			protected static const BETWEEN_DISTANCE:int = 150;
+			protected static const RIGHT_CORNER_OFFSET:int = 20;
+			
+			protected var netM:NetworkManager;
+			protected var d:LocalizationDictionary;
+			
+			protected var loginTween:TweenMax;
+			
+			public function init():void {
+				netM = NetworkManager.getInstance();
+				d = LocalizationDictionary.getInstance();
+				netM.setLoginListener(onLoginResult);
+				var ba:BitmapAsset = ImgLoader.getInstance().getBitmapAsset(LOGIN_IMG_ID);
+				width = Application.application.width;
+				height = Application.application.height;
+				introImg.source = ba;
+				introImg.width = width;
+				introImg.height = height * (width / ba.width);
+				d.registerLeemaBinding(username, "text", "username");
+				d.registerLeemaBinding(password, "text", "password");
+				
+				loginPanel.y = height - (loginPanel.height + 10);				
+				d.registerLeemaBinding(singlePlayerBtn, "text", "singlePlayer");
+				d.registerLeemaBinding(multiPlayerBtn, "text", "multiPlayer");
+				d.registerLeemaBinding(optionsBtn, "text", "options");
+				d.registerLeemaBinding(creditsBtn, "text", "credits");
+			}
+			
+			public function tryToLogin():void {
+				netM.login(StringUtil.strip(_username.text), StringUtil.strip(_password.text));
+			}
+			
+			public function onLoginResult(result:String):void {
+				if (result == "true") {
+					dispatchEvent(new Event(LOGIN_SUCCESS));
+					Settings.setUsername(StringUtil.strip(_username.text));
+					Settings.setPassword(StringUtil.strip(_password.text));
+				} else {
+					Alert.show(d.getLeema("loginFail"), d.getLeema("loginFailTitle"), Alert.OK,
+								null, null, null, Alert.OK);
+				}
+			}
+			
+			protected function onCreationComplete():void {
+				var startX:int = width - (singlePlayerBtn.width + RIGHT_CORNER_OFFSET);
+				var startY:int = height * 0.5 - (BETWEEN_DISTANCE * 1.5);
+				
+				singlePlayerBtn.x = startX;
+				singlePlayerBtn.y = startY;
+				singlePlayerBtn.disabled = true;
+				multiPlayerBtn.x = startX;
+				multiPlayerBtn.y = startY;
+				optionsBtn.x = startX;
+				optionsBtn.y = startY;
+				creditsBtn.x = startX;
+				creditsBtn.y = startY;
+				creditsBtn.disabled = true;
+				
+				MLFilters.getMainMenuButtonTween([multiPlayerBtn, optionsBtn, creditsBtn], 0.5, multiPlayerBtn.y + BETWEEN_DISTANCE, phase1Complete);
+				loginPanel.z = 0;
+			}
+			
+			//EVENTS
+			protected function showLoginPanel():void {
+				if (loginTween == null)
+					loginTween = MLFilters.getLoginTween(loginPanel, 1, loginPanelTweenUpdate);
+				else
+					loginTween.reverse();
+			}
+			
+			protected function loginPanelTweenUpdate(e:TweenEvent):void {
+				var rot:Number = e.currentTarget.exposedVars.rotationY * e.currentTarget.progress;
+				loginPanel.transform.matrix3D.prependTranslation(loginPanel.width * 0.5, loginPanel.height * 0.5, 0);
+				loginPanel.transform.matrix3D.prependRotation(1, Vector3D.Y_AXIS);
+				loginPanel.transform.matrix3D.prependTranslation(-loginPanel.width * 0.5, -loginPanel.height * 0.5, 0);
+			}
+			
+			protected function hideLoginPanel():void {
+				if (loginTween == null) return;
+				loginTween.reverse();
+			}
+			
+			//Main menu button animation event phases
+			protected function phase1Complete(e:Event):void {
+				MLFilters.getMainMenuButtonTween([optionsBtn, creditsBtn], 0.5, optionsBtn.y + BETWEEN_DISTANCE, phase2Complete);
+			}
+			
+			protected function phase2Complete(e:Event):void {
+				MLFilters.getMainMenuButtonTween([creditsBtn], 0.5, creditsBtn.y + BETWEEN_DISTANCE);
+			}
+			
+			protected function openOptionsPanel():void {
+				var op:IFlexDisplayObject = PopUpManager.createPopUp(this, OptionsPanel, true);
+				(op as OptionsPanel).init();
+				PopUpManager.centerPopUp(op);
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

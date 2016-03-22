@@ -1,0 +1,170 @@
+<languages default="en">
+	<language id="en">
+		<leema id="unitBreeding">Unit Available for Breeding</leema>
+		<leema id="itemsVault">Items in Vault</leema>
+		<leema id="itemsImport">Items Available for Import</leema>
+		<leema id="itemsExport">Items Set for Export</leema>
+		<leema id="equipmentConstruction">Equipment Available for Construction</leema>
+		<leema id="machineryConstruction">Machinery Available for Construction</leema>
+		<leema id="buildingsConstruction">Buildings Available for Construction</leema>
+		<leema id="championsBreeding">Champions Available for Breeding</leema>
+		<leema id="assetPool">Inactive Asset Pool</leema>
+		<leema id="battlegroupsInf">battlegroups:</leema>
+		
+		<leema id="conquestedLandsInf">conquested lands:</leema>
+		<leema id="activeStructuresInf">active structures:</leema>
+		<leema id="attributes">attributes:</leema>
+		<leema id="factions">factions:</leema>
+		<leema id="citadelTitle">citadel</leema>
+		<leema id="citadelInfo">This is the citadel</leema>
+		<leema id="chasmTitle">chasm</leema>
+		<leema id="chasmInfo">chasm</leema>
+		<leema id="wastelandTitle">wasteland</leema>
+		<leema id="wastelandInfo">wastelans</leema>
+		<leema id="plainTitle">plain</leema>
+		<leema id="plainInfo">plain</leema>
+		<leema id="mountainTitle">mountain</leema>
+		<leema id="mountainInfo">mountain</leema>
+		<leema id="cost">mountain</leema>
+		<leema id="upkeep">upkeep</leema>
+		
+		<!--Attributes-->
+		<leema id="dmg">DMG</leema>
+		<leema id="rng">RNG</leema>
+		<leema id="rad">RAD</leema>
+		<leema id="dur">DUR</leema>
+		<leema id="crf">CRF</leema>
+		<leema id="xylanSpawned">SPN</leema>
+		<leema id="morphidSpawned">SPN</leema>
+		<leema id="brontiteSpawned">SPN</leema>
+		
+		<leema id="xylanPC">RPC</leema>
+		<leema id="morphidPC">RPC</leema>
+		<leema id="brontitePC">RPC</leema>
+		<leema id="upk">UPK</leema>
+		<leema id="sel">SEL</leema>
+		<leema id="gat">GAT</leema>
+		<leema id="cap">CAP</leema>
+		<leema id="mal">MAL</leema>
+		<leema id="mch">MCH</leema>
+		<leema id="lif">LIF</leema>
+		
+		<!--Windows titles-->
+		<leema id="actionsWindowTitle">Actions</leema>
+		<leema id="compassWindowTitle">Compass</leema>
+		<leema id="attributeWindowTitle">Attributes</leema>
+		<leema id="gateWindowTitle">Gate</leema>
+		<leema id="productionWindowTitle">Production</leema>
+		<leema id="musicWindowTitle">Music</leema>
+		<leema id="resourcesWindowTitle">Resources</leema>
+		<leema id="menuWindowTitle">Menu</leema>
+		<leema id="shoutboxWindowTitle">Shoutbox</leema>
+		<leema id="tooltipWindowTitle">Tooltip</leema>
+		<leema id="assetWindowTitle">Asset</leema>
+		<leema id="inventoryWindowTitle">Inventory</leema>
+		<leema id="exportWindowTitle">Export</leema>
+		<leema id="importWindowTitle">Import</leema>
+		<leema id="vaultWindowTitle">Vault</leema>
+		<leema id="selectionWorldMapWindowTitle">Selection</leema>
+		<leema id="selectionCombatMapWindowTitle">Selection</leema>
+		<leema id="alianceWindowTitle">Aliances</leema>		
+		
+		<!--Main menu-->
+		<leema id="username">username</leema>
+		<leema id="password">password</leema>
+		<leema id="singlePlayer">S  ingle Player</leema>
+		<leema id="multiPlayer">M  ultiplayer</leema>
+		<leema id="options">O  ptions</leema>
+		<leema id="credits">C  redits</leema>
+		
+		<!--Options-->
+		<leema id="music">Music</leema>
+		<leema id="soundFX">Sound FX</leema>
+		<leema id="resolution">Resolution</leema>
+		<leema id="fullScreen">fullScreen</leema>
+		
+		<!--Battle waiting panel-->
+		<leema id="waitingBattle1">Waiting for other players to join and become ready</leema>
+		<leema id="waitingBattle2">#~# of #~# players joined, #~# are ready</leema>
+		<leema id="waitingBattle3">You are not ready</leema>
+		<leema id="waitingBattle4">Click here to become ready</leema>
+		<leema id="waitingBattle5">You are ready</leema>
+		<!--Battle end panel-->
+		<leema id="playerWonBattle">You have won the battle</leema>
+		<leema id="playerDisconectedWhileInBattle">Disconected while in battle</leema>
+		<leema id="playerRetired">You have retired from battle</leema>
+		<leema id="playerLost">You have lost the battle</leema>
+		
+		<!--FUNCTIONS-->
+	</language>
+	<language id="de">
+		<leema id="unitBreeding">Unit Available for Breeding</leema>
+		<leema id="itemsVault">Items in Vault</leema>
+		<leema id="itemsImport">Items Available for Import</leema>
+		<leema id="itemsExport">Items Set for Export</leema>
+		<leema id="equipmentConstruction">Equipment Available for Construction</leema>
+		<leema id="machineryConstruction">Machinery Available for Construction</leema>
+		<leema id="buildingsConstruction">Buildings Available for Construction</leema>
+		<leema id="championsBreeding">Champions Available for Breeding</leema>
+		<leema id="assetPool">Inactive Asset Pool</leema>
+		<leema id="battlegroupsInf">battlegroups:</leema>
+		
+		<leema id="conquestedLandsInf">conquested lands:</leema>
+		<leema id="activeStructuresInf">active structures:</leema>
+		<leema id="attributes">attributes:</leema>
+		<leema id="factions">factions:</leema>
+		<leema id="citadelTitle">citadel</leema>
+		<leema id="citadelInfo">This is the citadel</leema>
+		<leema id="chasmTitle">chasm</leema>
+		<leema id="chasmInfo">chasm</leema>
+		<leema id="wastelandTitle">wasteland</leema>
+		<leema id="wastelandInfo">wastelans</leema>
+		<leema id="plainTitle">plain</leema>
+		<leema id="plainInfo">plain</leema>
+		<leema id="mountainTitle">mountain</leema>
+		<leema id="mountainInfo">mountain</leema>
+		<leema id="cost">mountain</leema>
+		<leema id="upkeep">upkeep</leema>
+		
+		<!--Attributes-->
+		<leema id="dmg">DMG</leema>
+		<leema id="rng">RNG</leema>
+		<leema id="rad">RAD</leema>
+		<leema id="dur">DUR</leema>
+		<leema id="crf">CRF</leema>
+		<leema id="xylanSpawned">SPN</leema>
+		<leema id="morphidSpawned">SPN</leema>
+		<leema id="brontiteSpawned">SPN</leema>
+		
+		<leema id="xylanPC">RPC</leema>
+		<leema id="morphidPC">RPC</leema>
+		<leema id="brontitePC">RPC</leema>
+		<leema id="upk">UPK</leema>
+		<leema id="sel">SEL</leema>
+		<leema id="gat">GAT</leema>
+		<leema id="cap">CAP</leema>
+		<leema id="mal">MAL</leema>
+		<leema id="mch">MCH</leema>
+		
+		<!--Windows titles-->
+		<leema id="actionsWindowTitle">Actions</leema>
+		<leema id="compassWindowTitle">Compass</leema>
+		<leema id="attributeWindowTitle">Attributes</leema>
+		<leema id="gateWindowTitle">Gate</leema>
+		<leema id="productionWindowTitle">Production</leema>
+		<leema id="musicWindowTitle">Music</leema>
+		<leema id="resourcesWindowTitle">Resources</leema>
+		<leema id="menuWindowTitle">Menu</leema>
+		<leema id="shoutboxWindowTitle">Shoutbox</leema>
+		<leema id="tooltipWindowTitle">Tooltip</leema>
+		<leema id="assetWindowTitle">Asset</leema>
+		<leema id="inventoryWindowTitle">Inventory</leema>
+		<leema id="exportWindowTitle">Export</leema>
+		<leema id="importWindowTitle">Import</leema>
+		<leema id="vaultWindowTitle">Vault</leema>
+		<leema id="selectionWindowTitle">Selection</leema>
+		
+		<leema id="username">ska</leema>
+		<leema id="password">ta</leema>
+	</language>
+</languages>	

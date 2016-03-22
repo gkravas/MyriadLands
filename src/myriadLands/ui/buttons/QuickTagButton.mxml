@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="255" height="47" xmlns:ns1="myriadLands.ui.buttons.*"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" creationComplete="init();">
+	<mx:TextArea id="info" styleName="OutLineTextArea" width="{this.width - this.height * 0.5 - 1 - this.minimizeButton.width}"
+		 height="44" borderThickness="2" borderColor="#666666" right="{minimizeButton.width}" top="1" wordWrap="true" editable="false"
+		 themeColor="#666666" selectable="false" textAlign="center" click="actionSelected();"/>
+	<mx:Button id="minimizeButton" width="21" height="44" styleName="MLWindowCloseButton" right="0" top="1" click="changeMode();"/>
+	<ns1:CircularButton id="cycleButton" left="1" top="0" width="{this.height}" height="{this.height}" click="nextAvailableAction();"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.events.ActionEvent;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.actions.Action;
+			import gamestone.utils.ArrayUtil;
+			
+			private const actionTransformName:Object = {AbilityAction:"ability", AttackAction:"attack", AuraAction:"aura",
+			GateAction:"gate", HealAction:"heal", MoveAction:"move", OperationAction:"operation",
+			ProductionAction:"produce", RecycleAction:"recycle", ReviveAction:"revive", SpecialAction:"special",
+			UpgradeAction:"upgrade"};
+			
+			private var _d:LocalizationDictionary;
+			
+			private var actions:Array;
+			private var actionList:Array;
+			private var actionFilters:Array;
+			private var actionIndex:int;
+			private var currentAction:*;
+			
+			private function init():void {
+				_d = LocalizationDictionary.getInstance();
+				actions = [];
+				actionIndex = 0;
+			}
+			
+			public function setActionList(actionList:Array):void {
+				this.actionList = actionList;
+				actionIndex = 0;
+				nextAvailableAction();
+			}
+			
+			public function getQuickTagActions():Array {
+				var arr:Array = [];
+				for each(var a:Action in  actions)
+					arr.push(a.id);
+				return arr;
+			}
+			
+			public function setActionFilters(actionFilters:Array):void {
+				this.actionFilters = actionFilters;
+				validateCurrentAction();
+			}
+			
+			public function addAction(action:Action):void {
+				actions.push(action);
+				if (actions.length == 1)
+					nextAvailableAction();
+			}
+			
+			public function removeAction(action:Action):void {					
+				actions = ArrayUtil.remove(actions, action);
+				if (currentAction == action)
+					nextAvailableAction();
+			}
+						
+			private function setCurrentAction():void {
+				currentAction = actions[actionIndex];
+				info.text = _d.getLeema(currentAction.data.name + "Name");
+				cycleButton.setIconName(actionTransformName[(currentAction as Action).data.type] + "-cur");
+			}
+			
+			private function setNoAction():void {
+				currentAction = null;
+				info.text = "";
+				cycleButton.setIconName("");
+			}
+			
+			private function getNextAvailableAction(startIndex:int):int {
+				var index:int;
+				var action:Action;
+				var i:int;
+				//startIndex = (startIndex < 0) ? 0 : startIndex;
+				
+				for (i = startIndex; i < actions.length; i++) {
+					action = actions[i];
+					
+					index = actionList.indexOf(action.id);
+					if (index > -1 && actionFilters.indexOf(action.data.type) > -1)
+						return i;
+				}
+				for (i = 0; i < startIndex; i++) {
+					action = actions[i];
+					
+					index = actionList.indexOf(action.id);
+					if (index > -1 && actionFilters.indexOf(action.data.type) > -1)
+						return i;
+				}
+				return -1;
+			}
+			
+			//EVENT
+			private function nextAvailableAction():void {
+				if (actions.length == 0) {
+					setNoAction();
+					return;
+				} /*else if (actions.length == 1)
+					return;*/
+					
+				var newIndex:int = (actionIndex  < 0 || actionIndex >= actions.length - 1) ? getNextAvailableAction(0) : getNextAvailableAction(actionIndex + 1);
+				actionIndex = newIndex;
+				//setCurrentAction();
+				if (actionIndex == -1)
+					setNoAction();
+				else
+					setCurrentAction();
+			}
+			
+			private function validateCurrentAction():void {
+				if (actions.length == 0) {
+					setNoAction();
+					return;
+				} /*else if (actions.length == 1)
+					return;*/
+					
+				var newIndex:int = (actionIndex  < 0 || actionIndex >= actions.length - 1) ? getNextAvailableAction(0) : getNextAvailableAction(actionIndex);
+				actionIndex = newIndex;
+				//setCurrentAction();
+				if (actionIndex == -1)
+					setNoAction();
+				else
+					setCurrentAction();
+			}
+			
+			private function actionSelected():void {
+				if (currentAction == null) return;
+				dispatchEvent(new ActionEvent(ActionEvent.SELECTED, currentAction));
+			}
+			
+			private function changeMode():void {
+				
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

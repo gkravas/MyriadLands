@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="300">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.BitmapAsset;
+			
+			//SYM
+        	[Embed(source="/assets/images/sym/xylan.png")]
+        	public var xylan:Class;
+        	[Embed(source="/assets/images/sym/structure.png")]
+        	public var structure:Class;
+        	[Embed(source="/assets/images/sym/revive.png")]
+        	public var revive:Class;
+        	[Embed(source="/assets/images/sym/recycle.png")]
+        	public var recycle:Class;
+        	
+        	[Embed(source="/assets/xml/assets.xml", mimeType="application/octet-stream")]
+        	public var CONTENT:Class;
+        	[Embed(source="/assets/xml/dictionary.xml", mimeType="application/octet-stream")]
+        	public var dictionary:Class;
+        	[Embed(source="/assets/xml/locations.xml", mimeType="application/octet-stream")]
+        	public var locations:Class;
+        	
+        	public function getContent():XML {
+	    		var ba:ByteArray = new CONTENT() as ByteArray;
+				return new XML(ba.readUTFBytes(ba.length));
+	    	}
+	    	
+	    	public function getClass(id:String):Class {
+	    		var cls:Class;
+	    		if (hasOwnProperty(id))
+	    			cls = this[id] as Class;
+	    		return cls
+	    	}
+		]]>
+	</mx:Script>
+</mx:Module>

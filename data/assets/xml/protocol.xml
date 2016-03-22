@@ -1,0 +1,91 @@
+<messageTypes>
+	<messageType id="0" name="LOGOUT_REQUEST">
+		<data name="user" type="string"></data>
+	</messageType>
+    <messageType id="1" name="LOGIN_REQUEST">
+    	<data name="user" type="string"></data>
+    	<data name="password" type="string"></data>
+	</messageType>
+    <messageType id="2" name="LOGIN_SUCCESS"/>
+    <messageType id="3" name="LOGIN_FAILURE"/>
+    <messageType id="4" name="ACTION_PERFORMED">
+    	<data name="user" type="string"></data>
+    	<data name="entity" type="string"></data>
+    	<data name="action" type="int"></data>
+    	<data name="args" type="string"></data>
+	</messageType>
+    <messageType id="5" name="PLAYER_JOINED_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+    	<data name="citadel" type="string"></data>
+    	<data name="battlefieldMap" type="string"></data>
+	</messageType>
+    <messageType id="6" name="PLAYER_LEFT_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+	</messageType>
+    <messageType id="7" name="REQUEST_JOIN_BATTLEFIELD">
+        <data name="user" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+    	<data name="password" type="string"></data>
+	</messageType>
+    <messageType id="8" name="OTHER_PLAYERS_JOINED_BATTLEFIELD">
+        <data name="users" type="string"></data>
+	</messageType>
+    <messageType id="9" name="REQUEST_OTHER_PLAYERS_JOINED_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+	</messageType>
+    <messageType id="10" name="PLAYER_FRIEND_STATE_CHANGED">
+        <data name="user" type="string"></data>
+    	<data name="friendState" type="string"></data>
+    	<data name="toUser" type="string"></data>
+	</messageType>
+    <messageType id="11" name="AQUIRE_BATTLEFIELDS">
+    	<data name="battlefields" type="string"></data>
+	</messageType>
+    <messageType id="12" name="CREATE_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+    	<data name="location" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+    	<data name="maxPlayers" type="short"></data>
+    	<data name="password" type="string"></data>
+    	<data name="battlefieldWidth" type="short"></data>
+	</messageType>
+    <messageType id="13" name="BATTLEFIELD_CREATION_SUCCESS">
+    	<data name="user" type="string"></data>
+    	<data name="args" type="string"></data>
+	</messageType>
+    <messageType id="14" name="BATTLEFIELD_CREATION_FAIL">
+    	<data name="reason" type="short"></data>
+	</messageType>
+    <messageType id="15" name="BATTLEFIELD_UPDATE">
+    	<data name="location" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+    	<data name="playersIn" type="short"></data>
+    	<data name="playersReadyInBattlefield" type="short"></data>
+	</messageType>
+    <messageType id="16" name="BATTLEFIELD_REMOVED">
+    	<data name="location" type="string"></data>
+    	<data name="battlefieldName" type="string"></data>
+	</messageType>
+    <messageType id="17" name="PLAYER_READY_IN_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+	</messageType>
+    <messageType id="18" name="BATTLEFIELD_READY_FOR_GAME">
+	</messageType>
+    <messageType id="19" name="PLAYER_REQUEST_LEAVE_BATTLEFIELD">
+    	<data name="user" type="string"></data>
+	</messageType>
+    <messageType id="20" name="REQUEST_JOIN_BATTLEFIELD_FAILED">
+    	<data name="user" type="string"></data>
+    	<data name="reason" type="short"></data>
+	</messageType>
+    <messageType id="21" name="CHAT_OPEN_MESSAGE">
+        <data name="user" type="string"></data>
+        <data name="message" type="string"></data>
+	</messageType>
+    <messageType id="22" name="CHAT_BATTLEFIELD_MESSAGE">
+    	<data name="user" type="string"></data>
+        <data name="message" type="string"></data>
+	</messageType>
+</messageTypes>

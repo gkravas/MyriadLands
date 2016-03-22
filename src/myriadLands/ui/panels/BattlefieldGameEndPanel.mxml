@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="416" height="160" backgroundColor="#000000" backgroundAlpha="0.2" borderStyle="none">
+	<mx:TextArea id="info" styleName="BattleWaitingTextArea" fontSize="18" textAlign="center" verticalScrollPolicy="off" horizontalScrollPolicy="off"
+		backgroundAlpha="0.2" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" editable="false" enabled="false" selectable="true"
+		click="onAcceptLost();"/>
+	<mx:Script>
+		<![CDATA[
+			import flash.utils.setTimeout;
+			
+			import gamestone.localization.LocalizationDictionary;
+			
+			import mx.core.Application;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			
+			import myriadLands.core.GameHelperClass;
+			import myriadLands.core.Settings;
+			import myriadLands.events.NetworkEvent;
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			
+			public static const DISCONECTED:String = "DisconectedWhileInBattle";
+			public static const RETIRED:String = "Retired";
+			public static const LOST:String = "Lost";
+			
+			private static var me:IFlexDisplayObject;
+			private static var clickCallback:Function;
+			
+			
+			public static function show(clickCallback:Function, looses:Boolean = true, reason:int = 0):void {
+				BattlefieldGameEndPanel.clickCallback = clickCallback
+				me = PopUpManager.createPopUp(FlexGlobals.topLevelApplication.root, BattlefieldGameEndPanel, true);
+				PopUpManager.centerPopUp(me);
+				if (looses)
+					(me as BattlefieldGameEndPanel).info.text = LocalizationDictionary.getInstance().getLeema("player" + getReasonStringLeema(reason), [Settings.username]);
+				else
+					(me as BattlefieldGameEndPanel).info.text = LocalizationDictionary.getInstance().getLeema("playerWonBattle", [Settings.username]);
+			}
+			
+			private function onAcceptLost():void {
+				PopUpManager.removePopUp(me);
+				NetworkManager.getInstance().sendMessage(MLProtocol.PLAYER_REQUEST_LEAVE_BATTLEFIELD, {reason:MLProtocol.PLAYER_LOST_BATTLE});
+				BattlefieldGameEndPanel.clickCallback.apply(null);		
+			}
+			
+			private static function getReasonStringLeema(reason:int):String {
+				switch (reason) {
+					case MLProtocol.PLAYER_DISCONECTED_BY_FORCE:
+					return DISCONECTED;
+					break;
+					case MLProtocol.PLAYER_GAVE_UP_BATTLE:
+					return RETIRED;
+					break;
+					case MLProtocol.PLAYER_LOST_BATTLE:
+					return LOST;
+					break;
+				}
+				return "";
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

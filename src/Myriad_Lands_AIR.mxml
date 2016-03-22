@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:core="myriadLands.ui.asComponents*" xmlns:ns1="myriadLands.ui.*"
+	usePreloader="false" applicationComplete="init(event)" preinitialize="preInit(event);" styleName="MainBackground" xmlns:ns2="myriadLands.ui.editor.*" backgroundGradientAlphas="[1.0, 1.0]"
+	backgroundGradientColors="[#333333, #333333]" xmlns:ns3="myriadLands.ui.buttons.*" frameRate="60" showStatusBar="false" resize="onResize();"
+	closing="onApplicationClosing();" xmlns:panels="myriadLands.ui.panels.*">
+	<mx:Style source="myriadLands/ui/css/LookAndFeel.css"/>
+	<mx:Script>
+		<![CDATA[
+			import flash.utils.describeType;
+			import flash.utils.getQualifiedClassName;
+			
+			import gamestone.events.LoaderEvent;
+			import gamestone.events.PackageManagerEvent;
+			import gamestone.graphics.ImgLoader;
+			import gamestone.packaging.PackageManager;
+			import gamestone.utils.DebugX;
+			
+			import mx.core.Application;
+			import mx.core.BitmapAsset;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+			import mx.managers.SystemManager;
+			import mx.resources.ResourceManager;
+			
+			import myriadLands.actions.ActionClass;
+			import myriadLands.actions.CentralManager;
+			import myriadLands.context.MLContext;
+			import myriadLands.core.GameHelperClass;
+			import myriadLands.core.MainLoader;
+			import myriadLands.core.Settings;
+			import myriadLands.entities.EntityClass;
+			import myriadLands.events.GameEvent;
+			import myriadLands.events.NetworkEvent;
+			import myriadLands.modules.Assets;
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.sound.Sounds;
+			import myriadLands.ui.MainScreen;
+			import myriadLands.ui.cursor.MLCursorManager;
+			import myriadLands.ui.panels.BattleWaitingPanel;
+			import myriadLands.ui.panels.ChatPanel;
+			import myriadLands.ui.panels.DebugPanel;
+			import myriadLands.ui.panels.LoadingPanel;
+			import myriadLands.ui.panels.LoginPanel;
+			import myriadLands.ui.panels.MainMenu;
+			import myriadLands.ui.panels.PlanetPanel;
+			
+			private var mainScreen:MainScreen;
+			private var loginPanel:IFlexDisplayObject;
+			private var planetPanel:IFlexDisplayObject;
+			private var loadingPanel:IFlexDisplayObject;
+			
+			private var imgLoader:ImgLoader;
+			
+			private function setupApp():void {
+				new MLContext();
+			}
+			
+			private function preInit(event:Event):void {
+				//MLCursorManager.hideCursor();
+			}
+			
+			private function init(event:Event):void {
+				Settings.load();
+				Settings.setFullScreen(Settings.isFullScreen);
+				EntityClass;
+				ActionClass;
+				imgLoader = ImgLoader.getInstance();
+				imgLoader.addEventListener(LoaderEvent.EXTERNAL_ASSETS_COMPLETE, loadData);
+				planetPanel = PopUpManager.createPopUp(FlexGlobals.topLevelApplication.root, PlanetPanel, true);
+				//DebugPanel.show();
+				(planetPanel as PlanetPanel).loadImages();
+			}
+
+			private function loadData(e:LoaderEvent):void {
+				imgLoader.removeEventListener(LoaderEvent.EXTERNAL_ASSETS_COMPLETE, loadData);
+				(planetPanel as PlanetPanel).init();
+				//(planetPanel as PlanetPanel).isIntro = true;
+				//(planetPanel as PlanetPanel).render = true;
+				
+				loadingPanel = PopUpManager.createPopUp(FlexGlobals.topLevelApplication.root, LoadingPanel, false) as LoadingPanel;
+				(loadingPanel as LoadingPanel).init();	
+				
+				var mainLoader:MainLoader = new MainLoader();
+				mainLoader.addEventListener(Event.COMPLETE, loadingComplete);
+				mainLoader.load();
+				
+			}
+			
+			private function loadingComplete(event:Event):void {
+				//MLCursorManager.showCursor();
+				//MLCursorManager.setCursor(MLCursorManager.SELECT);
+				NetworkManager.getInstance().addEventListener(NetworkEvent.INIT_MAP, onBattleFieldJoined, false, 0, true);
+				(planetPanel as PlanetPanel).initLocationPoints();
+				Sounds.init();
+				Sounds.playSpaceBackground();
+				PopUpManager.removePopUp(loadingPanel);
+				loadingPanel = null;
+				createGamePlayObjects();
+				
+				loginPanel = PopUpManager.createPopUp(this, LoginPanel, false);
+				PopUpManager.centerPopUp(loginPanel);
+				(loginPanel as LoginPanel).init();
+				loginPanel.addEventListener(LoginPanel.LOGIN_SUCCESS, loginSuccess, false, 0, true);
+				(loginPanel as LoginPanel).show();
+				(planetPanel as PlanetPanel).playerCanBrowse = true;
+				(planetPanel as PlanetPanel).startMovePlanetAnim();
+				
+			}
+			
+			private function loginSuccess(e:Event):void {
+				PopUpManager.removePopUp(loginPanel);
+				//(loginPanel as LoginPanel).hide();
+				loginPanel = null;
+				//ChatPanel.show(ChatPanel.OPEN_GAME_TYPE);
+			}
+			
+			private function onBattleFieldJoined(e:Event):void {
+				(planetPanel as PlanetPanel).hideLocationInfo(locationInfoPanelHiden);
+			}
+			
+			private function locationInfoPanelHiden(e:Event):void {
+				PopUpManager.removePopUp(planetPanel);
+				mainScreen.visible = true;
+				dispatchEvent(new GameEvent(GameEvent.INIT_GAME_SCREEN));
+			}
+				
+			private function createGamePlayObjects():void {
+				mainScreen = new MainScreen();
+				//This is for game over
+				mainScreen.setGameOverFunction(onGameOver);
+				//For fx scene o battle game start
+				addEventListener(GameEvent.INIT_GAME_SCREEN, CentralManager.getInstance().prepareBattlefieldGame, false, 0, true);
+				
+				mainScreen.visible = false;
+				addChild(mainScreen);
+			}
+			
+			//Clear everyting here, make it like new
+			private function onGameOver():void {
+				NetworkManager.clear();
+				mainScreen.clear();
+				mainScreen.visible = false;
+				
+				PopUpManager.addPopUp(planetPanel, this, true);
+				//ChatPanel.show(ChatPanel.OPEN_GAME_TYPE);
+			}
+			
+			private function onKeyUp(e:KeyboardEvent):void {
+				if (e.keyCode == Keyboard.F2)
+					DebugPanel.show();
+			}
+			
+			private function onResize():void {
+				if (planetPanel == null) return;
+				planetPanel.width = width;
+				planetPanel.height = height;
+			}
+			
+			private function onApplicationClosing():void {
+				if (!Settings.loggedIn) return;
+				if (GameHelperClass.currentBattlefield != null)
+					NetworkManager.getInstance().sendMessage(MLProtocol.PLAYER_REQUEST_LEAVE_BATTLEFIELD,
+															{reason:MLProtocol.PLAYER_DISCONECTED_BY_FORCE});
+				NetworkManager.getInstance().sendMessage(MLProtocol.LOGOUT_REQUEST, {force:true});
+				DebugX.print(Settings.username + ".txt");
+			}
+		]]>
+	</mx:Script>
+</mx:WindowedApplication>

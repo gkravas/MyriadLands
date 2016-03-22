@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1024" height="768" creationComplete="init();" xmlns:ui="myriadLands.ui.*" xmlns:panels="myriadLands.ui.panels.*">
+	<mx:Canvas id="battlefieldsPanel" width="300" height="322" backgroundColor="#363636" x="362" y="234" alpha="0">
+		<mx:DataGrid id="locationBattleFields" y="32" width="280" horizontalCenter="0" height="250" styleName="LocationBattleFieldsGrid">
+			<mx:columns>
+				<mx:DataGridColumn id="nameColumn" headerText="name" dataField="name"/>
+				<mx:DataGridColumn id="openColumn" headerText="open" dataField="open"/>
+				<mx:DataGridColumn id="maxPlayersColumn" headerText="max players" dataField="maxPlayers"/>
+				<mx:DataGridColumn id="playersInColumn" headerText="players in" dataField="playersIn"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:Button x="241" y="290" label="Join" id="join" click="joinBattlefield();" styleName="MLSimpleButton"/>
+	</mx:Canvas>
+	<mx:Canvas id="battlefieldCreationPanel" width="300" height="322" backgroundColor="#363636" alpha="0">
+		<mx:Label x="10" y="32" text="Name" styleName="OptionPanelLabel" id="battlefieldNameLbl" truncateToFit="true"/>
+		<mx:Label x="10" y="70" text="password" styleName="OptionPanelLabel" id="passwordLbl" truncateToFit="true"/>
+		<mx:Label x="10" y="111" text="max Players" styleName="OptionPanelLabel" id="maxPlayersLbl" truncateToFit="true"/>
+		<mx:Label x="10" y="151" text="battlefield width" styleName="OptionPanelLabel" id="battlefieldWidthLbl" truncateToFit="true"/>
+		<mx:TextInput x="130" y="37" id="battlefieldNameInput"/>
+		<mx:TextInput x="130" y="75.5" id="passwordInput" displayAsPassword="true"/>
+		<mx:ComboBox x="209.5" y="116.5" width="80.5" height="22" id="maxPlayersCB"></mx:ComboBox>
+		<mx:ComboBox x="209.5" y="156.5" width="80.5" height="22" id="battlefieldWidthCB"></mx:ComboBox>
+		<mx:Button label="create" id="createBattlefieldBtn" right="10" bottom="10" styleName="MLSimpleButton" click="onBattlefieldCreation(event);"/>
+	</mx:Canvas>
+	<ui:MLWindow id="locationPanelWindow" x="417" y="39"/>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			import com.greensock.events.TweenEvent;
+			import mx.core.IFlexDisplayObject;
+			import myriadLands.core.GameHelperClass;
+			import gamestone.utils.NumberUtil;
+			import gamestone.utils.ArrayUtil;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.ui.asComponents.WorldMapTile;
+			import mx.containers.GridItem;
+			import myriadLands.Location.LocationData;
+			import mx.managers.PopUpManager;
+			import myriadLands.ui.css.MLFilters;
+			import myriadLands.events.NetworkEvent;
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			import mx.collections.ArrayCollection;
+			
+			private var _location:String;
+			private var netM:NetworkManager;
+			private var d:LocalizationDictionary;
+			
+			private var battlefieldsPanelTween:TweenMax;
+			private var currentLocation:LocationData;
+			private var locationInfoPanel:LocationInfoPanel;
+			private var onHidenCallback:Function;
+			
+			private var passwordPanel:IFlexDisplayObject;
+			
+			public function init():void {
+				d = LocalizationDictionary.getInstance();
+				netM = NetworkManager.getInstance();
+				netM.addEventListener(NetworkEvent.POPULATE_LOCATION_BATTLEFIELDS_PANEL, onUpdate, false, 0, true);
+				
+				locationInfoPanel = new LocationInfoPanel;
+				locationInfoPanel.init();
+				locationPanelWindow.setContent(locationInfoPanel, false, false, locationInfoPanel.width, true);
+				locationPanelWindow.x = battlefieldsPanel.x;
+				locationPanelWindow.y = battlefieldsPanel.y;
+				locationPanelWindow.addEventListener(MLWindow.SHOW_COMPLETE, showWindowComplete, false, 0, true);
+				locationPanelWindow.addEventListener(MLWindow.HIDE_COMPLETE, hideWindowComplete, false, 0, true);
+				locationPanelWindow.addEventListener(MLWindow.CUSTOM_HIDE, selfAutoHideCustom, false, 0, true);
+				
+				locationInfoPanel.createBattleFieldBtn.addEventListener(MouseEvent.CLICK, showBattlefieldCreationPanel, false, 0, true);
+				
+				battlefieldCreationPanel.x = battlefieldsPanel.x;
+				battlefieldCreationPanel.y = battlefieldsPanel.y;
+				
+				poupulateFromDictionary();				
+			}
+			
+			protected function poupulateFromDictionary():void {
+				nameColumn.headerText = d.getLeema("name");
+				openColumn.headerText = d.getLeema("open");
+				maxPlayersColumn.headerText = d.getLeema("maxPlayers");
+				playersInColumn.headerText = d.getLeema("playersIn");
+				
+				battlefieldNameLbl.text = d.getLeema("name");
+				passwordLbl.text = d.getLeema("password");
+				maxPlayersLbl.text = d.getLeema("maxPlayers");
+				battlefieldWidthLbl.text = d.getLeema("battlefieldWidth");
+			}
+			
+			public function show():void {
+				locationPanelWindow.show();
+				//ChatPanel.show(ChatPanel.OPEN_GAME_TYPE);
+			}
+			
+			private function selfAutoHideCustom(e:Event):void {
+				hide(null);
+			}
+			
+			private function showWindowComplete(e:Event):void {
+				MLFilters.getLocationPanelTween(battlefieldsPanel, 1, 1, locationPanelWindow.x + locationPanelWindow.width);
+			}
+			
+			private function showBattlefieldCreationPanel(e:MouseEvent):void {
+				MLFilters.getLocationPanelTween(battlefieldCreationPanel, 1, 1, locationPanelWindow.x - locationPanelWindow.width);
+			}
+			
+			public function hide(callback:Function):void {
+				onHidenCallback = callback;
+				MLFilters.getLocationPanelTween(battlefieldCreationPanel, 1, 0, locationPanelWindow.x);
+				MLFilters.getLocationPanelTween(battlefieldsPanel, 1, 0, locationPanelWindow.x, onHideComplete);
+				if (passwordPanel != null)
+					PopUpManager.removePopUp(passwordPanel);
+				passwordPanel = null;
+			}
+			
+			private function onHideComplete(e:TweenEvent):void {
+				locationPanelWindow.hide();
+			}
+			
+			public function hideWindowComplete(e:Event):void {
+				netM.removeEventListener(NetworkEvent.POPULATE_LOCATION_BATTLEFIELDS_PANEL, onUpdate);
+				PopUpManager.removePopUp(this);
+				if (onHidenCallback != null)
+					onHidenCallback.apply(null, [null]);
+			}
+			
+			public function populate(lData:LocationData):void {
+				currentLocation = lData;
+				locationInfoPanel.populateLocation(currentLocation);
+				populateBattlefields(currentLocation.name);
+				
+				maxPlayersCB.dataProvider = NumberUtil.getNumbersInsideLimits(lData.maxPlayers[LocationData.MIN], lData.maxPlayers[LocationData.MAX]);
+				maxPlayersCB.selectedIndex = 0;
+				
+				battlefieldWidthCB.dataProvider = NumberUtil.getNumbersInsideLimits(lData.tileWidth[LocationData.MIN], lData.tileWidth[LocationData.MAX]);
+				battlefieldWidthCB.selectedIndex = 0;
+			}
+			
+			public function populateBattlefields(location:String = null):void {
+				_location = (location == null) ? _location : location;
+				var data:ArrayCollection = NetworkManager.getInstance().getBattlefields(_location);
+				locationBattleFields.dataProvider = data;
+			}
+									
+			//EVENTS
+			private function joinBattlefield():void {
+				var bf:Object = locationBattleFields.selectedItem;
+				if (bf == null) return;
+				if (bf.playersIn == bf.maxPlayers) return;
+				if (bf.open)
+					netM.sendMessage(MLProtocol.REQUEST_JOIN_BATTLEFIELD, {name:bf.name, password:""});
+				else {
+					passwordPanel = PopUpManager.createPopUp(this, BattleFieldPasswordPanel, true);
+					(passwordPanel as BattleFieldPasswordPanel).init(bf.name);
+					PopUpManager.centerPopUp(passwordPanel);
+				}
+			}
+			private function onUpdate(e:NetworkEvent):void {
+				populateBattlefields();
+			}
+			
+			protected function onBattlefieldCreation(e:MouseEvent):void {
+				if (validateInput(battlefieldNameInput))
+					createBattleField(battlefieldNameInput.text, parseInt(String(maxPlayersCB.selectedItem)), passwordInput.text, parseInt(String(battlefieldWidthCB.selectedItem)));
+			}
+			
+			protected function validateInput(input:TextInput):Boolean {
+				if (battlefieldNameInput.text == "") {
+					battlefieldNameInput.setStyle("backgroundColor", MLFilters.OCHRA);
+					return false;
+				} else {
+					battlefieldNameInput.setStyle("backgroundColor", 0xFFFFFF);
+					return true;
+				}
+			}
+			
+			protected function createBattleField(battlefieldName:String, maxPlayers:int, password:String, battlefieldWidth:int):void {
+				var args:Object = {};
+				args.location = currentLocation.name;
+				args.battlefieldName = battlefieldName;
+				args.maxPlayers = maxPlayers;
+				args.password = password;
+				GameHelperClass.battlefieldCreationPassword = password;
+				args.battlefieldWidth = battlefieldWidth;
+				NetworkManager.getInstance().sendMessage(MLProtocol.CREATE_BATTLEFIELD, args);
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

@@ -1,0 +1,688 @@
+<actions>
+	<!--PRODUCTION-->
+	<action id="2" name="breedChampion" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">1000</attribute>
+		<attribute name="producedTypes">champion</attribute>
+	</action>
+	<action id="3" name="breedHomikin" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">200</attribute>
+		<attribute name="producedTypes">homikin</attribute>
+	</action>
+	<action id="4" name="breedAutophish" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">400</attribute>
+		<attribute name="producedTypes">autophish</attribute>
+	</action>
+	<action id="5" name="breedMotokrab" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">350</attribute>
+		<attribute name="producedTypes">motokrab</attribute>
+	</action>
+	<action id="6" name="constructCoreBuilding" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">1200</attribute>
+		<attribute name="producedTypes">coreStructure</attribute>
+	</action>
+	<action id="7" name="constructCommandBuilding" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">600</attribute>
+		<attribute name="producedTypes">commandBuilding</attribute>
+	</action>
+	<action id="8" name="constructInfrastructure" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">800</attribute>
+		<attribute name="producedTypes">infrastructure</attribute>
+	</action>
+	<action id="9" name="constructClonewards" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">800</attribute>
+		<attribute name="producedTypes">cloneward</attribute>
+	</action>
+	<action id="10" name="constructFlagstone" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">50</attribute>
+		<attribute name="producedTypes">flagstone</attribute>
+	</action>
+	<action id="11" name="manufactureEquipment" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">120</attribute>
+		<attribute name="producedTypes">equipment</attribute>
+	</action>
+	<action id="12" name="breedWarped" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">3000</attribute>
+		<attribute name="producedTypes">warped</attribute>
+	</action>
+	<action id="13" name="breedElder" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">3000</attribute>
+		<attribute name="producedTypes">elder</attribute>
+	</action>
+	<action id="14" name="breedElite" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">3000</attribute>
+		<attribute name="producedTypes">elite</attribute>
+	</action>
+	<action id="15" name="constructOccultBuilding" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">4000</attribute>
+		<attribute name="producedTypes">occultBuilding</attribute>
+	</action>
+	<action id="16" name="manufactureArtifact" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">1600</attribute>
+		<attribute name="producedTypes">artifact</attribute>
+	</action>
+	<action id="86" name="constructLaboratories" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">800</attribute>
+		<attribute name="producedTypes">laboratory</attribute>
+	</action>
+	<action id="87" name="manufactureMachinery" type="ProductionAction" view="worldMap">
+		<attribute name="morphidCost">120</attribute>
+		<attribute name="producedTypes">machinery</attribute>
+	</action>
+	
+	<!--GATE-->
+	<action id="17" name="deployCitadel" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">0</attribute>
+		<attribute name="allowedEntities">citadel</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="18" name="deployStructure" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">50</attribute>
+		<attribute name="allowedEntities">structure</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="19" name="deployFlagstone" type="GateAction" class="DeployFlagstone" view="worldMap">
+		<attribute name="morphidCost">100</attribute>
+		<attribute name="allowedEntities">flagstone</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="21" name="gateWarped" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">150</attribute>
+		<attribute name="allowedEntities">warped</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="22" name="gateSquad" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">250</attribute>
+		<attribute name="allowedEntities">squad</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="23" name="gateUnit" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">150</attribute>
+		<attribute name="allowedEntities">unit</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="24" name="gateChampion" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">100</attribute>
+		<attribute name="allowedEntities">champion</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="25" name="gateHomikin" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">80</attribute>
+		<attribute name="allowedEntities">homikin</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="26" name="gateAutophish" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">70</attribute>
+		<attribute name="allowedEntities">autophish</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="27" name="gateMotokrab" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">70</attribute>
+		<attribute name="allowedEntities">motokrab</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="28" name="summonMachinery" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">140</attribute>
+		<attribute name="allowedEntities">machinery</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="29" name="summonEquipment" type="GateAction" view="worldMap">
+		<attribute name="morphidCost">80</attribute>
+		<attribute name="allowedEntities">equipment</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	
+	<!--MOVEMENT-->
+	<action id="30" name="cruise" type="MoveAction" class="CruiseAction" view="worldMap">
+		<attribute name="morphidCost">120</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="31" name="move" type="MoveAction" class="MoveAction" view="combat">
+		<attribute name="morphidCost">0</attribute>
+		<attribute name="actCost">5</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>		
+	</action>
+	<action id="32" name="stomp" type="MoveAction" class="StompAction" view="combat">
+		<attribute name="morphidCost">200</attribute>
+		<attribute name="actCost">5</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+	</action>
+	
+	<!--OPERATION-->
+	<action id="33" name="exploreLand" type="OperationAction" class="ExploreAction" view="worldMap">
+		<attribute name="morphidCost">33</attribute>
+		<attribute name="highLightValidation"><![CDATA[
+			import myriadLands.entities.Land;
+			var land:Land = this.owner.parentEntity as Land;
+			if (land.structure != null) {
+				returnValue = (!land.explored && land.structure.data.name == "flagstone");
+			} else
+				returnValue = false;
+		]]></attribute>
+		<attribute name="validation"><![CDATA[
+			import myriadLands.entities.Land;
+			var land:Land = this.owner.parentEntity as Land;
+			if (land.structure != null) {
+				returnValue = (!land.explored && land.structure.data.name == "flagstone");
+			} else
+				returnValue = false;
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.owner.parentEntity.explore(100, this.ruinName);
+			this.owner.parentEntity.structure = null;
+			]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			this.owner.parentEntity.explore(100, this.ruinName);
+			this.owner.parentEntity.structure = null;
+		]]></attribute>
+	</action>
+	<action id="34" name="demolition" type="OperationAction" view="worldMap">
+		<attribute name="sound">demolition</attribute>
+		<attribute name="morphidCost">400</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="tileHighlightcolor"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.Land;
+			import myriadLands.combat.CombatHighlight;
+			var land:Land = this.entity as Land;
+			if (land.faction != null && land.structure != null) {
+				if (land.faction.isFactionAlliance(this.owner.faction, [Faction.FOE, Faction.NEUTRAL]))
+					returnValue = CombatHighlight.AVAILABLE;
+			} 
+		]]></attribute>
+		<attribute name="validation"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.Land;
+			returnValue = false;
+			if (this.inputEntity is Land) {
+				var land:Land = this.inputEntity as Land;
+				if (land.faction != null && land.structure != null) {
+					if (land.faction.isFactionAlliance(this.owner.faction, [Faction.FOE, Faction.NEUTRAL])) {
+						if (land == this.toValidateEntity)
+							returnValue = true;
+						else
+							this.action.setToValidateEntity(land);
+					}
+				}
+			}
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.action.playSound();
+			this.toValidateEntity.destroyStructure();
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			this.action.playSound();
+			this.toValidateEntity.destroyStructure();
+		]]></attribute>
+	</action>
+	<action id="35" name="convertLandToWarpedLand" type="OperationAction" view="worldMap">
+		<attribute name="morphidCost">4000</attribute>
+		<attribute name="validation"><![CDATA[this.action.setToValidateEntity(this.owner.parentEntity);]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			import myriadLands.ui.asComponents.WorldMapTile;
+			this.owner.parentEntity.worldMapTile.convertLandTo(WorldMapTile.WARPED_LAND);
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			import myriadLands.ui.asComponents.WorldMapTile;
+			this.owner.parentEntity.worldMapTile.convertLandTo(WorldMapTile.WARPED_LAND);
+		]]></attribute>
+	</action>
+	<action id="36" name="convertLandToConstructedLand" type="OperationAction" view="worldMap">
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="functionality"><![CDATA[
+			import myriadLands.ui.asComponents.WorldMapTile;
+			this.owner.parentEntity.worldMapTile.convertLandTo(WorldMapTile.CONSTRUCTED_LAND);
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			import myriadLands.ui.asComponents.WorldMapTile;
+			this.owner.parentEntity.worldMapTile.convertLandTo(WorldMapTile.CONSTRUCTED_LAND);
+		]]></attribute>
+	</action>
+	<action id="37" name="raid" type="OperationAction" class="RaidAction" view="worldMap">
+		<attribute name="sound">alarm</attribute>
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="38" name="siege" type="OperationAction" view="worldMap">
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="tileHighlightcolor"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.Land;
+			import myriadLands.combat.CombatHighlight;
+			var land:Land = this.entity as Land;
+			if (land.faction != null && land.structure != null) {
+				if (land.faction.isFactionAlliance(this.owner.faction, [Faction.FOE, Faction.NEUTRAL]))
+					returnValue = CombatHighlight.AVAILABLE;
+			} 
+		]]></attribute>
+		<attribute name="validation"><![CDATA[
+			import myriadLands.entities.Land;
+			returnValue = false;
+			if (this.inputEntity is Land) {
+				if (this.inputEntity.structure != null) {
+					if (this.inputEntity == this.toValidateEntity)
+						returnValue = true;
+					else 
+						this.action.setToValidateEntity(this.inputEntity);
+				}
+			}
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.toValidateEntity.structure.modifyEntityFor("mal:10:%", 5, "OperationInfo");
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			this.toValidateEntity.structure.modifyEntityFor("mal:10:%", 5, "OperationInfo");
+		]]></attribute>
+	</action>
+	<action id="39" name="conquest" type="OperationAction" class="ConquestAction" view="worldMap">
+		<attribute name="sound">alarm</attribute>
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="40" name="bombardment" type="OperationAction" view="worldMap">
+		<attribute name="sound">bombardment</attribute>
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="range">1-1</attribute>
+		<attribute name="tileHighlightcolor"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.Land;
+			import myriadLands.combat.CombatHighlight;
+			var land:Land = this.entity as Land;
+			if (land.faction != null && land.squad != null) {
+				if (land.faction.isFactionAlliance(this.owner.faction, [Faction.FOE, Faction.NEUTRAL]))
+					returnValue = CombatHighlight.AVAILABLE;
+			} 
+		]]></attribute>
+		<attribute name="validation"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.Land;
+			returnValue = false;
+			var land:Land = this.inputEntity as Land;
+			if (land.faction != null && land.squad != null) {
+				if (land.faction.isFactionAlliance(this.owner.faction, [Faction.FOE, Faction.NEUTRAL])) {
+					if (land == this.toValidateEntity)
+						returnValue = true;
+					else
+						this.action.setToValidateEntity(land);
+				}
+			}
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.action.playSound();
+			this.toValidateEntity.squad.modifyEntityFor("lif:-10:%,def:-10:%", 5, "OperationInfo");
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			this.action.playSound();
+			this.toValidateEntity.squad.modifyEntityFor("lif:-10:%,def:-10:%", 5, "OperationInfo");
+		]]></attribute>
+	</action>
+	<action id="41" name="smashMachinery" type="OperationAction" view="worldMap">
+		<attribute name="morphidCost">2000</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="validation"><![CDATA[
+			import myriadLands.entities.Machinery;
+			returnValue = false;
+			if (this.inputEntity is Machinery) {
+				if (this.inputEntity == this.toValidateEntity)
+					returnValue = true;
+				else
+					this.setToValidateEntity(this.inputEntity);
+			}
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			(this.toValidateEntity.parentEntity as Structure).removeMachinery(this.toValidateEntity);
+			//this.lastNetArgs = this.toValidateEntity.networkID;
+		]]></attribute>
+		<attribute name="netFunctionality"><![CDATA[
+			//import myriadLands.entities.EntityManager;
+			//import myriadLands.entities.Land;
+			//var target:Land = EntityManager.getInstance().getEntityByID(this.lastNetArray[0]);
+			//(target.parentEntity as Structure).removeMachinery(target);
+			(this.toValidateEntity.parentEntity as Structure).removeMachinery(this.toValidateEntity);
+		]]></attribute>
+	</action>
+	
+	<!--UPGRADE-->
+	<action id="42" name="addAttack" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">400</attribute>
+		<attribute name="upgradeArgs">atk:1:5,D</attribute>
+	</action>
+	<action id="43" name="addDefence" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">400</attribute>
+		<attribute name="upgradeArgs">def:1:5,D</attribute>
+	</action>
+	<action id="44" name="addCriticalChance" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">600</attribute>
+		<attribute name="upgradeArgs">crc:1:5,%</attribute>
+	</action>
+	<action id="45" name="reduceUpkeep" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">800</attribute>
+		<attribute name="upgradeArgs">upk:-5:5,%</attribute>
+	</action>
+	<action id="46" name="reduceOperationMalus" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1200</attribute>
+		<attribute name="upgradeArgs">mal:-5:5,%</attribute>
+	</action>
+	<action id="47" name="reduceGate" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">120</attribute>
+		<attribute name="upgradeArgs">gat:-5:5,%</attribute>
+	</action>
+	<!--<action id="48" name="increaseResourceAcquisition" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1000</attribute>
+		<attribute name="upgradeArgs">crc:5:2,%</attribute>
+	</action>
+	<action id="49" name="increaseMorphidAcquisition" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1000</attribute>
+		<attribute name="upgradeArgs">morphid:10:2,%</attribute>
+	</action>
+	<action id="50" name="increaseXylanAcquisition" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1000</attribute>
+		<attribute name="upgradeArgs">xylan:10:2,%</attribute>
+	</action>-->
+	<action id="51" name="increaseDamage" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1200</attribute>
+		<attribute name="upgradeArgs">extraDmg:10:5,%</attribute>
+	</action>
+	<action id="52" name="increaseLifeHealing" type="UpgradeAction" view="worldMap">
+		<attribute name="morphidCost">1200</attribute>
+		<attribute name="upgradeArgs">lifrg:10:5,%</attribute>
+	</action>
+	
+	<!--AURA ACTIONS-->
+	<action id="53" name="homikinCommand" type="AuraAction" class="StaticCombatAuraAction" view="combat">
+		<attribute name="applyToType">homikin</attribute>
+		<attribute name="applyToAttributes">lif:10:%,atk:10:%</attribute>
+	</action>
+	<action id="54" name="autophishCommand" type="AuraAction" class="StaticCombatAuraAction" view="combat">
+		<attribute name="applyToType">autophish</attribute>
+		<attribute name="applyToAttributes">lif:10:%,atk:10:%</attribute>
+	</action>
+	<action id="55" name="motokrabCommand" type="AuraAction" class="StaticCombatAuraAction" view="combat">
+		<attribute name="applyToType">motokrab</attribute>
+		<attribute name="applyToAttributes">lif:10:%,atk:10:%</attribute>
+	</action>
+	<action id="56" name="homikinAttackSynergy" type="AuraAction" class="DynamicCombatAuraAction" view="combat">
+		<attribute name="highLightValidation"><![CDATA[
+			import myriadLands.faction.Faction;
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.entities.Entity;
+			var entityOn:Entity = this.entity.entityOn;
+			returnValue = (ArrayUtil.inArray(entityOn.data.type, "homikin") && this.owner.faction == entityOn.faction);
+		]]></attribute>	
+		<attribute name="applyToAttributes">atk:5:%</attribute>
+	</action>
+	<action id="57" name="auraOfVoid" type="AuraAction" class="DynamicCombatAuraAction" view="combat">
+		<attribute name="radius">5</attribute>
+		<attribute name="highLightValidation"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.CombatGround;
+			import myriadLands.entities.Entity;
+			var entityOn:Entity = this.entity.entityOn;
+			if (this.owner.faction.getAllianceWithFaction(entityOn.faction) == Faction.FOE) {
+				var distance:int = (this.owner.parentEntity as CombatGround).calculateTileDistance(this.entity as CombatGround);
+				returnValue = (distance <= this.action.radius);
+			} else
+				returnValue = false;
+		]]></attribute>	
+		<attribute name="applyToAttributes">def:-10:%,lif:-10:%</attribute>
+	</action>
+	<action id="58" name="auraOfActionRegeneration" type="AuraAction" class="DynamicCombatAuraAction" view="combat">
+		<attribute name="radius">5</attribute>
+		<attribute name="highLightValidation"><![CDATA[
+			import myriadLands.faction.Faction;
+			import myriadLands.entities.CombatGround;
+			import myriadLands.entities.Entity;
+			var entityOn:Entity = this.entity.entityOn;
+			if (entityOn != this.owner && this.owner.faction.isFactionAlliance(entityOn.faction, [Faction.FRIEND, Faction.PLAYER])) {
+				var distance:int = (this.owner.parentEntity as CombatGround).calculateTileDistance(this.entity as CombatGround);
+				returnValue = (distance <= this.action.radius);
+			} else
+				returnValue = false;
+		]]></attribute>	
+		<attribute name="applyToAttributes">actrg:10:%</attribute>
+	</action>
+	<action id="59" name="augmentedUpgradeCap" type="AuraAction" class="StaticWorldMapAuraAction" view="worldMap">
+		<attribute name="applyToType">structure</attribute>
+		<attribute name="applyToAttributes">cap:1:+</attribute>
+	</action>	
+	<!--ABILITIES-->
+	<!--For abilities functionality and net functionality is the same-->
+	<action id="60" name="enableRecycling" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onInit</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.setRecyclingEnabled(true);]]></attribute>
+	</action>
+	<action id="61" name="8SquadsPreserved" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onInit</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxPreservedEntities += 8;]]></attribute>
+	</action>
+	<action id="62" name="enableTrade" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onInit</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.setTradeEnabled(true);]]></attribute>
+	</action>
+	<action id="63" name="5kBrontiteStorage" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onWorldMapEntered</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxBrontite += 50 * 1000;]]></attribute>
+	</action>
+	<action id="64" name="10kMorphidStorage" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onWorldMapEntered</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxMorphid += 100 * 1000;]]></attribute>
+	</action>
+	<action id="65" name="10kXylanStorage" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onWorldMapEntered</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxXylan += 100 * 1000;]]></attribute>
+	</action>
+	<action id="66" name="2UnitsActive" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onInit</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxBattlegroups += 2;]]></attribute>
+	</action>
+	<action id="67" name="2StructuresActive" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onInit</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxStructures += 2;]]></attribute>
+	</action>
+	<action id="68" name="8LandsOwned" type="AbilityAction" view="worldMap">
+		<attribute name="engageType">onWorldMapEntered</attribute>
+		<attribute name="functionality"><![CDATA[this.owner.faction.maxLands += 8;]]></attribute>
+	</action>
+	<action id="69" name="livingBomb" type="AbilityAction" view="combat">
+		<attribute name="engageType">onDeath</attribute>
+		<attribute name="callsOtherAction">true</attribute>
+		<attribute name="functionality"><![CDATA[
+			this.action.executeActionsFromScript(["-7"]);
+		]]></attribute>
+	</action>
+	<!--ATTACK ACTIONS-->
+	<action id="75" name="slashAttack" type="AttackAction" view="combat">
+		<attribute name="actCost">5</attribute>
+		<attribute name="range">1-2</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="damage">8,12</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	<action id="76" name="rifleAttack" type="AttackAction" view="combat">
+		<attribute name="actCost">10</attribute>
+		<attribute name="range">1-8</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="damage">20,30</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	<action id="77" name="mortarAttack" type="AttackAction" view="combat">
+		<attribute name="actCost">12</attribute>
+		<attribute name="range">4-12</attribute>
+		<attribute name="radius">3</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="damage">10,12</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	<action id="78" name="crippleAttack-1" type="AttackAction" view="combat">
+		<attribute name="morphidCost">400</attribute>
+		<attribute name="actCost">10</attribute>
+		<attribute name="range">1-15</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	<action id="79" name="crippleDefence-1" type="AttackAction" view="combat">
+		<attribute name="morphidCost">500</attribute>
+		<attribute name="actCost">10</attribute>
+		<attribute name="range">1-15</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	<action id="80" name="smashEquipment" type="AttackAction" view="combat">
+		<attribute name="morphidCost">3000</attribute>
+		<attribute name="actCost">5</attribute>
+		<attribute name="range">1-15</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="requiersInput">true</attribute>
+		<attribute name="chargeStaticCost">false</attribute>
+		<attribute name="functionality"><![CDATA[]]></attribute>
+	</action>
+	
+	<!--HEAL ACTIONS-->
+	<action id="81" name="Heal10Lif" type="HealAction" view="combat">
+		<attribute name="actCost">20</attribute>
+		<attribute name="range">0-5</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="damage">-10</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="82" name="Heal1Defence" type="HealAction" view="combat">
+		<attribute name="actCost">25</attribute>
+		<attribute name="range">0-5</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="attributeToApply">def</attribute>
+		<attribute name="damage">-1</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	
+	<!--BOOST ACTIONS-->
+	<action id="83" name="Boost2Defence" type="BoostAction" view="combat">
+		<attribute name="morphidCost">200</attribute>
+		<attribute name="actCost">20</attribute>
+		<attribute name="range">0-5</attribute>		
+		<attribute name="radius">1</attribute>
+		<attribute name="duraion">5</attribute>
+		<attribute name="attributeToApply">def</attribute>
+		<attribute name="damage">-2</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<action id="84" name="Boost2Attack" type="BoostAction" view="combat">
+		<attribute name="morphidCost">200</attribute>
+		<attribute name="actCost">20</attribute>
+		<attribute name="range">0-5</attribute>
+		<attribute name="radius">1</attribute>
+		<attribute name="duraion">5</attribute>
+		<attribute name="attributeToApply">atk</attribute>
+		<attribute name="damage">-2</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	
+	<!--ASSET POOL ACTIONS-->
+	<action id="-1" name="revive" type="ReviveAction" class="PoolAction" view="assetPool">
+		<attribute name="staticCost"><![CDATA[
+			morphid = this.entityToApply.morphidPC *  this.entityToApply.rez;
+			xylan = this.entityToApply.xylanPC *  this.entityToApply.rez;
+			brontite = this.entityToApply.brontitePC *  this.entityToApply.rez;
+		]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.owner.faction.preservedEntities++;		
+			this.entityToApply.multiplyAttribute("lif", 0.05);
+			this.entityToApply.multiplyAttribute("act", 0.05);
+			this.entityToApply.multiplyAttribute("atk", 0.05);
+			this.entityToApply.multiplyAttribute("def", 0.05);
+			if (this.entityToApply is Structure)
+				this.entityToApply.addToAttribute("cap", -1);
+			else if (this.entityToApply is Squad)
+				this.entityToApply.addToAttribute("unt", -1);
+			this.owner.faction.removeFromVault(this.entityToApply);
+			this.owner.faction.addToInventory(this.entityToApply);
+		]]></attribute>
+	</action>
+	<action id="-2" name="recycle" type="RecycleAction" class="PoolAction" view="assetPool">
+		<attribute name="noCost">true</attribute>
+		<attribute name="functionality"><![CDATA[
+			this.owner.faction.xylan += this.entityToApply.xylanPC * this.entityToApply.rep;
+			this.owner.faction.removeFromVault(this.entityToApply);
+			this.owner.faction.removeEntity(this.entityToApply);
+			this.owner.destroy();
+		]]></attribute>
+	</action>
+	<action id="-3" name="buy" type="BuyAction" class="PoolAction" view="assetPool">
+		<attribute name="staticCost"><![CDATA[morphid = this.owner.sel;]]></attribute>
+		<attribute name="functionality"><![CDATA[
+			this.entityToApply.faction.removeFromExportion(this.entityToApply);
+			this.entityToApply.faction.removeEntity(this.entityToApply);
+			this.owner.faction.addEntity(this.entityToApply);
+			this.owner.faction.addToInventory(this.entityToApply);
+			
+			var cost:Object = this.action.getCostExternal({});
+			this.owner.faction.morphid -= cost.morphid;
+			this.owner.faction.xylan -= cost.xylan;
+			this.owner.faction.brontite -= cost.brontite;
+			this.entityToApply.faction.morphid += cost.morphid;
+			this.entityToApply.faction.xylan += cost.xylan;
+			this.entityToApply.faction.brontite += cost.brontite;
+						
+			this.entityToApply.faction.removeFromImportion(this.entityToApply);
+		]]></attribute>
+	</action>
+	<action id="-4" name="toAssetPool" type="ToAssetPoolAction" class="PoolAction" view="assetPool">
+		<attribute name="noCost">true</attribute>
+		<attribute name="functionality"><![CDATA[
+			this.owner.faction.removeFromExportion(this.entityToApply);
+			this.owner.faction.addToInventory(this.entityToApply);
+		]]></attribute>
+	</action>
+	<action id="-5" name="export" type="ExportAction" class="PoolAction" view="assetPool">
+		<attribute name="noCost">true</attribute>
+		<attribute name="functionality"><![CDATA[
+			this.owner.faction.removeFromInventory(this.entityToApply);
+			this.owner.faction.addToExportion(this.entityToApply);
+		]]></attribute>
+	</action>
+	<!--EXTRA COMBAT ACTION-->
+	<action id="-6" name="gateCombatAction" type="GateAction" class="GateCombatAction" view="combat">
+		<attribute name="noCost">true</attribute>
+		<attribute name="radius">4</attribute>
+		<attribute name="requiersInput">true</attribute>
+	</action>
+	<!--LINKED COMBAT ACTION TO ABILITY-->
+	<action id="-7" name="livingBombAttack" type="AttackAction" view="combat">
+		<attribute name="noCost">true</attribute>
+		<attribute name="validation"><![CDATA[
+			returnValue = (this.owner.lastParentEntity != null);
+			this.toValidateEntity = (returnValue) ? this.owner.lastParentEntity : this.owner.parentEntity;
+		]]></attribute>
+		<attribute name="configForScriptExecution"><![CDATA[
+			import gamestone.utils.NumberUtil;
+			this.action.finalDamage = (-1 * NumberUtil.randomInt(this.action.damage[0], this.action.damage[1]) + this.owner.extraDmg);
+			this.action.isCritical = this.action.getCriticalChance();
+		]]></attribute>
+		<attribute name="radius">3</attribute>
+		<attribute name="attributeToApply">lif</attribute>
+		<attribute name="damage">20</attribute>
+	</action>
+</actions>

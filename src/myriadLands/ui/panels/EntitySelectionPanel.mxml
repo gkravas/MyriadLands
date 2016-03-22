@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" height="130" xmlns:ns1="myriadLands.ui.buttons.*"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" creationComplete="init();">
+	<mx:Button id="titleBar" height="100%" left="0" top="0" width="24" styleName="MLWindowCloseButton" click="playShowHideEffect(event);"/>
+	<mx:Grid id="content" horizontalGap="1" verticalGap="1" left="24" top="1">
+		<mx:GridRow width="100%" height="100%" id="row1"/>
+		<mx:GridRow width="100%" height="100%" id="row2"/>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			import com.greensock.events.TweenEvent;
+			import mx.containers.GridItem;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.entities.Entity;
+			import myriadLands.ui.css.MLFilters;
+			
+			private var showHideEffect:TweenMax;
+			private var _disabled:Boolean;
+			private var entityListForPopulate:Array;
+			private var onEntityEngage:Function;
+			
+			private function init():void {
+				titleIcon.disabled = true;
+			}
+			
+			private function playShowHideEffect(e:MouseEvent):void {
+				if (width == titleBar.width)
+					show();
+				else
+					hide();
+			}
+			
+			public function hide():void {
+				if (showHideEffect != null) {
+					showHideEffect.pause();
+					showHideEffect = null;
+				}
+				showHideEffect = MLFilters.getWindowOpenCloseWidthEffect(this, 0.5, titleBar.width, showHideComplete);
+			}
+			
+			public function show():void {
+				if (showHideEffect != null) {
+					showHideEffect.pause();
+					showHideEffect = null;
+				}
+				showHideEffect = MLFilters.getWindowOpenCloseWidthEffect(this, 0.5, titleBar.width + content.width, showHideComplete);
+			}
+			
+			public function reOpen(entityList:Array, f:Function):void {
+				entityListForPopulate = entityList;
+				onEntityEngage = f;
+				showHideEffect = MLFilters.getWindowOpenCloseWidthEffect(this, 0.5, titleBar.width, reOpenCloseComplete);
+			}
+			
+			private function populatePanel():void {
+				//clearRows();
+				row1.removeAllChildren();
+				row2.removeAllChildren();
+				
+				var ent:Entity;
+				for (var i:int = 0; i < entityListForPopulate.length; i++) {
+					var sq:SquareButton = new SquareButton();
+					sq.width = 63;
+					sq.height = 63;
+					var gi:GridItem = new GridItem();
+					gi.addChild(sq);
+					if (i % 2 == 0)
+						row1.addChild(gi);
+					else
+						row2.addChild(gi);
+					sq.setEntity(entityListForPopulate[i]);
+					sq.addEventListener(MouseEvent.CLICK, onEntityEngage, false, 0, true);
+				}
+			}
+			
+			private function clearRows():void {
+				var gi:GridItem;
+				var sq:SquareButton;
+				for each(gi in row1) {
+					sq = gi.removeChildAt(0) as SquareButton;
+					sq = null;
+				}
+				for each(gi in row2) {
+					sq = gi.removeChildAt(0) as SquareButton;
+					sq = null;
+				}
+			}
+			//EVENTS
+			private function showHideComplete(e:TweenEvent):void {
+				showHideEffect = null;
+			}
+			
+			private function reOpenCloseComplete(e:TweenEvent):void {
+				showHideEffect = null;
+				populatePanel();
+				showHideEffect = MLFilters.getEntitySelectionPanelOpenDelayedEffect(this, 0.5, titleBar.width + content.width, showHideComplete);
+			}
+			
+			//SETTERS
+			public function set disabled(v:Boolean):void {
+				_disabled = v;
+				titleBar.enabled = !v;
+				titleIcon.visible = !v;
+			}
+			
+			//GETTERS
+			public function get disabled():Boolean {
+				return _disabled;
+			}
+		]]>
+	</mx:Script>
+	<ns1:CircularButton width="{titleBar.width - 3}" height="{titleBar.width - 3}" y="106" x="1" id="titleIcon"/>
+</mx:Canvas>

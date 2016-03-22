@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="272" backgroundColor="#FFFFFF" xmlns:ns1="myriadLands.ui.buttons.*" backgroundAlpha="0.0" xmlns:ns2="myriadLands.ui.*" xmlns:ns3="myriadLands.ui.panels.*"
+	creationComplete="init();" horizontalScrollPolicy="off" verticalScrollPolicy="off" xmlns:text="myriadLands.ui.text.*" currentState="{INVALID_MODE}">
+	<mx:Grid x="0" y="0" verticalGap="0" id="_grid" width="100%"  horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas x="-1.4210855E-14" y="0" width="100%" height="62">
+					<ns1:CircularButton x="4" y="3" id="changeModeButton" click="onChangeModeButtonClick(event)"/>
+					<ns1:CircularButton width="26" height="26" x="54" y="3" id="moveFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="70" y="33" id="boostFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="101" y="33" id="upgradeFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="132" y="33" id="specialFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="163" y="33" id="auraFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="194" y="33" id="abilityFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="209" y="3" id="healFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="85" y="3" id="attackFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="116" y="3" id="operationFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="147" y="3" id="productionFilterButton" click="toggleFilter(event);"/>
+					<ns1:CircularButton width="26" height="26" x="178" y="3" id="gateFilterButton" click="toggleFilter(event);"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas x="0" y="0" width="100%" height="0" id="actionList" maxHeight="172" backgroundColor="#000000"
+					horizontalScrollPolicy="off" verticalScrollPolicy="off">
+					<mx:Grid id="actionListGrid" width="100%" height="172" left="0" top="0" horizontalScrollPolicy="off"
+						verticalScrollPolicy="on" verticalScrollBarStyleName="MLScrollBar">
+					</mx:Grid>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas x="0" y="0" width="100%" height="0" id="quickTagList" maxHeight="154"  horizontalScrollPolicy="off" verticalScrollPolicy="off" backgroundColor="#000000">
+					<mx:Grid id="quickTagGrid" width="100%" height="154" left="0" top="4" verticalGap="2">
+						<mx:GridRow width="100%">
+							<mx:GridItem width="100%">
+								<ns1:QuickTagButton width="100%" id="quickTag1"/>
+							</mx:GridItem>
+						</mx:GridRow>
+						<mx:GridRow width="100%">
+							<mx:GridItem width="100%">
+								<ns1:QuickTagButton width="100%" id="quickTag2"/>
+							</mx:GridItem>
+						</mx:GridRow>
+						<mx:GridRow width="100%">
+							<mx:GridItem width="100%">
+								<ns1:QuickTagButton width="100%" id="quickTag3"/>
+							</mx:GridItem>
+						</mx:GridRow>
+					</mx:Grid>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas x="0" y="0" width="100%" height="0" id="invalidActions" maxHeight="172"  horizontalScrollPolicy="off" verticalScrollPolicy="off" backgroundColor="#000000">
+					<mx:Image id="invalidImg" width="148" height="131"  horizontalCenter="0" verticalCenter="0"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas width="100%" height="54">
+					<text:AttributeValueItem x="1" y="5" id="dmg"/>
+					<text:AttributeValueItem x="139" y="5" id="rng"/>
+					<text:AttributeValueItem x="139" y="28" id="dur"/>
+					<text:AttributeValueItem x="1" y="28" id="rad"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Canvas width="100%">
+					<ns3:CostPanel left="0" top="1" id="costPanel"/>
+				</mx:Canvas>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+	<mx:states>
+		<mx:State name="fullMenuMode"/>
+		<mx:State name="quicktagMode"/>
+		<mx:State name="invalid"/>
+	</mx:states>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.TweenAlign;
+			import com.greensock.TweenMax;
+			import com.greensock.TimelineMax;
+			import com.greensock.events.TweenEvent;
+			import mx.events.FlexEvent;
+			import myriadLands.actions.ActionView;
+			import myriadLands.entities.Land;
+			import myriadLands.actions.MovementAction;
+			import myriadLands.actions.GateAction;
+			import myriadLands.actions.ProductionAction;
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.events.ActionEvent;
+			import flash.utils.setInterval;
+			import myriadLands.actions.Action;
+			import myriadLands.loaders.ActionLoader;
+			import myriadLands.ui.buttons.ActionButton;
+			import mx.containers.GridItem;
+			import mx.containers.GridRow;
+			import myriadLands.entities.Entity;
+			import gamestone.utils.StringUtil;
+			import gamestone.graphics.RGB;
+			import gamestone.display.MySprite;
+			import gamestone.graphics.ImgLoader;
+			import myriadLands.ui.css.MLFilters;
+			import gamestone.localization.LocalizationDictionary;
+						
+			private const FULL_MENU_MODE:String = "fullMenuMode";
+			private const QUICK_TAG_MODE:String = "quicktagMode";
+			private const INVALID_MODE:String = "invalid";
+			
+			private var mode:String;
+			
+			private var actionLoader:ActionLoader;
+			private var quickTagChooserTween:TweenMax;
+			private var actionListPanelTween:TweenMax;
+			private var invalidPanelTween:TweenMax;
+			
+			private var actionFilters:Array;
+			
+			private var currentEntity:Entity;
+			private var selectedAction:Action;
+			private var selectedQuickTagAction:Action;
+			
+			private var currentActionButton:ActionButton;
+			
+			private var imgLoader:ImgLoader;
+			private var _d:LocalizationDictionary;
+			private var _currentView:String;
+			
+			private var actionButtons:Array;
+			
+			private function init():void {
+				actionButtons = [];
+				_d = LocalizationDictionary.getInstance();
+				imgLoader = ImgLoader.getInstance();
+				actionLoader = ActionLoader.getInstance();
+				mode = QUICK_TAG_MODE;
+				setInvalidImg();
+				
+				moveFilterButton.setIconName("move-cur");
+				moveFilterButton.toggle = true;
+				moveFilterButton.setToggled(true);
+				
+				boostFilterButton.setIconName("boost-cur");
+				boostFilterButton.toggle = true;
+				boostFilterButton.setToggled(true);
+				
+				upgradeFilterButton.setIconName("upgrade-cur");
+				upgradeFilterButton.toggle = true;
+				upgradeFilterButton.setToggled(true);
+				
+				specialFilterButton.setIconName("special-cur");
+				specialFilterButton.toggle = true;
+				specialFilterButton.setToggled(true);
+				
+				auraFilterButton.setIconName("aura-cur");
+				auraFilterButton.toggle = true;
+				auraFilterButton.setToggled(true);
+				
+				abilityFilterButton.setIconName("ability-cur");
+				abilityFilterButton.toggle = true;
+				abilityFilterButton.setToggled(true);
+				
+				healFilterButton.setIconName("heal-cur");
+				healFilterButton.toggle = true;
+				healFilterButton.setToggled(true);
+				
+				attackFilterButton.setIconName("attack-cur");
+				attackFilterButton.toggle = true;
+				attackFilterButton.setToggled(true);
+				
+				operationFilterButton.setIconName("operation-cur");
+				operationFilterButton.toggle = true;
+				operationFilterButton.setToggled(true);
+				
+				productionFilterButton.setIconName("produce-cur");
+				productionFilterButton.toggle = true;
+				productionFilterButton.setToggled(true);
+				
+				gateFilterButton.setIconName("gate-cur");
+				gateFilterButton.toggle = true;
+				gateFilterButton.setToggled(true);
+				
+				_d.registerLeemaBinding(dmg, "attributeName", "dmg");
+				_d.registerLeemaBinding(rng, "attributeName", "rng");
+				_d.registerLeemaBinding(dur, "attributeName", "dur");
+				_d.registerLeemaBinding(rad, "attributeName", "rad");
+				
+				quickTag1.addEventListener(ActionEvent.SELECTED, quickTagActionSelected, false, 0, true);
+				quickTag2.addEventListener(ActionEvent.SELECTED, quickTagActionSelected, false, 0, true);
+				quickTag3.addEventListener(ActionEvent.SELECTED, quickTagActionSelected, false, 0, true);
+				
+				actionFilters = ["MoveAction", "BoostAction", "UpgradeAction", "SpecialAction", "AuraAction", "AbilityAction",
+				"HealAction", "AttackAction", "OperationAction", "ProductionAction", "GateAction"];
+				
+				quickTag1.setActionFilters(actionFilters);
+				quickTag2.setActionFilters(actionFilters);
+				quickTag3.setActionFilters(actionFilters);
+				
+				onChangeModeButtonClick(null);
+			}
+			
+			private function setInvalidImg():void {
+				var invalidSprite:MySprite = new MySprite();
+				invalidSprite.addChild(imgLoader.getBitmapAsset("invalid-cur"));
+				var invalidRGB:RGB = new RGB;
+				invalidRGB.setHex(MLFilters.GREY);
+				invalidSprite.setMyColorTransform(MySprite.getColorTransformFromRGB(invalidRGB, new RGB(0, 0, 0, 0)));
+				invalidImg.addChild(invalidSprite);
+			}
+			
+			private function playChangeModeTween():void {
+				var group:TimelineMax;
+				if (quickTagChooserTween != null)
+					quickTagChooserTween.pause();
+				if (actionListPanelTween != null)
+					actionListPanelTween.pause();
+				if (invalidPanelTween != null)
+					invalidPanelTween.pause();
+				firstPhase();
+			}
+			
+			public function setInvalid():void {
+				//actionListGrid.removeAllChildren();
+				mode = INVALID_MODE;
+				changeModeButton.setIconName(mode + "-cur");
+				playChangeModeTween();
+			}
+			
+			private function setActionList():void {
+				//populateWithActions();
+				quickTag1.setActionList(currentEntity.availableActions.concat(currentEntity.availableAbilities));
+				quickTag2.setActionList(currentEntity.availableActions.concat(currentEntity.availableAbilities));
+				quickTag3.setActionList(currentEntity.availableActions.concat(currentEntity.availableAbilities));
+				mode = FULL_MENU_MODE;
+				changeModeButton.setIconName(mode + "-sym");
+				playChangeModeTween();
+			}
+			
+			public function setEntity(entity:Entity):void {
+				//destroyActions();
+				currentEntity = entity;
+				//Land has no actions
+				if (entity.availableActions.length == 0 && entity.availableAbilities.length == 0)
+					setInvalid();
+				else {
+					setActionList();
+				}
+			}
+			
+			/*private function destroyActions():void {
+				if (currentEntity == null) return;
+				var actions:Array = actionLoader.getAvailableActions(currentEntity, _currentView);
+				var actionD:Action;
+				for each (actionD in actions)
+					actionD.markForDestroy();
+			}*/
+			
+			private function populateWithActions():void {
+				clearActionButtons();
+				actionListGrid.removeAllChildren();
+				if (currentEntity == null) return;
+				var actions:Array = actionLoader.getAvailableActions(currentEntity, _currentView);
+				actions = actions.concat(actionLoader.getAvailableAbilities(currentEntity, _currentView));
+				var actionD:Action;
+				
+				for each (actionD in actions) {
+					if (actionFilters.indexOf(actionD.data.type) == -1) continue;
+					var aName:String = actionD.data.name
+					var row:GridRow = new GridRow();
+					var item:GridItem = new GridItem();
+					var action:ActionButton = new ActionButton;
+					item.addChild(action);
+					row.addChild(item);
+					actionListGrid.addChild(row);
+					
+					action.setAction(actionD);
+					_d.registerLeemaBinding(action, "actionName", aName + "Name");
+					actionButtons.push(action);
+					if (quickTag1.getQuickTagActions().indexOf(aName) > -1)
+						action.setQuickTagIcon(1);
+					else if (quickTag2.getQuickTagActions().indexOf(aName) > -1)
+						action.setQuickTagIcon(2);
+					else if (quickTag3.getQuickTagActions().indexOf(aName) > -1)
+						action.setQuickTagIcon(3);
+					else
+						action.setQuickTagIcon(0);
+					action.addEventListener(MouseEvent.CLICK, actionButtonClicked, false, 0, true);
+					action.addEventListener(ActionEvent.SELECTED, showToolTipAndCost, false, 0, true);
+					action.addEventListener(ActionEvent.QUICK_TAG_CHANGED, actionQuickTagChanded, false, 0, true);
+				}
+			}
+			
+			private function clearActionButtons():void {
+				actionListGrid.verticalScrollPosition = 0;
+				var action:ActionButton;
+				for each(action in actionButtons) {
+					_d.unregisterLeemaBinding(action, "actionName", action.getAction().data.name+ "Name");
+					action.getAction().markForDestroy();
+				}
+				actionButtons = [];
+			}
+			
+			private function filterActions():void {
+				populateWithActions();
+				quickTag1.setActionFilters(actionFilters);
+				quickTag2.setActionFilters(actionFilters);
+				quickTag3.setActionFilters(actionFilters);
+			}
+			
+			public function resetSelectedAction():void {
+				if (currentActionButton == null) return;
+				currentActionButton.setSelected(false);
+				currentActionButton = null;
+			}
+			
+			//Events
+			private function actionButtonClicked(e:MouseEvent):void {
+				var ab:ActionButton = (e.currentTarget as ActionButton);
+				if (currentActionButton != ab) {
+					if (currentActionButton != null)
+						currentActionButton.setSelected(false);
+					currentActionButton = ab;
+					currentActionButton.setSelected(true);
+				} else {
+					currentActionButton.setSelected(false);
+					currentActionButton = null;
+				}
+			}
+			
+			private function onChangeModeButtonClick(e:Event):void {
+				if (mode == INVALID_MODE) return;
+				mode = (mode == FULL_MENU_MODE) ? QUICK_TAG_MODE : FULL_MENU_MODE
+				changeModeButton.setIconName(mode + "-sym");
+				playChangeModeTween();
+			}
+			
+			private function showToolTipAndCost(e:ActionEvent):void {
+				var action:Action = e.action;
+				if (selectedAction != action) {
+					selectedAction = action;
+					fillAttributes();
+					selectSelectedAction();
+				} else {
+					engageSelectedAction();
+					selectedAction = null;
+				}
+			}
+			
+			private function quickTagActionSelected(e:ActionEvent):void {
+				var action:Action = e.action;
+				if (selectedQuickTagAction != action) {
+					selectedQuickTagAction = action;
+					fillQuickTagAttributes();
+					selectSelectedQuickTagAction();
+				} else {
+					engageSelectedQuickTagAction();
+					selectedQuickTagAction = null;
+				}
+			}
+			
+			private function fillAttributes():void {
+				var dmgs:String = (selectedAction.damage[0] == selectedAction.damage[1]) ? selectedAction.damage[0] : String(selectedAction.damage);
+				dmg.setAttributeValue((dmgs == "undefined") ? "0,0" : dmgs);
+				var rngs:String = String(selectedAction.range).replace(",", "-");
+				rng.setAttributeValue((rngs == "undefined") ? "0-0" : rngs);
+				dur.setAttributeValue(String(selectedAction.duration));
+				rad.setAttributeValue(String(selectedAction.radius));
+				//needs fixing for starting dynamic cost
+				costPanel.lifePoints = String(selectedAction.lifCost);
+				costPanel.actionPoints = String(selectedAction.actCost);
+				costPanel.morphid = String(selectedAction.getCostExternal({}).morphid);
+			}
+			
+			private function fillQuickTagAttributes():void {
+				dmg.setAttributeValue(String(selectedQuickTagAction.damage).replace(",", "-"));
+				rng.setAttributeValue(String(selectedQuickTagAction.range).replace(",", "-"));
+				dur.setAttributeValue(String(selectedQuickTagAction.duration));
+				rad.setAttributeValue(String(selectedQuickTagAction.radius));
+				//needs fixing for starting dynamic cost
+				costPanel.lifePoints = String(selectedQuickTagAction.lifCost);
+				costPanel.actionPoints = String(selectedQuickTagAction.actCost);
+				costPanel.morphid = String(selectedQuickTagAction.morphidCost);
+			}
+			
+			public function clearAttributes():void {
+				dmg.setAttributeValue("0");
+				rng.setAttributeValue("0");
+				dur.setAttributeValue("0");
+				rad.setAttributeValue("0");
+				
+				costPanel.lifePoints = "0";
+				costPanel.actionPoints = "0";
+				costPanel.morphid = "0";
+			}
+			
+			public function updateDynamicCost(cost:Object):void {
+				costPanel.lifePoints = String(cost.lif);
+				costPanel.actionPoints = String(cost.act);
+				costPanel.morphid = String(cost.morphid);
+			}
+			
+			//Menu action
+			//If there is a null problem with action execution, search here
+			private function selectSelectedAction():void {
+				selectedAction.selected();
+				if (selectedAction is ProductionAction || selectedAction is GateAction || selectedAction.requiersInput)
+					selectedAction = null;
+			}
+			
+			private function engageSelectedAction():void {
+				selectedAction.engage();
+			}
+			
+			//Quick action
+			private function selectSelectedQuickTagAction():void {
+				selectedQuickTagAction.selected();
+				if (selectedQuickTagAction is ProductionAction || selectedQuickTagAction is GateAction || selectedQuickTagAction is MovementAction)
+					selectedQuickTagAction = null;
+			}
+			
+			private function engageSelectedQuickTagAction():void {
+				selectedQuickTagAction.engage();
+			}
+			
+			private function actionQuickTagChanded(e:ActionEvent):void {
+				var mode:int = e.quickTag;
+				var action:Action = e.action;
+				if (mode == -1) return;
+				switch (mode){
+					case 0:
+					quickTag3.removeAction(action);
+					break;
+					
+					case 1:
+					quickTag1.addAction(action);
+					break;
+					
+					case 2:
+					quickTag1.removeAction(action);
+					quickTag2.addAction(action);
+					break;
+					
+					case 3:
+					quickTag2.removeAction(action);
+					quickTag3.addAction(action);
+					break;
+				}
+			}
+			
+			private function toggleFilter(e:MouseEvent):void {
+				var b:CircularButton = e.currentTarget as CircularButton;
+				var filterName:String = b.id.replace("FilterButton", "Action");
+				filterName = StringUtil.capitalizeFirst(filterName);
+				if (b.isToggled())
+					actionFilters.push(filterName);
+				else
+					ArrayUtil.remove(actionFilters, filterName);
+				filterActions();
+			}
+					
+			private function firstPhase():void {
+				if (mode == FULL_MENU_MODE) {
+					invalidPanelTween = MLFilters.getPanelOpenCloseEffect(invalidActions, 0.5, 0);
+					quickTagChooserTween = MLFilters.getPanelOpenCloseEffect(quickTagList, 0.5, 0);
+					actionListPanelTween = MLFilters.getPanelOpenCloseEffect(actionList, 0.5, 0, secondPhase);
+					new TimelineMax({tweens:[invalidPanelTween, quickTagChooserTween, actionListPanelTween], align:TweenAlign.START});
+				} else if (mode == QUICK_TAG_MODE) {
+					invalidPanelTween = MLFilters.getPanelOpenCloseEffect(invalidActions, 0.5, 0);
+					quickTagChooserTween = MLFilters.getPanelOpenCloseEffect(quickTagList, 0.5, 0);
+					actionListPanelTween = MLFilters.getPanelOpenCloseEffect(actionList, 0.5, 0, secondPhase);
+					new TimelineMax({tweens:[invalidPanelTween, quickTagChooserTween, actionListPanelTween], align:TweenAlign.START});
+				} else if (mode == INVALID_MODE) {
+					invalidPanelTween = MLFilters.getPanelOpenCloseEffect(invalidActions, 0.5, 0);
+					quickTagChooserTween = MLFilters.getPanelOpenCloseEffect(quickTagList, 0.5, 0);
+					actionListPanelTween = MLFilters.getPanelOpenCloseEffect(actionList, 0.5, 0, secondPhase);
+					new TimelineMax({tweens:[invalidPanelTween, quickTagChooserTween, actionListPanelTween], align:TweenAlign.START});
+				}
+			}
+					
+			private function secondPhase(e:TweenEvent):void {
+				actionListGrid.addEventListener(FlexEvent.UPDATE_COMPLETE, thirdPhase, false, 0, true);
+				populateWithActions();
+			}
+			
+			private function thirdPhase(e:FlexEvent):void {
+				actionListGrid.removeEventListener(FlexEvent.UPDATE_COMPLETE, thirdPhase);
+				if (mode == FULL_MENU_MODE)
+					actionListPanelTween = MLFilters.getPanelOpenCloseEffect(actionList, 0.5, actionList.maxHeight);
+				else if (mode == QUICK_TAG_MODE)
+					quickTagChooserTween = MLFilters.getPanelOpenCloseEffect(quickTagList, 0.5, quickTagList.maxHeight);
+				else if (mode == INVALID_MODE)
+					invalidPanelTween = MLFilters.getPanelOpenCloseEffect(invalidActions, 0.5, invalidActions.maxHeight);
+			}
+			
+			//SETTERS
+			public function set currentView(v:String):void {
+				if (_currentView == v) return;
+				_currentView = v;
+			}
+			//GETTERS
+			public function get currentView():String {return _currentView;}
+			public function getEntity():Entity {return currentEntity;}
+		]]>
+	</mx:Script>
+</mx:Canvas>

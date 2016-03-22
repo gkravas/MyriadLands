@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" height="{85 + xylanCost.height}" creationComplete="init();"
+	width="{Settings.ENTITY_LIST_COUNT * (Settings.ENTITY_LIST_ITEM_WIDTH + 4)}"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" backgroundAlpha="0.0" xmlns:ns1="myriadLands.ui.text.*">
+	<mx:Grid id="productionGrid" x="0" y="0" width="{this.width}" height="{this.height - xylanCost.height}" horizontalScrollPolicy="on" 
+		verticalScrollPolicy="off" horizontalScrollBarStyleName="MLScrollBar" horizontalGap="4" verticalGap="2">
+		<mx:GridRow id="productionList"/>
+	</mx:Grid>
+	<ns1:CostItem bottom="0" left="0" id="xylanCost" width="61" height="19"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.core.Settings;
+			//384, 85
+			import myriadLands.actions.CentralManager;
+			import myriadLands.actions.ProductionAction;
+			import myriadLands.loaders.EntityLoader;
+			import mx.containers.GridRow;
+			import mx.containers.GridItem;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.entities.Entity;
+			
+			private var eLoader:EntityLoader;
+			private var currentAction:ProductionAction;
+			private var previousSelectedButton:SquareButton;
+			private var selectedEntity:Entity;
+			
+			private function init():void {
+				xylanCost.setIconName("xylan-sym");
+				eLoader = EntityLoader.getInstance();
+				//width = Settings.ENTITY_LIST_COUNT * (Settings.ENTITY_LIST_ITEM_WIDTH + parseInt(productionGrid.getStyle('horizontalGap')));
+			}
+			
+			public function setAction(action:ProductionAction):void {
+				currentAction = action;
+				productionList.removeAllChildren();
+				var list:Array = currentAction.producedTypes; 
+				var item:String;
+				for each(item in list){
+					addEntity(item);
+				}
+			}
+			
+			private function addEntity(entity:String):void {
+				var item:GridItem = new GridItem();
+				var sqB:SquareButton= new SquareButton();
+				sqB.width = 60;
+				sqB.height = 60;
+				item.percentWidth = 100;
+				item.addChild(sqB);
+				productionList.addChild(item);
+				sqB.setEntity(eLoader.getEntity(entity, null, true));
+				sqB.toggle = true;
+				sqB.addEventListener(MouseEvent.CLICK, onEntitySelected, false, 0, true);
+			}
+			
+			private function onEntitySelected(e:MouseEvent):void {
+				var ent:Entity = (e.currentTarget as SquareButton).getEntity();
+				if (selectedEntity == ent) {
+					if (currentAction.virtualValidate({entityName:ent.name}))
+						currentAction.produceEntity(ent.data.name);
+				} else {
+					selectedEntity = ent;
+					if (previousSelectedButton != null)
+						previousSelectedButton.setToggled(false);
+					previousSelectedButton = (e.currentTarget as SquareButton);
+					//previousSelectedButton.setGlow();
+					xylanCost.text = String(ent.xylanPC);
+				}
+			}
+			
+			public function reset():void {
+				xylanCost.text = "";
+				productionList.removeAllChildren();
+				currentAction = null;
+			} 
+		]]>
+	</mx:Script>
+</mx:Canvas>

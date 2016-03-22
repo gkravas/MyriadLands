@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="50" height="19" creationComplete="init()" backgroundAlpha="0.0" borderStyle="none"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Canvas width="100%" height="20" left="0" top="0" id="titleBar" styleName="MLWindowTitleBar" mouseDown="onTitleMouseDown(event)"
+		mouseUp="onTitleMouseUp(event)" enterFrame="onEnterFrame(event)" verticalScrollPolicy="off" horizontalScrollPolicy="off" borderStyle="none">
+		<mx:Button right="0" top="0" width="17" height="100%" styleName="MLWindowCloseButton" id="closeButton"
+			click="playShowHideEffect(event)"/>
+		<mx:Label text="This is the title" id="title" left="10" top="0" height="100%" styleName="MLWindowTitle" mouseEnabled="false"/>
+		<mx:TextArea width="73" height="15" right="55" styleName="EntityListCounter" cornerRadius="6" borderStyle="solid"
+			backgroundColor="#666666" borderColor="#666666" themeColor="#666666" verticalCenter="0" wordWrap="false" editable="true"
+			text="0 / 0" id="entityCounter" selectable="false" paddingTop="-2" textAlign="center" visible="false"/>
+	</mx:Canvas>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			import com.greensock.events.TweenEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.ui.css.MLFilters;			
+			
+			public static const SHOW_COMPLETE:String = "showComplete";
+			public static const HIDE_COMPLETE:String = "hideComplete";
+			public static const CUSTOM_HIDE:String = "customHide";
+			
+			private const startHeight:int = 19 + offSetY;
+			private const contentX:int = 0;
+			private const contentY:int = 19 + offSetY;
+			private const offSetY:int = 3;
+			
+			private var d:LocalizationDictionary;
+			private var startDraging:Boolean;
+			private var moved:Boolean;
+			private var mPoint:Point;
+			
+			private var showHideEffect:TweenMax;
+			private var content:Canvas;
+			private var showHideTitleBarOnly:Boolean;
+			private var movable:Boolean;
+			private var customAutoHide:Boolean;
+			private var titleBarWidth:int;
+			
+			private var currentCapacity:int;
+			private var maxCapacity:int;
+			
+			private var _isVisible:Boolean;
+			
+			private function init():void
+			{
+				d = LocalizationDictionary.getInstance();
+			}
+			
+			public function setContent(content:Canvas, showHideTitleBarOnly:Boolean = false, movable:Boolean = true, titleBarWidth:int = 0, customAutoHide:Boolean = false):void
+			{
+				if (titleBarWidth != 0) {
+					this.titleBarWidth = titleBarWidth;
+					titleBar.width = titleBarWidth;
+				}
+				this.movable = movable;
+				this.showHideTitleBarOnly = showHideTitleBarOnly;
+				this.content = content;
+				this.customAutoHide = customAutoHide;
+				addChild(content);
+				content.x = contentX;
+				content.y = contentY;
+				width = content.width;
+				height = content.height + offSetY + title.height;
+				
+				ChangeWatcher.watch(content, "height", onContentHeightChanged);
+				ChangeWatcher.watch(content, "width", onContentWidthChanged);
+				//may create error
+				_isVisible = true;
+			}
+			
+			public function setMaxCapacity(value:int):void {
+				maxCapacity = value;
+				updateEntityCounter();
+			}
+			
+			public function setCurrentCapacity(value:int):void {
+				currentCapacity = value;
+				updateEntityCounter();
+			}
+			
+			private function updateEntityCounter():void {
+				entityCounter.text = currentCapacity + " / "+ maxCapacity;
+			}
+			
+			public function set titleText(leemaID:String):void
+			{
+				d.registerLeemaBinding(title,"text", leemaID);
+			}
+			
+			public function get titleText():String
+			{
+				return title.text;
+			}
+			
+			public function isVisible():Boolean	{
+				return _isVisible;
+			}
+			
+			//Visibility
+			public function hide():void {
+				if (showHideEffect != null) {
+					showHideEffect.pause();
+					showHideEffect = null;
+				}
+				_isVisible = false;
+				if (!showHideTitleBarOnly)
+					showHideEffect = MLFilters.getWindowOpenCloseHeightEffect(this, 0.5, 0, 0, showHideComplete);
+				else
+					showHideEffect = MLFilters.getPanelOpenCloseEffect(this, 0.5, titleBar.height, showHideComplete);
+			}
+			
+			public function show():void {
+				if (showHideEffect != null) {
+					showHideEffect.pause();
+					showHideEffect = null;
+				}
+				_isVisible = true;
+				if (!showHideTitleBarOnly)
+					showHideEffect = MLFilters.getWindowOpenCloseHeightEffect(this, 0.5, titleBar.height + offSetY + content.height, 1, showHideComplete);
+				else
+					showHideEffect = MLFilters.getPanelOpenCloseEffect(this, 0.5, titleBar.height + offSetY + content.height, showHideComplete);
+			}
+			
+			private function playShowHideEffect(event:MouseEvent):void {
+				if (!showHideTitleBarOnly) {
+					if (!customAutoHide)
+						hide();
+					else
+						dispatchEvent(new Event(CUSTOM_HIDE));
+				} else {
+					if (height == titleBar.height)
+						show();
+					else {
+						if (!customAutoHide)
+							hide();
+						else
+							dispatchEvent(new Event(CUSTOM_HIDE));
+					}
+				}
+			}
+			
+			private function showHideComplete(e:TweenEvent):void {
+				showHideEffect = null;
+				if (_isVisible)
+					dispatchEvent(new Event(SHOW_COMPLETE));
+				else
+					dispatchEvent(new Event(HIDE_COMPLETE));
+			}
+			
+			//Events
+			private function onContentHeightChanged(e:Event):void
+			{
+				height = content.height + titleBar.height;
+			}
+			
+			private function onContentWidthChanged(e:Event):void
+			{
+				width = content.width;
+				if (titleBarWidth != 0) {
+					titleBar.width = titleBarWidth;
+				}
+			}
+			
+			private function onTitleMouseUp(event:MouseEvent):void
+			{
+				//if (!moved)
+				//	playShowHideEffect(null);
+				//else
+				//	moved = false;
+				startDraging = false;
+			}
+			
+			private function onEnterFrame(event:Event):void
+			{
+				if (!startDraging) return;
+				var newPoint:Point = localToGlobal( new Point(mouseX, mouseY));
+				var dx:int = newPoint.x - mPoint.x;
+				var dy:int = newPoint.y - mPoint.y;
+				//if (dx != 0 || dy != 0)
+				//	moved = true;
+				x += dx;
+				y += dy;
+				mPoint = newPoint;
+			}
+			
+			private function onTitleMouseDown(event:MouseEvent):void
+			{
+				if (!movable) return;
+				mPoint = new Point(event.stageX, event.stageY);
+				startDraging = true;
+				this.parent.setChildIndex(this, this.parent.numChildren - 1);
+			}
+			
+			public function get hasCustomAutoHide():Boolean {return customAutoHide;}
+		]]>
+	</mx:Script>
+</mx:Canvas>

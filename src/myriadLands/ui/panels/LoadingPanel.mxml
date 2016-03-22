@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" mouseEnabled="false" borderColor="#000000" backgroundColor="#000000" backgroundAlpha="0.0">
+	<mx:Image id="bg" horizontalCenter="0" verticalCenter="0" width="{height * 0.6}" height="{height * 0.6}" scaleContent="true" alpha="0.5" maintainAspectRatio="true"/>
+	<mx:ProgressBar id="_progressBar" mode="manual" styleName="LoadingBar" bottom="80" horizontalCenter="0" labelPlacement="center" height="30" visible="false"/>
+	<mx:Script>
+		<![CDATA[
+			import gamestone.events.LoaderEvent;
+			import gamestone.graphics.ImgInitParams;
+			import gamestone.graphics.ImgLoader;
+			
+			import mx.core.Application;
+			import mx.core.BitmapAsset;
+			import mx.core.FlexGlobals;
+			import mx.core.FlexSprite;
+			import mx.core.UIComponent;
+			
+			import myriadLands.core.MainLoader;
+			import myriadLands.ui.css.MLFilters;
+			
+			public function init():void {
+				ImgLoader.getInstance().addEventListener(LoaderEvent.ASSET_LOADED, updateProgress, false, 0 ,true);
+				var ba:BitmapAsset = ImgLoader.getInstance().getBitmapAsset("morphid-misc");
+				ba.smoothing = true;
+				bg.source = ba;
+				ImgLoader.getInstance().addEventListener(LoaderEvent.ASSET_LOADED, updateProgress, false, 0 ,true);
+				width = FlexGlobals.topLevelApplication.width;
+				height = FlexGlobals.topLevelApplication.height;
+				_progressBar.width = width * 0.5;
+				bg.z = 0;
+			}
+			
+			protected function updateProgress(e:LoaderEvent):void {
+				bg.mask = generateMask(0, 2 * Math.PI * e.current / e.total, bg.width);
+				bg.mask.x = 50;
+				bg.mask.y = -80;
+				_progressBar.setProgress(e.current, e.total);
+			}
+
+			public function generateMask(min:Number, max:Number, r:int = 50):DisplayObject {
+				var a:Shape = new Shape();	
+				a.graphics.drawRect(0, 0, 2 * r, 2 * r);			
+				a.graphics.beginFill(0);
+				a.graphics.moveTo(r + Math.cos(min) * r, r + Math.sin(min) * r);
+				for (var i:Number = min; i < max; i += .05)
+					a.graphics.lineTo(r + Math.cos(i) * r, r + Math.sin(i) * r);
+				a.graphics.lineTo(r, r);
+				return a;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

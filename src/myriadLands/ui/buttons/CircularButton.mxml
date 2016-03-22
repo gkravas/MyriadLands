@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="OuterCircularButton" width="44" height="44"
+	initialize="init();" currentState="{UP}" currentStateChange="{currentStateChanged();}" xmlns:skins="myriadLands.ui.skins.*" xmlns:buttons="myriadLands.ui.buttons.*"
+	mouseDown="{this.currentState = DOWN;}" mouseUp="{onMouseUp(event);}"
+	mouseOver="{this.currentState = OVER;}" mouseOut="{onMouseOut(event);}"
+	click="onClick(event);">
+	<buttons:InnerCircularButton id="bg" width="100%" height="100%"/>
+	<mx:states>
+		<mx:State name="up"/>
+		<mx:State name="over"/>
+		<mx:State name="down"/>
+		<mx:State name="toggled"/>
+		<mx:State name="disabled"/>
+	</mx:states>
+	<mx:Image id="sprite" width="70%" height="70%" mouseEnabled="true"
+		scaleContent="true"	horizontalCenter="0" verticalCenter="0"/>
+	<mx:Script>
+		<![CDATA[
+			import gamestone.packaging.PackageManager;
+			import gamestone.packaging.AssetPackage;
+			import myriadLands.modules.Assets;
+			import mx.binding.utils.BindingUtils;
+			import mx.events.ToolTipEvent;
+			import myriadLands.actions.CentralManager;
+			import mx.events.FlexEvent;
+			import mx.core.BitmapAsset;
+			import gamestone.graphics.ImgLoader;
+			import gamestone.display.MySprite;
+			import gamestone.graphics.RGB;
+			import myriadLands.ui.css.MLFilters;
+			
+			private const UP:String = "up";
+			private const OVER:String = "over";
+			private const DOWN:String = "down";
+			private const TOGGLED:String = "toggled";
+			private const DISABLED:String = "disabled";
+			
+			private var _RGBTransform:RGB;
+			private var _RGBOffSet:RGB;
+			private var _toggle:Boolean;
+			private var _isToggled:Boolean;
+			private var _disabled:Boolean;
+			private var _customTooltip:String;
+							
+			private function init():void {
+				_RGBTransform = new RGB();
+       			_RGBOffSet = new RGB(0, 0, 0);
+       			BindingUtils.bindProperty(this, "toolTip", this, "id");
+       			customTooltip = id;
+       			CentralManager.getInstance().setToolTipHandler(this);
+			}
+			
+			public function setIconName(name:String):void {
+				sprite.addEventListener(FlexEvent.UPDATE_COMPLETE, onComp, false, 0, true);
+				sprite.visible = false;
+				
+				var ba:BitmapAsset = null;//(PackageManager.getInstance().getPackage("assets") as AssetPackage).getBitmapAsset("images","sym-recycle");
+				var bmp:BitmapAsset = (ba != null) ? ba : ImgLoader.getInstance().getBitmapAsset(name);
+	     		sprite.source = bmp;
+			}
+     		
+     		public function setIcon(ba:BitmapAsset):void {
+				sprite.addEventListener(FlexEvent.UPDATE_COMPLETE, onComp, false, 0, true);
+				sprite.visible = false;
+	     		sprite.source = ba;
+			}
+			
+     		private function currentStateChanged():void {
+     			bg.currentState = this.currentState;
+				_RGBTransform.setHex(getStyle(currentState + "IconColor") as uint);
+			    sprite.transform.colorTransform = MySprite.getColorTransformFromRGB(_RGBTransform, _RGBOffSet);
+			}
+			
+			public function setToggled(v:Boolean):void {
+				_isToggled = v;
+				currentState = v ? TOGGLED : UP;
+			}
+			
+			public function isToggled():Boolean {
+				return _isToggled;
+			}
+			
+			//Events
+			public function onMouseUp(e:MouseEvent):void {
+				this.currentState = OVER;
+				if (_toggle)
+					_isToggled = !_isToggled;
+			}
+			
+			public function onMouseOut(e:MouseEvent):void {
+				if (!_toggle)
+					this.currentState = UP;
+				else {
+					this.currentState = (_isToggled) ? TOGGLED : UP;
+				}
+			}
+			
+			public function onClick(e:MouseEvent):void {
+				
+			}
+			
+			public function onComp(e:FlexEvent):void {
+				sprite.visible = true;
+				sprite.removeEventListener(FlexEvent.UPDATE_COMPLETE, onComp);
+			}
+			
+			//Setters
+			public function set toggle(v:Boolean):void {
+				_toggle = v;
+			}
+			
+			public function set disabled(v:Boolean):void {
+				_disabled = v;
+				mouseChildren = !_disabled;
+				mouseEnabled = !_disabled;
+			}
+			
+			public function set customTooltip(v:String):void {
+				_customTooltip = v;
+			}
+			
+			//Getters
+			public function get toggle():Boolean {
+				return _toggle;
+			}
+			
+			public function get disabled():Boolean {
+				return _disabled;
+			}
+			
+			public function get customTooltip():String {
+				return _customTooltip;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

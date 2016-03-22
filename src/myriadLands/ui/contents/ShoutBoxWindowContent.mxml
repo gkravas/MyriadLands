@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="281" height="182" xmlns:ns1="myriadLands.ui.buttons.*"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" creationComplete="init();">
+	<mx:TextArea x="{changeModeButton.width * 0.5}" y="{changeModeButton.width * 0.5}"
+		width="{this.width - changeModeButton.width * 0.5}" height="{this.width - changeModeButton.height * 0.5}"
+		styleName="actionButtonText" wordWrap="true" editable="false" id="content" verticalScrollBarStyleName="MLScrollBar"
+		horizontalScrollPolicy="off" verticalScrollPolicy="auto" paddingTop="{changeModeButton.height * 0.5}" selectable="false">
+	</mx:TextArea>
+	<ns1:CircularButton id="changeModeButton" x="0" y="0" width="46" height="46" click="toggleMode();"/>
+	<mx:Script>	
+		<![CDATA[
+			import mx.core.UIComponent;
+			import myriadLands.actions.Action;
+			import myriadLands.entities.Entity;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.ui.css.MLFilters;
+			
+			private const SHOUTBOX_MODE:String = "shoutbox";
+			private const TOOLTIP_MODE:String = "tooltip";
+			
+			private var mode:String;
+			private var previousToolTip:String;
+			private var currentToolTip:String;
+			private var d:LocalizationDictionary;
+			
+			private function init():void {
+				mode = TOOLTIP_MODE;
+				changeModeButton.setIconName(mode + "-sym");
+				d = LocalizationDictionary.getInstance();
+			}
+			
+			private function toggleMode():void {
+				mode = (mode == SHOUTBOX_MODE) ? TOOLTIP_MODE : SHOUTBOX_MODE;
+				setModeAndPlayEffect();
+			}
+			
+			private function setModeAndPlayEffect():void {
+				changeModeButton.setIconName(mode + "-sym");
+				//play effect
+			}
+			
+			public function setEntity(entity:Entity):void {
+				if (mode != TOOLTIP_MODE) return;
+				currentToolTip = entity.data.name + "Info"
+				content.text = d.getLeema(currentToolTip);
+			}
+			
+			public function setAction(action:Action):void {
+				if (mode != TOOLTIP_MODE) return;
+				currentToolTip = action.data.name + "Info"
+				content.text = d.getLeema(currentToolTip);
+			}
+			
+			public function setUIComponent(comp:UIComponent):void {
+				if (mode != TOOLTIP_MODE) return;
+				previousToolTip = currentToolTip;
+				currentToolTip = comp.toolTip + "Info"
+				content.text = d.getLeema(currentToolTip);
+			}
+			
+			public function setText(txt:String):void {
+				if (mode != TOOLTIP_MODE) return;
+				currentToolTip = txt;
+				content.text = txt;
+			}
+			
+			public function showPreviousToolTip():void {
+				if (mode != TOOLTIP_MODE) return;
+				currentToolTip = previousToolTip;
+				previousToolTip = "";
+				content.text = d.getLeema(currentToolTip);
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

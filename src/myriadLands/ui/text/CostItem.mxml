@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="{circularButton.height + 5}" xmlns:ns1="myriadLands.ui.buttons.*">
+	<mx:TextArea x="9" y="2" styleName="OutLineTextArea" height="15" id="textArea" width="{this.width - textArea.x}" maxChars="6" text="" wordWrap="false" editable="false" mouseEnabled="false" textAlign="right" borderStyle="none" selectable="false"/>
+	<ns1:CircularButton x="1" y="1" width="17" height="17" id="circularButton"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.BitmapAsset;
+			
+			public function setIconName(name:String):void {
+				circularButton.setIconName(name);
+			}
+			
+			public function setIcon(ba:BitmapAsset):void {
+				circularButton.setIcon(ba);
+			}
+			
+			//Setters
+			public function set text(txt:String):void
+			{
+				textArea.text = txt;
+			}
+			public function set disabled(v:Boolean):void {
+				circularButton.disabled = v;
+			}
+			
+			//Getters
+			public function get text():String
+			{
+				return textArea.text;
+			}
+			
+			public function get disabled():Boolean {
+				return circularButton.disabled;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

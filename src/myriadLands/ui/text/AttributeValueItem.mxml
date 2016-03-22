@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="131" height="20" xmlns:ns1="myriadLands.ui.buttons.*" backgroundAlpha="0.0"
+	creationComplete="init();">
+	<mx:Canvas x="10.6" y="0" height="20" width="120.399994" backgroundColor="#000000">
+		<mx:TextArea x="45" y="2" id="_attributeValue" width="73.5" height="16" wordWrap="false" editable="false" selectable="false" styleName="AttributeValueItemValue"/>
+		<mx:TextArea x="-7.25" y="2" maxChars="3" wordWrap="false" editable="false" id="_attributeName" text="ATR" width="49" height="16" enabled="true" selectable="false" styleName="AttributeValueItemName"/>
+	</mx:Canvas>
+	<ns1:CircularButton x="1" y="0" width="20" height="20" id="circularButton"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.ui.css.MLFilters;
+			public function init():void {
+				circularButton.disabled = true;
+			}
+			
+			public function setIcon(iconName:String):void {
+				circularButton.setIconName(iconName);
+			}
+			
+			private function setFontColor(color:uint):void {
+				_attributeValue.setStyle("color", color);
+			}
+			
+			//GETTERS
+			public function set attributeName(txt:String):void {_attributeName.text = txt;}
+			public function setAttributeValue(txt:String, isUpdate:Boolean = false):void {
+				setFontColor(MLFilters.TRUE_BLACK);
+				if (isUpdate) {
+					var newValue:int = parseInt(txt);
+					var oldValue:int = parseInt(_attributeValue.text);
+					if (oldValue < newValue)
+						setFontColor(MLFilters.GREEN);
+					else if (oldValue > newValue)
+						setFontColor(MLFilters.RED);
+				}
+				_attributeValue.text = txt;					
+			}
+			
+			//SETTERS
+			public function get attributeName():String {return _attributeName.text;}
+			public function getAttributeValue():String {return _attributeValue.text;}
+		]]>
+	</mx:Script>
+</mx:Canvas>

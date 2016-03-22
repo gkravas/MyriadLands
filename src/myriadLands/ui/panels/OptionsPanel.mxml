@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="300" height="262" backgroundColor="#000000" backgroundAlpha="0.4">
+	<mx:HSlider id="musicSlider" x="130" y="143" minimum="0" maximum="100" snapInterval="1" enabled="true" liveDragging="true" allowTrackClick="true" change="onMusicVolumeChange();"/>
+	<mx:HSlider id="soundFXSlider" x="130" y="183" minimum="0" maximum="100" snapInterval="1" enabled="true" liveDragging="true" allowTrackClick="true" change="onSoundFXVolumeChange();"/>
+	<mx:Label y="141" id="music" text="music" right="178" styleName="OptionPanelLabel"/>
+	<mx:Label y="181" id="soundFX" text="soundFX" right="178" styleName="OptionPanelLabel"/>
+	<mx:Label y="23" id="resolution" text="resolution" right="178" styleName="OptionPanelLabel"/>
+	<mx:Label y="67" id="fullScreen" text="fullScreen" right="178" styleName="OptionPanelLabel"/>
+	<mx:CheckBox id="fullscreenCB" x="130" y="73" labelPlacement="left" change="toggleFullScreen(event);"/>
+	<mx:ComboBox x="130" y="28"></mx:ComboBox>
+	<mx:Button x="217" y="219" label="Close" fontSize="20" fontFamily="TrebuchetMS" click="closeMe();"/>
+	<mx:Script>
+		<![CDATA[
+			import flash.net.drm.DRMManager;
+			import mx.core.Application;
+			import myriadLands.core.Settings;
+			import myriadLands.sound.Sounds;
+			import mx.managers.PopUpManager;
+			import gamestone.localization.LocalizationDictionary;
+			
+			public function init():void {
+				var d:LocalizationDictionary = LocalizationDictionary.getInstance();
+				d.registerLeemaBinding(music, "text", "music");
+				d.registerLeemaBinding(soundFX, "text", "soundFX");
+				d.registerLeemaBinding(resolution, "text", "resolution");
+				d.registerLeemaBinding(fullScreen, "text", "fullScreen");
+				
+				musicSlider.value = Settings.musicVolume;
+				soundFXSlider.value = Settings.soundVolume;
+				fullscreenCB.selected = Settings.isFullScreen;
+			}
+			
+			//EVENTS
+			protected function closeMe():void {
+				PopUpManager.removePopUp(this);
+				Settings.musicVolume = musicSlider.value;
+				Settings.soundVolume = soundFXSlider.value;
+				Settings.save();
+			}
+			protected function onMusicVolumeChange():void {
+				Sounds.setMusicVolume(musicSlider.value);
+			}
+			protected function onSoundFXVolumeChange():void {
+				Sounds.setSoundVolume(soundFXSlider.value);
+			}
+			protected function toggleFullScreen(e:Event):void {
+				Settings.isFullScreen = !Settings.isFullScreen;
+				Settings.setFullScreen(Settings.isFullScreen);
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

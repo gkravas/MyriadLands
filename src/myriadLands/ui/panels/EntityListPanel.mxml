@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" height="85" creationComplete="init();"
+	width="{(Settings.ENTITY_LIST_COUNT + 1) * (Settings.ENTITY_LIST_ITEM_WIDTH + 4)}" 
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" backgroundAlpha="0.0" xmlns:ns1="myriadLands.ui.text.*">
+	<mx:Grid id="entityGrid" x="0" y="0" width="{this.width}" height="{this.height}" horizontalScrollPolicy="on" 
+		verticalScrollPolicy="off" horizontalScrollBarStyleName="MLScrollBar" horizontalGap="4" verticalGap="2">
+		<mx:GridRow id="entityList"/>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.core.Settings;
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.events.AssetEvent;
+			import mx.containers.GridRow;
+			import mx.containers.GridItem;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.entities.Entity;
+			
+			private var handler:Function;
+			private var entities:Array;
+			
+			private function init():void {
+				entities = [];
+			}
+			
+			public function addEntity(entity:Entity):void {
+				var item:GridItem = new GridItem();
+				var sqB:SquareButton= new SquareButton();
+				sqB.width = 60;
+				sqB.height = 60;
+				item.percentWidth = 100;
+				item.addChild(sqB);
+				if (entity != null)
+					sqB.setEntity(entity);
+				entityList.addChild(item);
+				sqB.addEventListener(MouseEvent.CLICK, onEntitySelected, false, 0, true);
+				sqB.toggle = true;
+				entities.push(item);
+			}
+			
+			public function removeEntity(entity:Entity):void {
+				var item:GridItem;
+				for each(item in entities) {
+					if ((item.getChildAt(0) as SquareButton).getEntity() == entity) {
+						entityList.removeChild(item);
+						entities = ArrayUtil.remove(entities, item);
+					}
+				}
+			}
+			
+			public function clearEntities():void {
+				entityList.removeAllChildren();
+				entities = [];
+			}
+			
+			//GETTERS
+			public function getEntitiesNum():int {return entities.length;}
+			
+			//EVENTS
+			public function onEntitySelected(e:MouseEvent):void {
+				dispatchEvent(new AssetEvent(id, (e.currentTarget as SquareButton).getEntity(), e.currentTarget as SquareButton));
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

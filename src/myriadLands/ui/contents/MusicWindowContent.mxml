@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="322" height="57" xmlns:ns1="myriadLands.ui.buttons.*"
+	creationComplete="init();">
+	<mx:Canvas width="30" height="100%" backgroundColor="#000000" borderStyle="solid" borderColor="#666666" themeColor="#666666" left="0" top="0" borderThickness="2">
+		<mx:Button width="30" height="21" styleName="MLWindowCloseButton" left="0" top="0"/>
+		<mx:Button width="30" height="21" styleName="MLWindowCloseButton" bottom="0" left="0"/>
+	</mx:Canvas>
+	<mx:TextArea left="30" top="0" width="265" height="100%" styleName="actionButtonText" wordWrap="false" editable="false" selectable="false"/>
+	<ns1:CircularButton id="musicToggleButton" right="1" top="1" width="55" height="55" click="toggleMusic();"/>
+	<mx:Script>
+		<![CDATA[
+			private function init():void {
+				musicToggleButton.setIconName("musicbox-sym");
+				musicToggleButton.toggle = true;
+				musicToggleButton.setToggled(true);
+			}
+			
+			private function toggleMusic():void {
+				
+			}
+			
+			private function play():void {
+				
+			}
+			
+			private function pause():void {
+				
+			}
+			
+			private function nextTrack():void {
+				
+			}
+			
+			private function previousTrack():void {
+				
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

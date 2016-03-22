@@ -1,0 +1,88 @@
+<images>
+	<img id="circle" class="ML" cat="nav" type="png"/>
+	<img id="ark" class="ML" cat="nav" type="png"/>
+	
+	<!--LANDS-->
+	<img id="test" class="ML" cat="ico,bu" type="png"/>
+	<img id="cardRear" class="ML" cat="ico,bu" type="png"/>
+	<img id="flatLands" class="ML" cat="ico,bu" type="png"/>
+	<img id="scarredLand" class="ML" cat="ico,bu" type="png"/>
+	<img id="constructedLand" class="ML" cat="ico,bu" type="png"/>
+	<img id="warpedLand" class="ML" cat="ico,bu" type="png"/>
+	<img id="occultRuins" class="ML" cat="ico,bu" type="png"/>
+	<img id="portalRuins" class="ML" cat="ico,bu" type="png"/>
+	<img id="chasm" class="ML" cat="ico,bu" type="png"/>
+	<img id="crater" class="ML" cat="ico,bu" type="png"/>
+	<img id="wasteDump" class="ML" cat="ico,bu" type="png"/>
+	
+	<!--UNITS-->
+	<img id="aseor" class="ML" cat="bu,ico" type="png"/>
+	<img id="missMauoti" class="ML" cat="bu,ico" type="png"/>
+	<img id="ikrixMatriarch" class="ML" cat="bu,ico" type="png"/>
+	<img id="warpedChampion" class="ML" cat="bu,ico" type="png"/>
+	
+	<img id="homikinHoplite" class="ML" cat="bu,ico" type="png"/>
+	<img id="homikinMedicant" class="ML" cat="bu,ico" type="png"/>
+	<img id="homikinRanger" class="ML" cat="bu,ico" type="png"/>
+	
+	<img id="lightMotokrab" class="ML" cat="bu,ico" type="png"/>
+	<img id="shriekerMotokrab" class="ML" cat="bu,ico" type="png"/>
+	<img id="armoredMotokrab" class="ML" cat="bu,ico" type="png"/>
+	
+	<img id="patrollerAutophish" class="ML" cat="bu,ico" type="png"/>
+	<img id="cruiserAutophish" class="ML" cat="bu,ico" type="png"/>
+	
+	<img id="warpedMinion" class="ML" cat="bu,ico" type="png"/>
+	<img id="warpedAutophish" class="ML" cat="bu,ico" type="png"/>
+	<img id="warpedMotokrab" class="ML" cat="bu,ico" type="png"/>
+	
+	<!--COMBAT GRID-->
+	<img id="gridTerrain00" class="ML" cat="cbt" type="png"/>
+	<img id="gridTerrain01" class="ML" cat="cbt" type="png"/>
+	<img id="gridTerrain02" class="ML" cat="cbt" type="png"/>
+	<img id="gridTerrain03" class="ML" cat="cbt" type="png"/>
+	<img id="gridTerrain04" class="ML" cat="cbt" type="png"/>
+	<img id="gridTerrain05" class="ML" cat="cbt" type="png"/>
+	
+	<!--STRUCTURES-->
+	<img id="citadelCore" class="ML" cat="ico,bu" type="png"/>
+	<img id="flagstone" class="ML" cat="ico,bu" type="png"/>
+	<img id="championHall" class="ML" cat="ico,bu" type="png"/>
+	<img id="constructionPit" class="ML" cat="ico,bu" type="png"/>
+	<img id="labComplex" class="ML" cat="ico,bu" type="png"/>
+	<img id="homikinDens" class="ML" cat="ico,bu" type="png"/>
+	<img id="hangars" class="ML" cat="ico,bu" type="png"/>
+	<img id="drillPlatform" class="ML" cat="ico,bu" type="png"/>
+	<img id="tradePortal" class="ML" cat="ico,bu" type="png"/>
+	<img id="commandBureau" class="ML" cat="ico,bu" type="png"/>
+	<!--<img id="factoryUpgrades" class="ML" cat="ico,bu" type="png"/>
+	<img id="silo" class="ML" cat="ico,bu" type="png"/>-->
+	<img id="motocrabAssembly" class="ML" cat="ico,bu" type="png"/>
+	<img id="vaultHouse" class="ML" cat="ico,bu" type="png"/>
+	<img id="warpHive" class="ML" cat="ico,bu" type="png"/>
+	<img id="weaponsRange" class="ML" cat="ico,bu" type="png"/>
+
+	<!--EQUIPMENT-->	
+	<img id="ripsaw" class="ML" cat="bu" type="png"/>
+	<img id="infantryRifle" class="ML" cat="bu" type="png"/>
+	
+	<!--CURSORS-->
+	<img id="cur" class="icons" path="cur" type="png">
+	ability,attack,aura,boost,browse,click,gate,heal,invalid,move,operation,produce,
+	select,special,upgrade
+	</img>
+	<!--SYMBOLS-->
+	<img id="sym" class="icons" path="sym" type="png">
+	actionFloater,assets,attributes,combatActionMenu,exitGame,gateFloater,
+	musicbox,navigator,productionFloater,quicktag1,quicktag2,quicktag3,quicktagMode,
+	quicktagUnassigned,selectionFloater,shoutbox,toAssetPool,worldActionMenu,resources,
+	newGame,forum,actionPoints,lifePoints,morphid,xylan,buy,champion,collapseExpandArrow,
+	friend,foe,neutral,structure,land,machinery,unit,equipment,fullMenuMode,brontite,tooltip,
+	revive,recycle,buy,export,cycle
+	</img>
+	
+	<!--MISC-->
+	<img id="misc" class="icons" path="misc" type="jpg">
+	loginBG,planetMap,spaceBG
+	</img>
+</images>

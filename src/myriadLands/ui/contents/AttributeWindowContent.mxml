@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="132" creationComplete="init();" horizontalScrollPolicy="off"
+	verticalScrollPolicy="off">
+	<mx:Grid top="0" left="0" id="attributeList" verticalGap="2"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.actions.ActionView;
+			import myriadLands.actions.CentralManager;
+			import gamestone.utils.ArrayUtil;
+			import com.greensock.TweenMax;
+			import com.greensock.events.TweenEvent;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.ui.css.MLFilters;
+			import myriadLands.entities.Entity;
+			import myriadLands.ui.text.AttributeValueItem;
+			import mx.containers.GridItem;
+			import mx.containers.GridRow;
+			
+			private const ATTRIBUTE_ITEM_HEIGHT:int = 20;
+			private const transformationIconNames:Object = 
+			{xylanSpawned:"xylan-sym", morphidSpawned:"morphid-sym", brontiteSpawned:"brontite-sym",
+			xylanPC:"xylan-sym", morphidPC:"morphid-sym", brontitePC:"brontite-sym", upk:"xylan-sym",
+			sel:"xylan-sym", gat:"morphid-sym", lif:"lifePoints-sym", act:"actionPoints-sym"};
+			
+			private var entity:Entity;
+			
+			private var populateTween:TweenMax;
+			
+			private var _d:LocalizationDictionary;
+			private var _attributes:Object;
+			private var _currentView:String;
+			
+			private const battleFieldNonVisibleAttributes:Array = ["xylanPC", "morphidPC", "brontitePC"];
+			
+			private const combatVisibleAttributes:Array = ["lif", "lifrg", "act", "actrg", "atk", "def", "crc", "mal"];
+			
+			private function init():void {
+				_d = LocalizationDictionary.getInstance();
+			}
+			
+			public function setEntity(entity:Entity):void {
+				this.entity = entity;
+				populateTween = MLFilters.getPanelOpenCloseEffect(this, 0.5, 0, onCloseEffectComplete);
+			}
+			
+			public function updateEntity():void {
+				var att:Array = entity.getStringData();
+				var txt:String;
+				var arr:Array;
+				for each(txt in att) {
+					arr = txt.split(":");
+					(_attributes[arr[0]] as AttributeValueItem).setAttributeValue(arr[1], true);
+				}
+			}
+			
+			protected function setEntityAttributes(att:Array):void {
+				attributeList.removeAllChildren();
+				var txt:String;
+				var arr:Array;
+				_attributes = {};
+				for each(txt in att) {
+					arr = txt.split(":");
+					if (!attributeVisible(arr[0], _currentView)) continue;
+					var row:GridRow = new GridRow();
+					row.percentWidth = 100;
+					var item:GridItem = new GridItem();
+					var avi:AttributeValueItem = new AttributeValueItem();
+					item.percentWidth = 100;
+					row.addChild(item);
+					item.addChild(avi);
+					_attributes[arr[0]] = avi;
+					avi.attributeName = _d.getLeema(arr[0]);
+					avi.setAttributeValue(arr[1]);
+					if (transformationIconNames.hasOwnProperty(arr[0]))
+						avi.setIcon(transformationIconNames[arr[0]]);
+					attributeList.addChild(row);
+				}
+			}
+			
+			protected function attributeVisible(att:String, view:String):Boolean {
+				var returnValue:Boolean;
+				if (view == ActionView.COMBAT)
+					returnValue = ArrayUtil.inArray(combatVisibleAttributes, att);
+				else if (view == ActionView.WORLD_MAP)
+					returnValue = !ArrayUtil.inArray(battleFieldNonVisibleAttributes, att);
+				else
+					returnValue = true;
+				return returnValue;
+			}
+			//GETTERS
+			public function getEntity():Entity {return entity;}
+			public function get currentView():String {return _currentView;}
+			
+			//SETTERS
+			public function set currentView(v:String):void {_currentView = v;}
+			
+			//EVENTS
+			private function onCloseEffectComplete(e:TweenEvent):void {
+				var arr:Array = entity.getStringData();
+				setEntityAttributes(arr);
+				populateTween = MLFilters.getPanelOpenDelayedEffect(this, 0.5, arr.length * (ATTRIBUTE_ITEM_HEIGHT + attributeList.getStyle("verticalGap")), onOpenEffectComplete);
+			}
+			
+			private function onOpenEffectComplete(e:TweenEvent):void {
+				populateTween = null;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

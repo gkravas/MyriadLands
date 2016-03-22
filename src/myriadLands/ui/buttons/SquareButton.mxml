@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="SquareButton" width="44" height="44"
+	initialize="init();" currentState="{UP}" mouseDown="{currentState = DOWN;}" mouseUp="{onMouseUp(event);}"
+	mouseOver="{currentState = OVER;}" mouseOut="{onMouseOut(event);}" currentStateChange="{currentStateChanged();}"
+	borderColor="#515151" borderStyle="solid" borderThickness="2" themeColor="#515151">
+	<mx:states>
+		<mx:State name="up"/>
+		<mx:State name="over"/>
+		<mx:State name="down"/>
+		<mx:State name="toggled"/>
+		<mx:State name="disabled"/>
+	</mx:states>
+	<mx:Image id="sprite" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" scaleContent="true"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.actions.CentralManager;
+			import mx.binding.utils.BindingUtils;
+			import myriadLands.entities.Entity;
+			import mx.core.BitmapAsset;
+			import gamestone.graphics.ImgLoader;
+			import gamestone.display.MySprite;
+			import gamestone.graphics.RGB;
+			import myriadLands.ui.css.MLFilters;
+				
+			private const UP:String = "up";
+			private const OVER:String = "over";
+			private const DOWN:String = "down";
+			private const TOGGLED:String = "toggled";
+			private const DISABLED:String = "disables";
+			
+			private var _RGBTransform:RGB;
+			private var _RGBOffSet:RGB;
+			private var _toggle:Boolean;
+			private var _isToggled:Boolean;
+			
+			private var cEntity:Entity;
+			private var iconName:String;
+			private var _disabled:Boolean;
+			private var _customTooltip:String;
+			
+			private function init():void {
+				_RGBTransform = new RGB();
+       			_RGBOffSet = new RGB(0, 0, 0);
+       			BindingUtils.bindProperty(this, "toolTip", this, "id");
+       			customTooltip = id;
+       			CentralManager.getInstance().setToolTipHandler(this);
+			}
+			
+			public function setIconName(name:String):void {
+				iconName = name;
+				var bmp:BitmapAsset = ImgLoader.getInstance().getBitmapAsset(name);
+	     		sprite.source = bmp;
+			}
+			
+			public function getIconName():String {
+				return iconName;
+			}
+			
+			//SETTERS
+			public function setEntity(entity:Entity):void {
+				cEntity = entity;
+				if (entity != null) {
+					iconName = cEntity.data.name + "-bu";
+	     			sprite.source = entity.getBitmapAssetBu();
+	   			} else
+	   				sprite.source = null;
+			}
+			
+			public function set toggle(v:Boolean):void {
+				_toggle = v;
+			}
+			
+			public function setToggled(v:Boolean):void {
+				_isToggled = v;
+				currentState = v ? TOGGLED : UP;
+			}
+			
+			public function set disabled(v:Boolean):void {
+				_disabled = v;
+				mouseChildren = !_disabled;
+				mouseEnabled = !_disabled;
+			}
+			
+			public function set customTooltip(v:String):void {
+				_customTooltip = v;
+			}
+			
+			//GETTERS
+			public function isToggled():Boolean {
+				return _isToggled;
+			}
+			
+			public function getEntity():Entity {
+				return cEntity;
+			}			
+			
+			public function get toggle():Boolean {
+				return _toggle;
+			}
+			
+			public function get disabled():Boolean {
+				return _disabled;
+			}
+			
+			public function get customTooltip():String {
+				return _customTooltip;
+			}
+			
+			private function currentStateChanged():void {
+				setStyle("backgroundColor", getStyle(currentState + "Color"));
+				if (currentState == TOGGLED)
+					setStyle("borderColor", getStyle(currentState + "BorderColor"));
+				else
+					setStyle("borderColor", getStyle("defaultBorderColor"));
+				_RGBTransform.setHex(getStyle(currentState + "IconColor") as uint);
+			    sprite.transform.colorTransform = MySprite.getColorTransformFromRGB(_RGBTransform, _RGBOffSet);
+			}
+			
+			//Events
+			public function onMouseUp(e:MouseEvent):void {
+				this.currentState = OVER;
+				if (_toggle)
+					_isToggled = true;
+			}
+			
+			public function onMouseOut(e:MouseEvent):void {
+				if (!_toggle)
+					this.currentState = UP;
+				else {
+					this.currentState = (_isToggled) ? TOGGLED : UP;
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

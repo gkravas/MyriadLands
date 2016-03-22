@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="247" height="27" xmlns:ns1="myriadLands.ui.buttons.*">
+	<mx:TextArea x="0" y="0" height="{this.height}" width="{this.width - this.height * 0.5 - 1}" id="factionName" wordWrap="false" editable="false"
+		selectable="false" styleName="actionButtonText" text="here goes the text" textAlign="center"/>
+	<ns1:CircularButton id="friendModeButton" width="{this.height}" height="{this.height}" right="1" top="0" click="nextFriendMode();"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.faction.FactionAllianceManager;
+			import myriadLands.faction.Faction;
+			import myriadLands.events.FactionEvent;
+						
+			private const NEUTRAL:int = 0;
+			private const FRIEND:int = 1;
+			private const FOE:int = 2;
+			
+			private const MODES:Array = [Faction.NEUTRAL, Faction.FRIEND, Faction.FOE];
+			private var friendMode:int;
+			private var _faction:Faction;
+			
+			protected var fam:FactionAllianceManager = FactionAllianceManager.getInstance();
+						
+			public function setFriendMode(mode:int):void {
+				friendMode = mode;
+				friendModeButton.setIconName(MODES[friendMode] + "-sym");
+				fam.modifyFactionAlliance(fam.player, _faction, MODES[friendMode]); 
+			}
+			
+			//GETTERS
+			public function get faction():Faction {return _faction;}
+						
+			//SETTERS
+			public function set faction(value:Faction):void {
+				var friendState:String = fam.getAlliance(fam.player, value);
+				_faction = value;
+				factionName.text = _faction.name;
+				friendMode = MODES.indexOf(friendState);
+				friendModeButton.setIconName(friendState + "-sym");
+			}
+			
+			//EVENTS
+			private function nextFriendMode():void {
+				switch (friendMode) {
+					case NEUTRAL:
+						setFriendMode(FRIEND);
+					break;
+					case FRIEND:
+						setFriendMode(FOE);
+					break;
+					case FOE:
+						setFriendMode(NEUTRAL);
+					break;
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

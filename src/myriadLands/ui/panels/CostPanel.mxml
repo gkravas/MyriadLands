@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="206.63335" height="22"
+	xmlns:ns1="myriadLands.ui.buttons.*" backgroundAlpha="0.0" xmlns:ns2="myriadLands.ui.text.*"
+	creationComplete="init();">
+	<ns2:CostItem x="0" y="0" width="61" height="19" id="_morphid"/>
+	<ns2:CostItem x="72" y="0" width="61" height="19" id="_actionPoints"/>
+	<ns2:CostItem x="144" y="0" width="61" height="19" id="_lifePoints"/>
+	<mx:Script>
+		<![CDATA[
+			private function init():void {
+				_morphid.circularButton.disabled = true;
+				_morphid.circularButton.setIconName("morphid-sym");
+				
+				_actionPoints.circularButton.disabled = true;
+				_actionPoints.circularButton.setIconName("actionPoints-sym");
+				
+				_lifePoints.circularButton.disabled = true;
+				_lifePoints.circularButton.setIconName("lifePoints-sym");
+			}
+			
+			//GETTERS
+			public function get morphid():String {return _morphid.text}
+			public function get actionPoints():String {return _actionPoints.text}
+			public function get lifePoints():String {return _lifePoints.text}
+			
+			//SETTERS
+			public function set morphid(v:String):void {_morphid.text = v;}
+			public function set actionPoints(v:String):void {_actionPoints.text = v;}
+			public function set lifePoints(v:String):void {_lifePoints.text = v;}
+		]]>
+	</mx:Script>
+</mx:Canvas>

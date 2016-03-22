@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:buttons="myriadLands.ui.buttons.*" width="32"
+	creationComplete="init();">
+	<mx:Grid verticalGap="1" horizontalGap="0" height="100%">
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="optionsPanelButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="chatPanelButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="logoutButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="exitButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			import mx.events.CloseEvent;
+			import mx.core.Application;
+			import gamestone.localization.LocalizationDictionary;
+			import mx.controls.Alert;
+			import myriadLands.events.MainMenuEvent;
+			
+			protected var d:LocalizationDictionary;
+			
+			private function init():void {
+				d = LocalizationDictionary.getInstance();
+				optionsPanelButton.setIconName("selectionFloater-sym");
+				chatPanelButton.setIconName("actionFloater-sym");
+				logoutButton.setIconName("shoutbox-sym");
+				exitButton.setIconName("exitGame-sym");
+			}
+			
+			private function onClick(e:MouseEvent):void {
+				var id:String = e.currentTarget.name;
+				switch (id) {
+					case optionsPanelButton.name:
+						var op:IFlexDisplayObject = PopUpManager.createPopUp(this, OptionsPanel, true);
+						(op as OptionsPanel).init();
+						PopUpManager.centerPopUp(op);
+					break;
+					case chatPanelButton.name:
+						ChatPanel.show();
+					break;
+					case logoutButton.name:
+						Alert.show(d.getLeema("logoutInfo"), d.getLeema("logoutTitle"), Alert.YES + Alert.NO,
+									Application.application.root, onLogout, null, Alert.NO);
+					break;
+					case exitButton.name:
+						Alert.show(d.getLeema("exitGameInfo"), d.getLeema("exitGameTitle"), Alert.YES + Alert.NO,
+									Application.application.root, onLogout, null, Alert.NO);
+					break;
+				}
+			}
+			
+			private function onLogout(e:CloseEvent):void {
+				if (e.detail == Alert.YES)
+					NetworkManager.getInstance().sendMessage(MLProtocol.LOGOUT_REQUEST);
+			}
+			
+			private function onGameExit(e:CloseEvent):void {
+				if (e.detail == Alert.YES)
+					Application.application.close();
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

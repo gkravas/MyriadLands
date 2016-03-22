@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="300" height="300" backgroundColor="#363636" backgroundAlpha="1.0"
+	borderStyle="none" borderThickness="1" borderColor="#FFFFFF" creationComplete="init();">
+	<mx:Label text="Location Name" fontFamily="TrebuchetMS" fontSize="24" color="#CC9933" id="locationName" y="28" horizontalCenter="7"/>
+	<mx:Label text="Map Dimensions" fontFamily="TrebuchetMS" fontSize="20" color="#CC9933" id="mapDimensions" y="229" horizontalCenter="0"/>
+	<mx:Button y="264" label="Create BattleField" right="10" fontFamily="TrebuchetMS" fontSize="13" id="createBattleFieldBtn" styleName="MLSimpleButton"/>
+	<mx:Canvas y="61" width="300" height="159" borderColor="#000000" borderStyle="none" horizontalCenter="0">
+		<mx:Grid id="landTypesGrid" height="100" horizontalScrollPolicy="on" 
+			verticalScrollPolicy="off" horizontalScrollBarStyleName="MLScrollBar" horizontalGap="4" y="46" borderStyle="none" horizontalCenter="0" width="270">
+			<mx:GridRow id="landTypesTileList"/>
+			<mx:GridRow id="landTypesNameList"/>
+		</mx:Grid>
+		<mx:Label text="Available Lands" fontFamily="TrebuchetMS" fontSize="20" color="#CC9933" id="availableLands" y="10" horizontalCenter="0"/>
+	</mx:Canvas>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.Location.LocationData;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.ui.asComponents.WorldMapTile;
+			import mx.containers.GridItem;
+			import gamestone.localization.LocalizationDictionary;
+			
+			private var d:LocalizationDictionary;
+			
+			private var currentLocation:LocationData;
+			
+			public function init():void {
+				d = LocalizationDictionary.getInstance();
+			}
+			
+			public function populateLocation(lData:LocationData):void {
+				currentLocation = lData;
+				populateAvailableLands(lData.availableLandTypes);
+				locationName.text = d.getLeema(lData.name);
+				
+				availableLands.text = d.getLeema(availableLands.id);
+				mapDimensions.text = d.getLeema(mapDimensions.id) + " : " + lData.tileWidth.toString().replace(",", "-");
+				
+				createBattleFieldBtn.label = d.getLeema(createBattleFieldBtn.id);
+			}
+			
+			protected function populateAvailableLands(availableLands:Array):void {
+				landTypesTileList.removeAllChildren();
+				landTypesNameList.removeAllChildren();
+				var index:int;
+				for each(index in availableLands) {
+					var label:Label = new Label();
+					var gi1:GridItem = new GridItem();
+					landTypesTileList.addChild(gi1);
+					gi1.addChild(label);
+					landTypesNameList.addChild(gi1);
+					label.text = d.getLeema(WorldMapTile.LAND_TYPES[index] + "Name");
+					label.truncateToFit =  false;
+					label.styleName = "LandTypeInfo";
+					
+					var sq:SquareButton = new SquareButton();
+					sq.width = landTypesGrid.height - landTypesGrid.horizontalScrollBar.height - 20;
+					sq.height = sq.width;
+					sq.disabled = true;
+					label.width = sq.width;
+					var gi:GridItem = new GridItem();
+					landTypesTileList.addChild(gi);
+					gi.addChild(sq);
+					sq.setIconName(WorldMapTile.LAND_TYPES[index] + "-bu");
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

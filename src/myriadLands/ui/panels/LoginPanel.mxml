@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="270" height="115" borderStyle="solid"
+	borderColor="#000000" themeColor="#000000" borderThickness="1" backgroundAlpha="0.3" backgroundColor="#000000">
+	<mx:Label id="username" color="#FAD39E" fontSize="16" fontFamily="TrebuchetMS" right="160" bottom="73.04999"/>
+	<mx:Label id="password" color="#FAD39E" fontSize="16" fontFamily="TrebuchetMS" right="160" bottom="40.049988"/>
+	<mx:Button label="Login" click="tryToLogin();" bottom="10" right="10"/>
+	<mx:TextInput width="142" id="_username" text="PLAYER" right="10" bottom="73.04999"/>
+	<mx:TextInput width="142" id="_password" text="123456" right="10" bottom="40" displayAsPassword="true"/>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.events.TweenEvent;
+			import com.greensock.TweenMax;
+			import myriadLands.ui.css.MLFilters;
+			import mx.effects.Rotate;
+			import gamestone.utils.StringUtil;
+			import myriadLands.core.Settings;
+			import mx.controls.Alert;
+			import gamestone.localization.LocalizationDictionary;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.net.NetInternal;
+			
+			use namespace NetInternal;
+			
+			public static const LOGIN_SUCCESS:String = "login_success";			
+			
+			protected var netM:NetworkManager;
+			protected var d:LocalizationDictionary;
+			protected var tween:TweenMax;
+			
+			public function init():void {
+				netM = NetworkManager.getInstance();
+				d = LocalizationDictionary.getInstance();
+				netM.setLoginListener(onLoginResult);
+				
+				d.registerLeemaBinding(username, "text", "username");
+				d.registerLeemaBinding(password, "text", "password");
+			}
+			
+			public function tryToLogin():void {
+				netM.login(StringUtil.strip(_username.text), StringUtil.strip(_password.text));
+			}
+			
+			public function onLoginResult(result:String):void {
+				if (result == "true") {
+					hide();
+					Settings.setUsername(StringUtil.strip(_username.text));
+					Settings.setPassword(StringUtil.strip(_password.text));
+				} else {
+					Alert.show(d.getLeema("loginFail"), d.getLeema("loginFailTitle"), Alert.OK,
+								null, null, null, Alert.OK);
+				}
+			}
+			
+			public function show():void {
+				tween = MLFilters.getLoginTween(this, 1, null, hideComplete);
+			}
+			
+			public function hide():void {
+				tween.reverse(true);
+			}
+			
+			protected function hideComplete(e:TweenEvent):void {
+				tween.removeEventListener(TweenEvent.COMPLETE, hideComplete);
+				tween = null;
+				dispatchEvent(new Event(LOGIN_SUCCESS));
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

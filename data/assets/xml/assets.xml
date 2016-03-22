@@ -1,0 +1,5 @@
+<package id="assets">
+	<group id="images" type="img">
+		<item id="sym-recycle" type="png" data="recycle"/>
+	</group>
+</package>

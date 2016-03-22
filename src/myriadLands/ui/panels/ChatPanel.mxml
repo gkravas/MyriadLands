@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="200">
+	<mx:TextArea id="chatArea" text="chat message" width="100%" styleName="ChatTextArea" height="{height - messageToSend.height}" left="0" top="0"/>
+	<mx:TextInput id="messageToSend" width="{width - sendBtn.width}" height="24" styleName="ChatTextArea" keyUp="onKeyUp(event);" bottom="0" left="0"/>
+	<mx:Button x="{messageToSend.width}" label="Send" styleName="MLSimpleButton" height="24" width="66.799995" id="sendBtn" click="sendMessage();" bottom="0"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			
+			public static const OPEN_GAME_TYPE:String = "openGame";
+			public static const BATTLE_GAME_TYPE:String = "battleGame";
+			
+			private static var _chatPanel:IFlexDisplayObject;
+			public static const OFFSET_Y:int = 30;
+			private static var hidden:Boolean = true;
+			
+			private static var openGamemessages:String = "";
+			private static var battleGamemessages:String = "";
+			
+			private static var type:String = ChatPanel.OPEN_GAME_TYPE;
+			
+			private var netM:NetworkManager = NetworkManager.getInstance();
+		
+			public static function show(type:String):void {
+				ChatPanel.type = type;
+				if(_chatPanel == null) {
+					 _chatPanel = PopUpManager.createPopUp(FlexGlobals.topLevelApplication.root, ChatPanel);
+					 _chatPanel.y = FlexGlobals.topLevelApplication.root.height - _chatPanel.height - OFFSET_Y;
+					 _chatPanel.x = (FlexGlobals.topLevelApplication.root.width - _chatPanel.width) * 0.5;
+				} else {
+					if (hidden)
+						PopUpManager.addPopUp(_chatPanel, FlexGlobals.topLevelApplication.root);
+					else
+						PopUpManager.bringToFront(_chatPanel);
+				}
+				(_chatPanel as ChatPanel).chatArea.text = (type == ChatPanel.OPEN_GAME_TYPE) ? openGamemessages : battleGamemessages;
+				hidden = false;
+			}
+			
+			public static function hide():void {
+				PopUpManager.removePopUp(_chatPanel);
+				hidden = true;
+			}
+			
+			public static function addMessage(user:String, msg:String):void {
+				var messages:String = (type == ChatPanel.OPEN_GAME_TYPE) ? openGamemessages : battleGamemessages;
+				messages += user + ": " + msg + "\n";
+				(_chatPanel as ChatPanel).chatArea.text = messages;
+				(type == ChatPanel.OPEN_GAME_TYPE) ? openGamemessages = messages : battleGamemessages = messages;
+			}
+			
+			protected function sendMessage():void {
+				netM.sendMessage(MLProtocol.CHAT_OPEN_MESSAGE, {msg:messageToSend.text});
+				messageToSend.text = "";
+			}
+			
+			//EVENTS
+			protected function onKeyUp(e:KeyboardEvent):void {
+				if (e.keyCode == Keyboard.ENTER)
+					sendMessage();
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

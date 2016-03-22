@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:buttons="myriadLands.ui.buttons.*" width="32"
+	creationComplete="init();">
+	<mx:Grid verticalGap="1" horizontalGap="0" height="100%">
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="selectionFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="actionFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="attributeFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="productionFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="gateFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="resourceFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="assetFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="compassFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="shoutboxFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="musicFloaterButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="exitButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="newGameButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem>
+				<buttons:SquareButton width="32" height="32" id="forumButton" click="onClick(event);"/>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.events.MainMenuEvent;
+			private function init():void {
+				selectionFloaterButton.setIconName("selectionFloater-sym");
+				actionFloaterButton.setIconName("actionFloater-sym");
+				attributeFloaterButton.setIconName("attributes-sym");
+				productionFloaterButton.setIconName("productionFloater-sym");
+				gateFloaterButton.setIconName("gateFloater-sym");
+				resourceFloaterButton.setIconName("resources-sym");
+				assetFloaterButton.setIconName("assets-sym");
+				compassFloaterButton.setIconName("navigator-sym");
+				shoutboxFloaterButton.setIconName("shoutbox-sym");
+				musicFloaterButton.setIconName("musicbox-sym");
+				exitButton.setIconName("exitGame-sym");
+				newGameButton.setIconName("newGame-sym");
+				forumButton.setIconName("forum-sym");
+			}
+			
+			private function onClick(e:MouseEvent):void {
+				var floater:String = (e.currentTarget as SquareButton).id.replace("Button", "");
+				dispatchEvent(new MainMenuEvent(MainMenuEvent.TOGGLE_FLOATER_VISIBILITY, floater));
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

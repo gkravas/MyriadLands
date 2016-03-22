@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="#999999" showCloseButton="true">
+	<mx:Form x="0" y="0" id="_form"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import myriadLands.entities.Entity;
+			import mx.managers.PopUpManager;
+			import mx.controls.Button;
+			import mx.containers.FormItem;
+			import mx.controls.TextInput;
+			
+			private var _entity:Entity;
+			private var costsArr:Array;
+			
+			public function init(entity:Entity):void
+			{
+				var arr:Array = [];
+				_entity = entity;
+				arr = entity.sel.split(",");
+				populateForm(arr);
+					
+				//set focus to first
+				focusManager.setFocus(TextInput(FormItem(_form.getChildAt(0)).getChildAt(0)));
+			}
+			
+			private function populateForm(costs:Array):void
+			{
+				costsArr = [];
+				
+				for each (var item:String in costs)
+				{
+					var arr:Array = item.split(":");
+					var formItem:FormItem = new FormItem()
+					formItem.label = arr[0];
+					var txtInput:TextInput = new TextInput();
+					txtInput.id = arr[0];
+					txtInput.text = arr[1];
+					formItem.addChild(txtInput);
+					_form.addChild(formItem);
+					costsArr.push(txtInput);
+				}
+				addEventListener(CloseEvent.CLOSE, removeMe);
+				/* var _formItem:FormItem = new FormItem()
+				_formItem.label = "";
+				var b:Button = new Button;
+				b.label = "OK";
+				_formItem.addChild(b);
+				b.addEventListener(MouseEvent.CLICK, removeMe);
+				_form.addChild(_formItem); */
+			}
+			
+			private function removeMe(e:CloseEvent):void
+			{
+				onClose();
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function onClose():void
+			{
+				var str:String = "";
+				for each(var item:TextInput in costsArr)
+				{
+					if (item.text != "") str += "," + item.id + ":" + item.text;
+				}
+				str = str.substr(1, str.length);
+				_entity.sel = str;
+			}			
+		]]>
+	</mx:Script>
+</mx:TitleWindow>

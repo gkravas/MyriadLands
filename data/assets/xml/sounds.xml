@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<sounds defaultGroup="sounds" defaultPath="assets/sounds/">
+	<!-- Music -->
+	<sound id="space" multiple="false" group="music" path="assets/sounds/music/"/>
+	<sound id="intro" multiple="false" group="music" path="assets/sounds/music/"/>
+		
+	<!-- General -->
+	<sound id="production" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="upgrade" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="gate" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="heal" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="bombardment" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="aura" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="demolition" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+	<sound id="alarm" volume="100" multiple="true" group="fx" path="assets/sounds/fx/"/>
+</sounds>

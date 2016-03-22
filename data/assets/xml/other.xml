@@ -1,0 +1,201 @@
+<entity name="crater" type="Land">
+	<attribute name="resourcesSpawned">morphid:1000,xylan:1000,arkstones:500</attribute>
+	<attribute name="structureSlots">0</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">140</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:200</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="forest" type="Land">
+	<attribute name="resourcesSpawned">morphid:100,xylan:1200,arkstones:1200</attribute>
+	<attribute name="structureSlots">2</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">120</attribute>
+	<attribute name="gridSize">20-25</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:300</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="fungalForest" type="Land">
+	<attribute name="resourcesSpawned">morphid:600,xylan:1200,arkstones:800</attribute>
+	<attribute name="structureSlots">1</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">120</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:200</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="rockyFields" type="Land">
+	<attribute name="resourcesSpawned">morphid:400,xylan:200,arkstones:1600</attribute>
+	<attribute name="structureSlots">1</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">110</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:300</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="volcano" type="Land">
+	<attribute name="resourcesSpawned">morphid:100,xylan:600,arkstones:3600</attribute>
+	<attribute name="structureSlots">1</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">180</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:300</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="wasteland" type="Land">
+	<attribute name="resourcesSpawned">morphid:3000,xylan:3000,arkstones:1600</attribute>
+	<attribute name="structureSlots">0</attribute>
+	<attribute name="attackerBonus">0</attribute>
+	<attribute name="defenderBonus">0</attribute>
+	<attribute name="cruisingFactor">160</attribute>
+	<attribute name="explorationChance">0</attribute>
+	<attribute name="upgradeCost">morphid:0,xylan:0,arkstones:400</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="availableFunctions">upgradeMiningOperations,setSellPrice</attribute>
+</entity>
+<entity name="globalCommand" type="Building">
+	<attribute name="maxMachineries">3</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:400,xylan:200,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:400,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--build (global upkeep reduction),-build (global level gain),-build (global efficiency gain),-build (global mining upgrade),-build trade portal,-build (battlegroup max),-build (structure max),-build (land max)-->
+</entity>
+
+
+
+
+<entity name="gatehouse" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:20,xylan:100,arkstones:50</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--reduces cruising factor by -10% for all friendly battlegroups-->
+</entity>
+<entity name="morphidConversionTower" type="Building">
+	<attribute name="maxMachineries">1</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:20,xylan:20,arkstones:20</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--convert morphid to xylan,-convert morphid to arkstone-->
+</entity>
+<entity name="xylanConversionTower" type="Building">
+	<attribute name="maxMachineries">1</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:20,xylan:20,arkstones:20</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--convert xylan to arkstone,convert xylan to morphid,slash attack,plasma burst-->
+</entity>
+<entity name="arkstoneConversionTower" type="Building">
+	<attribute name="maxMachineries">1</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:20,xylan:20,arkstones:20</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--convert arkstone to xylan,convert arkstone to morphid-->
+</entity>
+<entity name="silo" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:100,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--stores 50k morphid, 50k xylan and 50karkstone-->
+</entity>
+<entity name="bunker" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--increases [def] and [hp] of friendly units by +20% whan defending the owner’s land-->
+</entity>
+<entity name="___BATTLEGROUP MAX" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:200,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--increases number of maximum battlegroups by +1-->
+</entity>
+<entity name="____LAND MAX" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:200,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--increases number of maximum owned lands by +8-->
+</entity>
+<entity name="____STRUCTURE MAX" type="Building">
+	<attribute name="maxMachineries">0</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:200,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--increases number of maximum owned structures by +4-->
+</entity>
+<entity name="____GLOBAL MINING UPGRADE" type="Building">
+	<attribute name="maxMachineries">4</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--all owned lands receive a +5% bonus on their resource acquisition rate-->
+</entity>
+<entity name="___GLOBAL EFFICIENCY UPGRADE" type="Building">
+	<attribute name="maxMachineries">4</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:100,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:600,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--all owned structures receive -2% on their operation malus-->
+</entity>
+<entity name="___GLOBAL LEVEL GAIN" type="Building">
+	<attribute name="maxMachineries">1</attribute>
+	<attribute name="hp">0</attribute>
+	<attribute name="operationMalus">10</attribute>
+	<attribute name="trainTimes">10</attribute>
+	<attribute name="upkeep">morphid:6000,xylan:100,arkstones:100</attribute>
+	<attribute name="upgradeCost">morphid:100,xylan:0,arkstones:0</attribute>
+	<attribute name="availableFunctions">buildOnLand</attribute>
+	<!--all owned battlegroups and attached units on the world map receive +1 level on their trainable attributes-->
+</entity>

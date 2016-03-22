@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1024" height="768" backgroundColor="#000000"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off" xmlns:containers="away3d.containers.*" xmlns:ns2="myriadLands.ui.*">
+	<ns2:MLWindow id="locationBattlefieldInfoWindow" visible="false"/>
+	<mx:Script>
+		<![CDATA[
+			import away3d.cameras.*;
+			import away3d.containers.*;
+			import away3d.core.base.*;
+			import away3d.core.render.Renderer;
+			import away3d.core.utils.Cast;
+			import away3d.materials.*;
+			import away3d.primitives.*;
+			
+			import com.greensock.TweenMax;
+			import com.greensock.events.TweenEvent;
+			
+			import flash.filters.BitmapFilter;
+			import flash.filters.BitmapFilterQuality;
+			import flash.filters.BitmapFilterType;
+			import flash.filters.GlowFilter;
+			
+			import gamestone.graphics.ImgInitParams;
+			import gamestone.graphics.ImgLoader;
+			
+			import mx.containers.Panel;
+			import mx.controls.Button;
+			import mx.controls.Image;
+			import mx.controls.Label;
+			import mx.core.Application;
+			import mx.core.BitmapAsset;
+			import mx.core.FlexGlobals;
+			import mx.core.FlexSprite;
+			import mx.core.IFlexDisplayObject;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			
+			import myriadLands.Location.LocationData;
+			import myriadLands.core.GameHelperClass;
+			import myriadLands.core.MainLoader;
+			import myriadLands.core.Settings;
+			import myriadLands.loaders.LocationLoader;
+			import myriadLands.net.MLProtocol;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.ui.buttons.LocationButton;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.ui.css.MLFilters;
+			import myriadLands.ui.cursor.MLCursorManager;
+			
+			import r1.deval.D;
+			
+			// variables
+			public static const ID:String = "planetPanel";
+			protected static const PLANET_MAP:String = "planetMap-misc";
+			protected static const GLOBE_RADIUS:int = 250;
+			protected static const GLOBE_DETAIL:int = 20;
+			protected static const PLANET_OFFSET_Z_AFTER_LOADING:int = -300;			
+			
+			private var holderUI:UIComponent;
+			
+			private var _playerCanBrowse:Boolean;
+			private var startRotating:Boolean;
+			private var lastMouseX:Number = 0;
+			private var lastMouseY:Number = 0;
+			private var lastPanAngle:Number;
+			private var lastTiltAngle:Number;
+			private var skies:Sphere;
+			private var globe:Sphere;
+			
+			private var camera:TargetCamera3D;
+			private var view3D:View3D;
+			private var rotationTween:TweenMax;
+			private var _isIntro:Boolean;
+			
+			private var globeBMPWidth:int;
+			private var globeBMPHeight:int;
+				
+			private var renderThread:Timer;
+			
+			private var browsingLocation:LocationData;
+			private var locLoader:LocationLoader;
+			private var locationBattleInfoPanel:IFlexDisplayObject;
+			
+			public function loadImages():void {
+				var imgpar:ImgInitParams = new ImgInitParams();
+				imgpar.file = MainLoader.IMAGES_PATH + "misc/planetMap.jpg";
+				imgpar.id = PLANET_MAP;
+				var imgpar1:ImgInitParams = new ImgInitParams();
+				imgpar1.file = MainLoader.IMAGES_PATH + "misc/morphid.png";
+				imgpar1.id = "morphid-misc";
+				var imgpar2:ImgInitParams = new ImgInitParams();
+				imgpar2.file = MainLoader.IMAGES_PATH + "nav/circle.png";
+				imgpar2.id = "circle-nav";
+				var imgpar3:ImgInitParams = new ImgInitParams();
+				imgpar3.file = MainLoader.IMAGES_PATH + "misc/spaceBG.jpg";
+				imgpar3.id = "spaceBG-misc";
+				ImgLoader.getInstance().loadImages([imgpar,imgpar1,imgpar2,imgpar3]);
+			}
+			
+			public function init():void {
+				width = FlexGlobals.topLevelApplication.width;
+				height = FlexGlobals.topLevelApplication.height;
+				
+				renderThread = new Timer(Settings.RENDER_EXECUTION_INTERVAL);
+				renderThread.addEventListener(TimerEvent.TIMER, onEnterFrame);
+				renderThread.start();
+				
+				holderUI = new UIComponent();
+				addChildAt(holderUI, numChildren -1);
+				
+				holderUI.addEventListener(MouseEvent.MOUSE_DOWN, MouseDown);
+				holderUI.addEventListener(MouseEvent.MOUSE_UP, MouseUp);
+				
+				camera = new TargetCamera3D();
+				camera.z = -1000;
+				
+				view3D = new View3D({camera:camera});
+				var ba:BitmapAsset = ImgLoader.getInstance().getBitmapAsset("spaceBG-misc")
+				ba.scaleX = width / ba.width;
+				ba.scaleY = height / ba.height;
+				ba.x = -width * 0.5;
+				ba.y = -height * 0.5;
+				view3D.background.addChild(ba);
+				holderUI.addChild(view3D);
+				view3D.x = width * 0.5;
+				view3D.y = height * 0.5;
+				globe = new Sphere({radius:GLOBE_RADIUS, segmentsH:GLOBE_DETAIL, segmentsW:GLOBE_DETAIL});
+				
+				var sp:Sprite = new Sprite();
+				sp.mouseChildren = true;
+				sp.addChild(ImgLoader.getInstance().getBitmapAsset("planetMap-misc"));
+				
+				globe.material = new MovieMaterial(sp, {interactive:true});
+				globe.centerPivot();
+								
+				//globe.x = width * 0.5;
+				//globe.y = -height * 0.5;
+				view3D.scene.addChild(globe);
+				//view3D.camera.lookAt(globe.position);
+				
+				//skies = new Sphere({material:"earthcloudmap.png",radius:153,segmentsH:18, segmentsW:26});
+				//view3D.scene.addChild(skies);
+				//view3D.render();
+				
+				var myFilter2:Array = new Array()
+				myFilter2.push(new GlowFilter(0xFFFFFF, 0.8, 8, 8, 6, 3, false, false));
+				globe.ownCanvas = true;
+				globe.filters = myFilter2;
+				camera.target = globe;
+				view3D.render();
+				
+				locLoader = LocationLoader.getInstance();
+			}
+			
+			public function initLocationPoints():void {
+				var locationSprite:Sprite =  (globe.material as MovieMaterial).movie;
+				var locations:Object = locLoader.getLocations();
+				var lData:LocationData;
+				for each (lData in locations)
+					addLocationPoint(lData.name, lData.coords[0], lData.coords[1], locationSprite);
+				
+			}
+			
+			protected function addLocationPoint(name:String, x:int, y:int, parent:Sprite):void {
+				var locationBtn:LocationButton =  new LocationButton();
+				locationBtn.name = name;
+				locationBtn.x = x;
+				locationBtn.y = y;
+				locationBtn.addEventListener(MouseEvent.CLICK, onSpotClicked, false, 0, true);
+				parent.addChild(locationBtn);
+			}
+			
+			protected function createBattleField(battlefieldName:String, maxPlayers:int, password:String, battlefieldWidth:int):void {
+				var args:Object = {};
+				args.location = browsingLocation.name;
+				args.battlefieldName = battlefieldName;
+				args.maxPlayers = maxPlayers;
+				args.password = password;
+				args.battlefieldWidth = battlefieldWidth;
+				NetworkManager.getInstance().sendMessage(MLProtocol.CREATE_BATTLEFIELD, args);
+			}
+			
+			public function hideLocationInfo(callback:Function):void {
+				(locationBattleInfoPanel as LocationBattleFieldsInfoPanel).hide(callback);
+			}
+			
+			public function startMovePlanetAnim():void {
+				MLFilters.getMovePlanetTween(globe, 1, PLANET_OFFSET_Z_AFTER_LOADING, onMovePlanetAnimUpdate);
+			}
+			
+			protected function onMovePlanetAnimUpdate(e:TweenEvent):void {
+				view3D.render();
+			}
+			
+			//SETTERS
+			public function set playerCanBrowse(v:Boolean):void {_playerCanBrowse = v;}
+			//GETTERS
+			public function get playerCanBrowse():Boolean {return _playerCanBrowse;}
+			
+			//EVENTS
+			private function MouseDown(event:MouseEvent):void {
+				if (!_playerCanBrowse) return;
+				MLCursorManager.setCursor(MLCursorManager.BROWSE);
+			    startRotating = true;
+			    lastMouseX = stage.mouseX;
+			    lastMouseY = stage.mouseY;
+			}
+
+			private function MouseUp(event:MouseEvent):void {
+			    startRotating = false;
+			    MLCursorManager.setCursor(MLCursorManager.SELECT);
+			}
+			
+			/*private function onEnterFrame(e:Event):void {
+				if (!startRotating) return;
+			    var mouseDX:int = stage.mouseY - lastMouseY;
+			    var mouseDY:int = stage.mouseX - lastMouseX;
+			    
+			    if (rotationTween != null) {
+			    	rotationTween.complete();
+			    	rotationTween = null;
+			    }
+			    var cameraSpeed:Number = 0.5;			    
+			    var angleY:int = (mouseDY != 0) ? globe.rotationY - cameraSpeed * mouseDY : globe.rotationY;
+			    var angleX:int = (mouseDX != 0) ? globe.rotationX - cameraSpeed * mouseDX : globe.rotationX;
+			    rotationTween = MLFilters.getPlanetRotationTween(globe, 0.3, angleX, angleY, onUpdate);
+			    
+			    lastMouseX = stage.mouseX;
+			    lastMouseY = stage.mouseY;
+			}*/
+			
+			private function onEnterFrame(e:Event):void {
+				if (!startRotating) return;
+				// rerender viewport
+				var cameraSpeed:Number = 0.3; // Approximately same speed as mouse movement.
+				var mouseDX:int = stage.mouseY - lastMouseY;
+			    var mouseDY:int = stage.mouseX - lastMouseX;
+				
+				globe.yaw(-cameraSpeed * mouseDY);
+				//trace(cameraSpeed * mouseDY);
+				//if ( (globe.rotationX > -50 && cameraSpeed * mouseDX > 0) ||  (globe.rotationX < 50 && cameraSpeed * mouseDX < 0))
+				//	globe.pitch(cameraSpeed * mouseDX);
+				
+				lastMouseX = stage.mouseX;
+			    lastMouseY = stage.mouseY;
+				view3D.render();
+			}
+			
+			/*private function onUpdate(e:TweenEvent):void {
+				globe.applyRotations();
+				view3D.render();
+			}*/
+						
+			protected function onSpotClicked(e:MouseEvent):void {
+				browsingLocation = locLoader.getLocation((e.currentTarget as Sprite).name);
+				GameHelperClass.currentLocation = browsingLocation;
+				locationBattleInfoPanel = PopUpManager.createPopUp(this, LocationBattleFieldsInfoPanel, true);
+				PopUpManager.centerPopUp(locationBattleInfoPanel);
+				var lbp:LocationBattleFieldsInfoPanel = locationBattleInfoPanel as LocationBattleFieldsInfoPanel;
+				lbp.init();
+				lbp.populate(browsingLocation);
+				lbp.show();
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas width="{this.height}" height="{this.height}" horizontalCenter="0" verticalCenter="0"/>
+</mx:Canvas>

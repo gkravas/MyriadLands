@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" height="85" horizontalScrollPolicy="off"
+	width="{Settings.ENTITY_LIST_COUNT * (Settings.ENTITY_LIST_ITEM_WIDTH + 4)}"
+	verticalScrollPolicy="off" creationComplete="init();">
+	<mx:Grid id="gateGrid" x="0" y="0" width="{this.width}" height="100%" horizontalScrollPolicy="on" 
+		verticalScrollPolicy="off" horizontalScrollBarStyleName="MLScrollBar" horizontalGap="4">
+		<mx:GridRow id="gateList"/>
+	</mx:Grid>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.core.Settings;
+			//384, 85
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.actions.GateAction;
+			import myriadLands.loaders.EntityLoader;
+			import mx.containers.GridRow;
+			import mx.containers.GridItem;
+			import myriadLands.ui.buttons.SquareButton;
+			import myriadLands.entities.Entity;
+			
+			private var currentAction:GateAction;
+			private var previousSelectedButton:SquareButton;
+			
+			private function init():void {
+				//width = Settings.ENTITY_LIST_COUNT * (Settings.ENTITY_LIST_ITEM_WIDTH + parseInt(gateGrid.getStyle('horizontalGap')));
+			}
+			
+			public function setAction(action:GateAction):void {
+				currentAction = action;
+				gateList.removeAllChildren();
+				var inventory:Array = currentAction.owner.faction.getInventory();
+				var list:Array = currentAction.allowedEntities; 
+				var ent:Entity;
+				for each(ent in inventory){
+					if (ArrayUtil.inArray(list, ent.name))
+						addEntity(ent);
+				}
+			}
+			
+			private function addEntity(entity:Entity):void {
+				var item:GridItem = new GridItem();
+				var sqB:SquareButton= new SquareButton();
+				sqB.width = 60;
+				sqB.height = 60;
+				item.percentWidth = 100;
+				item.addChild(sqB);
+				gateList.addChild(item);
+				sqB.setEntity(entity);
+				sqB.addEventListener(MouseEvent.CLICK, onEntitySelected, false, 0, true);
+				sqB.toggle = true;
+			}
+			
+			private function onEntitySelected(e:MouseEvent):void {
+				if (previousSelectedButton == (e.currentTarget as SquareButton)) return;
+				var ent:Entity = (e.currentTarget as SquareButton).getEntity();
+				currentAction.gateEntity = ent;
+				currentAction.gateEntitySelected();
+				if (previousSelectedButton != null) {
+					previousSelectedButton.setToggled(false);
+				}
+				previousSelectedButton = (e.currentTarget as SquareButton);
+				//previousSelectedButton.setGlow();
+			}
+			
+			public function reset():void {
+				gateList.removeAllChildren();
+				currentAction = null;
+			} 
+		]]>
+	</mx:Script>
+</mx:Canvas>

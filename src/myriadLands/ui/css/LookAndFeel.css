@@ -1,0 +1,379 @@
+/* CSS file */
+@namespace mx "library://ns.adobe.com/flex/mx";
+mx|DataGrid.LocationBattleFieldsGrid
+{
+	alternatingItemColors: #666666, #333333;
+	headerColors: #666666, #363636;
+	horizontalGridLines: false;
+	color: #CC9933;
+	fontFamily: TrebuchetMS;
+	fontSize: 14;
+	fontWeight: normal;
+	verticalScrollBarStyleName: MLScrollBar;
+	textAlign: center;
+	rollOverColor: #CCCC99;
+	selectionColor: #CC9933;
+	textRollOverColor: #3386CC;
+	textSelectedColor: #3386CC;
+}
+mx|Label.AlianceLabel
+{
+	fontFamily: TrebuchetMS;
+	fontSize: 30;
+	color: #FAD39E;
+	disabledColor: #FAD39E;
+}
+mx|Label.OptionPanelLabel
+{
+	fontFamily: TrebuchetMS;
+	fontSize: 20;
+	color: #FAD39E;
+	disabledColor: #FAD39E;
+}
+mx|Label.LandTypeInfo
+{
+	fontFamily: TrebuchetMS;
+	color: #CC9933;
+	disabledColor: #FAD39E;
+}
+mx|ScrollBar.MLScrollBar
+{
+	cornerRadius: 0;
+	fillAlphas: 1.0, 1.0;
+	fillColors: #CC9933, #CC9933, #3386CC, #3386CC;
+	trackColors: #000000, #000000;
+	borderColor: #000000;	
+}
+/*@font-face {
+    src: url("assets/fonts/TREBUC.TTF");
+    fontFamily: TrebuchetMS;
+    advancedAntiAliasing:true;
+	embedAsCFF: true;
+}
+@font-face {
+	src: url("assets/fonts/TREBUCBD.TTF");
+	fontFamily: TrebuchetMS;
+	advancedAntiAliasing:true;
+	embedAsCFF: true;
+}
+@font-face {
+	src: url("assets/fonts/TREBUCBI.TTF");
+	fontFamily: TrebuchetMS;
+	advancedAntiAliasing:true;
+	embedAsCFF: true;
+}
+@font-face {
+	src: url("assets/fonts/TREBUCIT.TTF");
+	fontFamily: TrebuchetMS;
+	advancedAntiAliasing:true;
+	embedAsCFF: true;
+}*/
+.MainBackground
+{
+	backgroundColor: #666666;
+	backgroundAlpha: 1.0;
+	backgroundSize: "100%";
+	backgroundGradientAlphas: 1.0, 1.0;
+	backgroundGradientColors: #666666, #666666;
+	horizontalAlign: left;
+	verticalAlign: top;
+}
+
+mx|Button.MLWindowCloseButton
+{
+	up-skin : ClassReference("myriadLands.ui.skins.MLWindowCloseButtonSkin");
+	down-skin : ClassReference("myriadLands.ui.skins.MLWindowCloseButtonSkin");
+	over-skin : ClassReference("myriadLands.ui.skins.MLWindowCloseButtonSkin");
+	disabled-skin : ClassReference("myriadLands.ui.skins.MLWindowCloseButtonSkin");
+	
+}
+mx|Label.MLWindowTitle
+{
+	color: #FAD39E;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 12;
+}
+mx|Canvas.MLWindowTitleBar
+{
+	backgroundColor: #000000;
+}
+mx|Canvas.OuterCircularButton
+{
+	upInnerColor : #9b9b9b;
+	overInnerColor : #000000;
+	downInnerColor : #ffebb8;
+	toggledInnerColor : #d98201;
+	disabledColor : #363636;
+	
+	upOuterColor : #c9c9c9;
+	overOuterColor : #000000;
+	downOuterColor : #fe6d02;
+	toggledOuterColor : #543400;
+	disabledOuterColor : #363636;
+	
+	upIconColor : #3e3e3e;
+	overIconColor : #ffcc21;
+	downIconColor : #fe6d02;
+	toggledIconColor : #ffcd26;
+	disabledIconColor : #666666;
+}
+mx|Canvas.InnerCircularButton
+{
+	upInnerColor : #9b9b9b;
+	overInnerColor : #000000;
+	downInnerColor : #ffebb8;
+	toggledInnerColor : #d98201;
+	disabledColor : #363636;
+	
+	upOuterColor : #c9c9c9;
+	overOuterColor : #000000;
+	downOuterColor : #fe6d02;
+	toggledOuterColor : #543400;
+	disabledOuterColor : #363636;	
+}
+mx|Button.InnerCircularAttributeButton
+{
+	upInnerColor : #363636;
+	overInnerColor : #cc9933;
+	downInnerColor : #cccc99;
+	disabledInnerColor : #363636;	
+}
+mx|Canvas.SquareButton
+{
+	upColor : #000000;
+	overColor : #180f00;
+	downColor : #ffebb8;
+	toggledColor : #d98201;
+	disabledColor : #000000;	
+	
+	toggledBorderColor : #fe6d02;
+	defaultBorderColor : #515151;
+	
+	upIconColor : #666666;
+	overIconColor : #db8800;
+	downIconColor : #fe6d00;
+	toggledIconColor : #ffcd26;
+	disabledIconColor : #666666;
+}
+mx|TextArea.EntityListCounter
+{
+	backgroundColor: #000000;
+	borderThickness: 1;
+	color: #FAD39E;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 12;
+	textAlign: right;
+}
+mx|TextArea.OutLineTextArea
+{
+	backgroundColor: #000000;
+	borderThickness: 1;
+	color: #FAD39E;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 12;
+	textAlign: right;
+}
+mx|TextArea.ChatTextArea
+{
+	backgroundColor: #000000;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 14;
+	color: #FAD39E;
+	horizontalScrollBarStyleName: MLScrollBar;
+	borderColor: #666666;
+	themeColor: #666666;
+}
+mx|TextArea.BattleWaitingTextArea
+{
+	backgroundColor: #000000;
+	borderThickness: 1;
+	color: #FAD39E;
+	fontSize: 40;
+	textAlign: center;
+	disabledColor: #FAD39E;
+	backgroundDisabledColor: #000000;
+	backgroundAlpha: 0.0;
+	borderStyle: none;
+}
+mx|TextArea.MainMenuButtonTextArea
+{
+	backgroundColor: #000000;
+	borderThickness: 1;
+	color: #AAB3B3;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 50;
+	textAlign: left;
+	disabledColor: #FAD39E;
+}
+mx|Panel.LoadingPanel
+{
+	backgroundColor: #000000;
+	border-color: #cc9933;
+	borderThicknessBottom: 0;
+	borderThicknessLeft: 0;
+	borderThicknessRight: 0;
+	headerHeight: 20;
+	borderAlpha: 1.0;
+	titleStyleName: panelTitle;
+}
+.panelTitle
+{
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 12;
+	fontWeight: normal;
+	color: #000000;
+	textAlign: center;
+}
+mx|ProgressBar.LoadingBar
+{
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 14;
+	fontWeight: bold;
+	textAlign: left;
+	barColor: #CC9933;
+	color: #3386CC;
+}
+mx|TextArea.AttributeValueItemName
+{
+	backgroundColor: #363636;
+	borderColor: #363636;
+	borderStyle: solid;
+	color: #666666;
+	cornerRadius: 8;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 12;
+	fontStyle: normal;
+	fontWeight: bold;
+	paddingTop: -2;
+	textAlign: right;
+	textDecoration: normal;
+}
+mx|TextArea.AttributeValueItemValue
+{
+	backgroundColor: #666666;
+	borderColor: #666666;
+	cornerRadius: 8;
+	paddingTop: -2;
+	color: #000000;
+}
+mx|TextArea.actionButtonText
+{
+	backgroundColor: #000000;
+	borderColor: #666666;
+	fontSize: 12;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	color: #CC9933;
+	defaultColor: #CC9933;
+	selectedColor: #FFFFFF;
+	paddingTop: 4;
+	themeColor: #666666;
+	disabled-color: #DDDDDD;
+	background-disabled-color: #363636;
+}
+mx|Button.MLSimpleButton
+{
+	color: #CC9933;
+	textRollOverColor: #CCCC99;
+	fillAlphas: 1.0, 1.0;
+	fillColors: #666666, #666666, #363636, #363636;
+	borderColor: #CC9933;
+	themeColor: #CCCC99;
+}
+mx|Alert
+{
+	barColor: 0;
+	backgroundColor: #363636;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	borderColor: #000000;
+	color: #CC9933;
+	buttonStyleName: MLSimpleButton;
+	fontSize: 15;
+	textAlign: center;
+	borderThicknessLeft: 1;
+	borderThicknessRight: 1;
+	borderThicknessTop: 1;
+	borderThicknessBottom: 1;
+	titleStyleName: alertTitle;
+	headerHeight: 20;
+	cornerRadius: 5;
+}
+mx|Label.DamageInfo
+{
+	color: #FF0000;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.HealInfo
+{
+	color: #00FF00;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.BoostInfo
+{
+	color: #F77136;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.OperationInfo
+{
+	color: #AAAAAA;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.AuraInfo
+{
+	color: #C207EA;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.UpgradeInfo
+{
+	color: #1707EA;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+mx|Label.IncreaseActInfo
+{
+	color: #04F8DE;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 60;
+	textAlign: center;
+}
+.dataGridVerticalScrollBar
+{
+	fillAlphas: 1.0, 1.0, 1.0, 1.0;
+	fillColors: #CC9933, #CC9933, #3386CC, #3386CC;
+	trackColors: #000000, #000000;
+}
+.alertTitle
+{
+	textAlign: center;
+	fontWeight: bold;
+	fontLookup: embeddedCFF;
+	fontFamily: TrebuchetMS;
+	fontSize: 15;
+}

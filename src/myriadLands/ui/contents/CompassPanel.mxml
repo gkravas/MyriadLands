@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="112" xmlns:ns1="myriadLands.ui.buttons.*"
+	creationComplete="init()" horizontalScrollPolicy="off" verticalScrollPolicy="off" enterFrame="onEnterFrame(event);">
+	<ns1:SquareButton width="100" height="112" mouseEnabled="false" id="backGround" left="0" top="0"/>
+	<mx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			import myriadLands.actions.ActionView;
+			import gamestone.graphics.ImgLoader;
+			import myriadLands.ui.css.MLFilters;
+			import myriadLands.events.CompassEvent;
+			import myriadLands.core.Settings;
+			import mx.core.BitmapAsset;
+			
+			private const unitOffset:int = Settings.MOUSE_NAVIGATOR_SENSITIVITY;
+			
+			private var startDraging:Boolean;
+			private var moved:Boolean;
+			private var mPoint:Point;
+			
+			private var navigating:Boolean;
+			private var _offSetX:int;
+			private var _offSetY:int;
+			
+			private var showHideEffect:TweenMax;
+			
+			private var _currentView:String;
+			
+			private function init():void
+			{
+				var imgL:ImgLoader = ImgLoader.getInstance();
+				var ark:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				_center.addChild(imgL.getBitmapAsset("circle-nav"));
+				_up.addChild(imgL.getBitmapAsset("ark-nav"));
+				
+				var downA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				downA.rotation = 180;
+				_down.addChild(downA);
+				
+				var leftA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				leftA.rotation = -90;
+				_left.addChild(leftA);
+				
+				var rightA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				rightA.rotation = 90;
+				_right.addChild(rightA);
+				
+				var upRightA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				upRightA.rotation = 45;
+				_upRight.addChild(upRightA);
+				
+				var upLeftA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				upLeftA.rotation = -45;
+				_upLeft.addChild(upLeftA);
+				
+				var downRightA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				downRightA.rotation = 135;
+				_downRight.addChild(downRightA);
+				
+				var downLeftA:BitmapAsset = imgL.getBitmapAsset("ark-nav");
+				downLeftA.rotation = -135;
+				_downLeft.addChild(downLeftA);
+				
+				Settings.zoom = zoomSlider.value;
+			}
+			
+			
+			//Events
+			private function mouseOverNav(e:MouseEvent):void
+			{
+				navigating = false;
+				(e.currentTarget as Image).filters = [MLFilters.NAVIGATOR_MOUSE_OVER_FILL];
+			}
+			
+			private function mouseDownNav(e:MouseEvent,offSetX:int, offSetY:int):void
+			{
+				if (e.currentTarget != _center)
+				{
+					_offSetX = offSetX;
+					_offSetY = offSetY;
+					navigating = true;
+				}
+				(e.currentTarget as Image).filters = [MLFilters.NAVIGATOR_MOUSE_DOWN_FILL];
+			}
+			
+			private function onEnterFrame(e:Event):void {
+				if (!navigating) return;
+				if (currentView == ActionView.WORLD_MAP)
+					dispatchEvent(new CompassEvent(CompassEvent.SCROLL_WORLD_MAP, _offSetX, _offSetY));
+				else if (currentView == ActionView.COMBAT)
+					dispatchEvent(new CompassEvent(CompassEvent.SCROLL_COMBAT_MAP, _offSetX, _offSetY));
+			}
+			
+			private function mouseUpNav(e:MouseEvent):void
+			{
+				navigating = false;
+				(e.currentTarget as Image).filters = [MLFilters.NAVIGATOR_MOUSE_OVER_FILL];
+			}
+			
+			private function centerClick(e:MouseEvent):void
+			{
+				if (currentView == ActionView.WORLD_MAP)
+					dispatchEvent(new CompassEvent(CompassEvent.SCROLL_TO_CITADEL_LAND));
+				else if (currentView == ActionView.COMBAT)
+					dispatchEvent(new CompassEvent(CompassEvent.SCROLL_TO_CHAMPION));
+				(e.currentTarget as Image).filters = [MLFilters.NAVIGATOR_MOUSE_OVER_FILL];
+			}
+			
+			private function turnBaseColor(e:Event):void
+			{
+				navigating = false;
+				(e.currentTarget as Image).filters = [MLFilters.NAVIGATOR_BASE_FILL];
+			}
+			
+			public function zoomMap():void {
+				Settings.zoom = zoomSlider.value;
+				dispatchEvent(new CompassEvent(CompassEvent.ZOOM_MAP, 0, 0, zoomSlider.value));
+			}
+			
+			//SETTERS
+			public function set currentView(v:String):void {_currentView = v;}
+			//GETTERS
+			public function get currentView():String {return _currentView;}
+		]]>
+	</mx:Script>
+	<mx:Image id="_center" click="centerClick(event)" creationComplete="turnBaseColor(event)" mouseOut="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="35" top="35"/>
+	<mx:Image width="23" height="16" id="_up" mouseDown="mouseDownNav(event, 0, -unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="37.5" top="10"/>
+	<mx:Image width="23" height="16" id="_upRight" mouseDown="mouseDownNav(event, unitOffset, -unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="68.5" top="13"/>
+	<mx:Image width="23" height="16" id="_downRight" mouseDown="mouseDownNav(event, unitOffset, unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="85.5" top="68"/>
+	<mx:Image width="23" height="16" id="_downLeft" mouseDown="mouseDownNav(event, -unitOffset, unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="29.5" top="84"/>
+	<mx:Image width="23" height="16" id="_upLeft" mouseDown="mouseDownNav(event, -unitOffset, -unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="13.5" top="29"/>
+	<mx:Image width="23" height="16" id="_right" mouseDown="mouseDownNav(event, unitOffset, 0)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="88" top="38"/>
+	<mx:Image width="23" height="16" id="_left" mouseDown="mouseDownNav(event, -unitOffset, 0)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="11" top="61"/>
+	<mx:Image width="23" height="16" id="_down" mouseDown="mouseDownNav(event, 0, unitOffset)" mouseUp="mouseUpNav(event)" mouseOut="turnBaseColor(event)" creationComplete="turnBaseColor(event)" mouseOver="mouseOverNav(event)" left="61" top="88"/>
+	<mx:HSlider id="zoomSlider" x="0" y="91" minimum="0.3" maximum="0.6" snapInterval="0.01" change="zoomMap();" liveDragging="true" enabled="true" allowTrackClick="true" value="0.6" width="95"/>
+</mx:Canvas>

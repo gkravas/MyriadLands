@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:ns1="myriadLands.ui.asComponents.*" xmlns:ns2="myriadLands.ui.*"
+	creationComplete="init()" horizontalScrollPolicy="off" verticalScrollPolicy="off" resize="onResize(event)" xmlns:ns3="myriadLands.ui.buttons.*"
+	xmlns:ns4="myriadLands.ui.contents.*" xmlns:ns5="myriadLands.ui.text.*" xmlns:panels="myriadLands.ui.panels.*">
+	<ns1:WorldMap width="100%" height="100%" id="_worldMap" x="0" y="0"/>
+	<ns1:CombatMap width="100%" height="100%" id="_combatMap" x="0" y="0"/>
+	<ns2:MLWindow id="menuWindow"/>
+	<ns2:MLWindow id="attributeWindow"/>
+	<ns2:MLWindow id="productionWindow"/>
+	<ns2:MLWindow id="gateWindow"/>
+	<ns2:MLWindow id="actionWindow"/>
+	<ns2:MLWindow id="shoutBoxWindow"/>
+	<ns2:MLWindow id="musicWindow"/>
+	<ns2:MLWindow id="compassWindow"/>
+	<ns2:MLWindow id="resourcesWindow"/>
+	<ns2:MLWindow id="assetWindow"/>
+	<ns2:MLWindow id="selectionWorldMapWindow"/>
+	<ns2:MLWindow id="selectionCombatMapWindow"/>
+	<ns2:MLWindow id="alianceWindow"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.entities.EntityManager;
+			import myriadLands.net.NetworkManager;
+			import myriadLands.ui.contents.*;
+			import myriadLands.actions.CentralManager;
+			import myriadLands.ui.asComponents.MapTile;
+			import gamestone.utils.NumberUtil;
+			import myriadLands.events.WorldMapEvent;
+			
+			private const OFFSET:int = 5;
+			
+			private var centralManager:CentralManager;
+			
+			private var actionPanel:ActionWindowContent;
+			private var compassPanel:CompassPanel;
+			private var attributePanel:AttributeWindowContent;
+			private var gatePanel:GateWindowContent;
+			private var productuionPanel:ProductionWindowContent;
+			private var musicPanel:MusicWindowContent;
+			private var resourcesPanel:ResourcesWindowContent;
+			private var menuPanel:MenuWindowContent;
+			private var shoutBoxPanel:ShoutBoxWindowContent;
+			private var assetPanel:AssetWindowsContent;
+			private var selectionWorldMapPanel:SelectionWorldMapWindowContent;
+			private var selectionCombatMapPanel:SelectionCombatMapWindowContent;
+			private var aliancePanel:AlianceWindowContent;
+	
+		
+			private function init():void
+			{
+				centralManager = CentralManager.getInstance();
+				
+				menuPanel =  new MenuWindowContent();
+				menuWindow.setContent(menuPanel, true);
+				menuWindow.titleText = "";
+				menuWindow.x = 0;
+				menuWindow.y = OFFSET;
+				menuWindow.closeButton.visible = false;
+				
+				attributePanel =  new AttributeWindowContent();
+				attributeWindow.setContent(attributePanel);
+				attributeWindow.titleText = "attributeWindowTitle";
+				attributeWindow.x = menuWindow.width + OFFSET;
+				attributeWindow.y = OFFSET;
+				
+				productuionPanel =  new ProductionWindowContent();
+				productionWindow.setContent(productuionPanel);
+				productionWindow.titleText = "productionWindowTitle";
+				productionWindow.x = attributeWindow.x + attributeWindow.width + OFFSET;
+				productionWindow.y = OFFSET;
+				
+				gatePanel =  new GateWindowContent();
+				gateWindow.setContent(gatePanel);
+				gateWindow.titleText = "gateWindowTitle"; 
+				gateWindow.x = productionWindow.x;
+				gateWindow.y = productionWindow.y + productionWindow.height + OFFSET; 
+				
+				actionPanel = new ActionWindowContent();
+				actionWindow.setContent(actionPanel);
+				actionWindow.titleText = "actionsWindowTitle";
+				actionWindow.x = productionWindow.x + productionWindow.width + OFFSET;
+				actionWindow.y = OFFSET; 
+				
+				shoutBoxPanel =  new ShoutBoxWindowContent();
+				shoutBoxWindow.setContent(shoutBoxPanel);
+				shoutBoxWindow.titleText = "shoutboxWindowTitle";
+				shoutBoxWindow.x = 0;
+				shoutBoxWindow.y = this.height - shoutBoxWindow.height;
+				
+				musicPanel =  new MusicWindowContent();
+				musicWindow.setContent(musicPanel);
+				musicWindow.titleText = "musicWindowTitle";
+				musicWindow.x = shoutBoxWindow.x + shoutBoxWindow.width + OFFSET;
+				musicWindow.y = this.height - musicWindow.height;
+				musicWindow.hide();
+				
+				compassPanel = new CompassPanel();
+				compassWindow.setContent(compassPanel);
+				compassWindow.titleText = "compassWindowTitle"; 
+				compassWindow.x = musicWindow.x + musicWindow.width + OFFSET;
+				compassWindow.y = this.height - compassWindow.height; 
+				
+				resourcesPanel =  new ResourcesWindowContent();
+				resourcesWindow.setContent(resourcesPanel);
+				resourcesWindow.titleText = "resourcesWindowTitle";
+				resourcesWindow.x = compassWindow.x + compassWindow.width + OFFSET;
+				resourcesWindow.y = height - resourcesWindow.height; 
+				
+				assetPanel =  new AssetWindowsContent();
+				assetWindow.setContent(assetPanel);
+				assetWindow.titleText = "assetWindowTitle";
+				assetWindow.x = actionWindow.x + actionWindow.width + OFFSET; 
+				assetWindow.y = OFFSET; 
+				
+				selectionWorldMapPanel =  new SelectionWorldMapWindowContent();
+				selectionWorldMapWindow.setContent(selectionWorldMapPanel, false, true, 257);
+				selectionWorldMapWindow.titleText = "selectionWorldMapWindowTitle";
+				selectionWorldMapWindow.x = this.width * 0.2;
+				selectionWorldMapWindow.y = this.height * 0.5;
+				
+				selectionCombatMapPanel =  new SelectionCombatMapWindowContent();
+				selectionCombatMapWindow.setContent(selectionCombatMapPanel);
+				selectionCombatMapWindow.titleText = "selectionCombatMapWindowTitle";
+				selectionCombatMapWindow.x = this.width - selectionCombatMapWindow.width - OFFSET;
+				selectionCombatMapWindow.y = OFFSET;
+				
+				aliancePanel = new AlianceWindowContent();
+				alianceWindow.setContent(aliancePanel);
+				alianceWindow.titleText = "alianceWindowTitle";
+				alianceWindow.x = this.width * 0.5;
+				alianceWindow.y = this.height * 0.5;
+				alianceWindow.hide();
+				
+				centralManager.init(_worldMap, _combatMap, compassPanel, selectionWorldMapPanel, shoutBoxPanel,
+									attributePanel, actionPanel, assetPanel, productuionPanel,
+									menuPanel, musicPanel, gatePanel, resourcesPanel, selectionCombatMapPanel, aliancePanel);
+			}
+			
+			public function setGameOverFunction(gameOverFunction:Function):void {
+				CentralManager.getInstance().setGameOverFunction(gameOverFunction);
+			}
+			
+			public function clear():void {
+				EntityManager.clear();
+				_worldMap.clear();
+				assetPanel.clear();
+			}
+			private function onResize(event:Event):void {
+				//_worldMap.setSize(width, height);
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

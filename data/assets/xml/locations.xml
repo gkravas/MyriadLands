@@ -1,0 +1,6 @@
+<locations>
+	<location name="myriad1" tileWidth="8-10" coords="50,50" availableLandTypes="0,1" maxPlayers="1-4"/>
+	<location name="myriad2" tileWidth="8-10" coords="200,200" availableLandTypes="0,1" maxPlayers="1-4"/>
+	<location name="myriad3" tileWidth="8-10" coords="500,500" availableLandTypes="0,1" maxPlayers="1-4"/>
+	<location name="myriad4" tileWidth="8-10" coords="700,600" availableLandTypes="0,1" maxPlayers="1-4"/>
+</locations>

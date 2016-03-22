@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" height="206" xmlns:ns1="myriadLands.ui.buttons.*" backgroundAlpha="0.0" width="625"
+	xmlns:panels="myriadLands.ui.panels.*" xmlns:text="myriadLands.ui.text.*" creationComplete="init();">
+	<mx:Canvas id="cycleBtn" width="234" height="40" y="3" left="{cycleTypeButton.width * 0.5}" click="nextAvailableLand(event);"
+		mouseOver="{cycleBtn.setStyle('backgroundColor', 0x9b9b9b);}" mouseDown="{cycleBtn.setStyle('backgroundColor', 0xffebb8);}"
+		mouseUp="{cycleBtn.setStyle('backgroundColor', 0x363636);}" mouseOut="{cycleBtn.setStyle('backgroundColor', 0x363636);}" backgroundColor="#363636"/>
+	<ns1:CircularButton width="45" height="45" left="0" top="0" id="cycleTypeButton" click="changeMapFilter(event);"/>
+	<mx:Grid left="0" top="51" id="grid" horizontalGap="2" height="130">
+		<mx:GridRow height="100%">
+			<mx:GridItem height="100%">
+				<mx:Canvas width="58" height="100%" borderStyle="none" borderColor="#326B93" alpha="1.0" borderThickness="2">
+					<ns1:CircularButton width="27" height="27" right="1" top="1" id="friendsFilterButton" click="toggleFactionFilter(event);"/>
+					<ns1:CircularButton width="27" height="27" right="1" top="33" id="neutralsFilterButton" click="toggleFactionFilter(event);"/>
+					<ns1:CircularButton width="27" height="27" right="1" top="65" id="foesFilterButton" click="toggleFactionFilter(event);"/>
+					<ns1:CircularButton height="27" top="80" left="1" width="27" id="championsFilterButton" click="toggleEntityFilter(event);"/>
+					<ns1:CircularButton height="27" top="48" left="1" width="27" id="structuresFilterButton" click="toggleEntityFilter(event);"/>
+					<ns1:CircularButton height="27" top="16" left="1" width="27" id="landsFilterButton" click="toggleEntityFilter(event);"/>
+				</mx:Canvas>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:GridItem height="100%">
+					<ns1:SquareButton width="130" height="130" id="cEntityButton" click="onEntityEngage(event);"/>
+				</mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem height="100%">
+				<panels:EntitySelectionPanel id="firstPanel"/>
+			</mx:GridItem>
+			<mx:GridItem height="100%">
+				<panels:EntitySelectionPanel id="secondPanel"/>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+	<text:CostItem bottom="0" left="60" width="61" height="19" id="lifeCirc" visible="false"/>
+	<mx:Script>
+		<![CDATA[
+			import myriadLands.core.Settings;
+			import myriadLands.faction.FactionAllianceManager;
+			import myriadLands.faction.Faction;
+			import flash.utils.setInterval;
+			import myriadLands.entities.Squad;
+			import gamestone.utils.StringUtil;
+			import myriadLands.actions.ActionView;
+			import gamestone.utils.ArrayUtil;
+			import myriadLands.events.WorldMapEvent;
+			import myriadLands.loaders.EntityLoader;
+			import myriadLands.entities.Champion;
+			import myriadLands.entities.Structure;
+			import myriadLands.entities.Land;
+			import myriadLands.entities.Entity;
+			
+						
+			private const LANDS_MODE:String = "land";
+			private const STRUCTURES_MODE:String = "structure";
+			private const CHAMPIONS_MODE:String = "champion";
+			private const MACHINERY:String = "machinery";
+			private const EQUIPMENT:String = "equipment";
+			private const UNIT:String = "unit";
+			
+			private var mapFilterMode:String;
+			private var cEntity:Entity;
+			private var cLand:Land;
+			
+			private var constructedLands:Array;
+			
+			private function init():void {
+				constructedLands = [];
+				
+				landsFilterButton.toggle = true;
+				//landsFilterButton.setToggled(true);
+				landsFilterButton.setIconName(LANDS_MODE + "-sym");
+				structuresFilterButton.toggle = true;
+				//structuresFilterButton.setToggled(true);
+				structuresFilterButton.setIconName(STRUCTURES_MODE + "-sym");
+				championsFilterButton.toggle = true;
+				//championsFilterButton.setToggled(true);
+				championsFilterButton.setIconName(CHAMPIONS_MODE + "-sym");
+				friendsFilterButton.toggle = true;
+				//friendsFilterButton.setToggled(true);
+				friendsFilterButton.setIconName("friend-sym");
+				neutralsFilterButton.toggle = true;
+				//neutralsFilterButton.setToggled(true);
+				neutralsFilterButton.setIconName("neutral-sym");
+				foesFilterButton.toggle = true;
+				//foesFilterButton.setToggled(true);
+				foesFilterButton.setIconName("foe-sym");
+				
+				lifeCirc.setIconName("lifePoints-sym");
+				lifeCirc.disabled = true;
+				
+				firstPanel.disabled = true;
+				firstPanel.hide();
+				secondPanel.disabled = true;
+				secondPanel.hide();
+			
+				setMapFilterMode(STRUCTURES_MODE);
+			}
+			
+			private function setMapFilterMode(filterMode:String):void {
+				mapFilterMode = filterMode;
+				cycleTypeButton.setIconName(mapFilterMode + "-sym");
+			}
+			
+			private function changeMapFilter(e:MouseEvent):void {
+				if (cLand == null) return;
+				switch (mapFilterMode) {
+					case LANDS_MODE:
+						setMapFilterMode(STRUCTURES_MODE);
+					break;
+					case STRUCTURES_MODE:
+						setMapFilterMode(CHAMPIONS_MODE);
+					break;
+					case CHAMPIONS_MODE:
+						setMapFilterMode(LANDS_MODE);
+					break;
+				}
+				setLandTile(cLand);
+			}
+			
+			private function setEntiy(entity:Entity):void {
+				cEntity = entity;
+				cEntityButton.setEntity(cEntity);
+			}
+			
+			public function setLandTile(land:Land):void {
+				cLand = land;
+				switch (mapFilterMode) {
+					case LANDS_MODE:
+						setEntiy(cLand);
+						populateFronLand();
+					break;
+					case STRUCTURES_MODE:
+						setEntiy(cLand.structure);
+						populateFronStructure();
+					break;
+					case CHAMPIONS_MODE:
+						setEntiy(cLand.squad);
+						populateFronChampion();
+					break;
+				}
+			}
+			
+			private function populateFronLand():void {
+				firstPanel.disabled = true;
+				firstPanel.hide();
+				secondPanel.disabled = true;
+				secondPanel.hide();
+				lifeCirc.visible = false;
+			}
+			
+			private function populateFronStructure():void {
+				var arr:Array = (cEntity != null) ? (cEntity as Structure).getMachineries() : [];
+				firstPanel.disabled = true;
+				firstPanel.hide();
+				secondPanel.disabled = false;
+				secondPanel.titleIcon.setIconName(MACHINERY + "-sym");
+				secondPanel.reOpen(arr, onEntityEngage);
+				lifeCirc.visible = false;
+			}
+			
+			private function populateFronChampion():void {
+				var arr1:Array;
+				var arr2:Array;
+				if (cEntity != null) {
+					lifeCirc.visible = true;
+					lifeCirc.text = String(cEntity.lif);
+					arr1 = (cEntity as Champion).getUnits();
+					arr2 = (cEntity as Champion).getEquipment();
+				} else {
+					arr1 = [];
+					arr2 = [];
+				}
+				firstPanel.disabled = false;
+				firstPanel.titleIcon.setIconName(UNIT + "-sym");
+				firstPanel.reOpen(arr1, onEntityEngage);
+				secondPanel.disabled = false;
+				secondPanel.titleIcon.setIconName(EQUIPMENT + "-sym");
+				secondPanel.reOpen(arr2, onEntityEngage);
+			}
+			
+			public function newLandConstructed(e:WorldMapEvent):void {
+				constructedLands.push(e.entity);
+			}
+			
+			private function applyFilters():void {
+				var index:int = (cLand == null) ? 0 : constructedLands.indexOf(cLand);
+				var sum:int = 0;
+				var land:Land = cLand;
+				while (!validateLand(land)) {
+					index++;
+					sum++;
+					if (sum == constructedLands.length) {
+						land == null;
+						break;
+					} else if (index == constructedLands.length)
+						index = 0;
+						
+					land = constructedLands[index];
+				}
+				setLandTile(land);
+				land.worldMapTile.scrollToMe();
+			}
+			
+			private function validateLand(land:Land):Boolean {
+				var fam:FactionAllianceManager = FactionAllianceManager.getInstance();
+				var filters:Array = [];
+				
+				if (friendsFilterButton.isToggled())
+					filters.push(Faction.FRIEND);
+				if (neutralsFilterButton.isToggled())
+					filters.push(Faction.NEUTRAL);
+				if (foesFilterButton.isToggled())
+					filters.push(Faction.FOE);
+				
+				//Marks all of player's
+				if (land.faction == Settings.player || filters.length == 0 || (land.faction != null && land.faction.isFactionAlliance(Settings.player, filters))) {
+					if (structuresFilterButton.isToggled() && land.structure == null)
+						return false;
+					if (championsFilterButton.isToggled() && land.squad == null)
+						return false;
+					return true;
+				}
+				return false;
+			}
+			//Sends event to actionPanel
+			private function populateActionPanel(entity:Entity):void {
+				if (entity == null) return;
+					entity.fireSelectedEvent(ActionView.SELECTION_PANEL);
+			}
+			
+			//GETTERS
+			public function getLandTile():Land {return cLand;}
+			
+			//EVENTS			
+			private function onEntityEngage(e:MouseEvent):void {
+				var ent:Entity = (e.currentTarget as SquareButton).getEntity();
+				populateActionPanel(ent);
+			}
+			
+			private function toggleEntityFilter(e:MouseEvent):void {
+				applyFilters();
+			}
+						
+			private function toggleFactionFilter(e:MouseEvent):void {
+				applyFilters();
+			}
+			
+			private function nextAvailableLand(e:MouseEvent):void {
+				var index:int = (cLand == null) ? 0 : constructedLands.indexOf(cLand) + 1;
+				index = (index > constructedLands.length - 1) ? 0 : index;
+				cLand = constructedLands[index];
+				applyFilters();
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

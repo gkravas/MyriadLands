@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="640" height="480"
+	showCloseButton="true" close="onClose();" title="Debug Console">
+	<mx:TextArea id="textArea" left="0" top="0" width="100%" height="100%"/>
+	<mx:Script>
+		<![CDATA[
+			import gamestone.utils.DebugX;
+			
+			import mx.core.Application;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			
+			private static var dx:DebugPanel;
+			
+			public function init():void {
+				gamestone.utils.DebugX.init(textArea);
+			}
+			
+			protected function onClose():void {
+				visible = false;
+			}
+			
+			public static function show():void {
+				if (dx == null) {
+					dx = PopUpManager.createPopUp(FlexGlobals.topLevelApplication.root, DebugPanel, false) as DebugPanel;
+					dx.init();
+				}
+				PopUpManager.bringToFront(dx as IFlexDisplayObject);
+				
+			}
+		]]>
+	</mx:Script>
+</mx:TitleWindow>
