@@ -8,8 +8,8 @@ Here you can find the server [Myriad Lands Game Server](https://github.com/dwork
 All artwork is owned by [George Dimitriou](http://www.dimitriou-art.com/)
 
 ![Screen 1](/screenshots/1.jpg?raw=true "Screen 1")
-![Screen 2](/screenshots/1.jpg?raw=true "Screen 2")
-![Screen 3](/screenshots/1.jpg?raw=true "Screen 3")
-![Screen 4](/screenshots/1.jpg?raw=true "Screen 4")
-![Screen 5](/screenshots/1.jpg?raw=true "Screen 5")
-![Screen 6](/screenshots/1.jpg?raw=true "Screen 6")
+![Screen 2](/screenshots/2.jpg?raw=true "Screen 2")
+![Screen 3](/screenshots/3.jpg?raw=true "Screen 3")
+![Screen 4](/screenshots/4.jpg?raw=true "Screen 4")
+![Screen 5](/screenshots/5.jpg?raw=true "Screen 5")
+![Screen 6](/screenshots/6.jpg?raw=true "Screen 6")
